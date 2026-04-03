@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Application Error</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h2 class="mb-3 text-danger">Request Failed</h2>
+                    <p class="text-muted">The application hit an internal error while processing your request.</p>
+
+                    <div class="mb-3">
+                        <div><strong>Status:</strong> <span th:text="${status}">500</span></div>
+                        <div><strong>Error:</strong> <span th:text="${error}">Internal Server Error</span></div>
+                        <div><strong>Message:</strong> <span th:text="${message}">Unexpected error</span></div>
+                        <div><strong>Path:</strong> <span th:text="${path}">/login</span></div>
+                    </div>
+
+                    <div th:if="${trace}" class="mb-3">
+                        <label class="form-label"><strong>Stack Trace</strong></label>
+                        <textarea class="form-control" rows="14" readonly th:text="${trace}"></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a href="/login" class="btn btn-primary">Back to Login</a>
+                        <a href="/" class="btn btn-outline-secondary">Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
