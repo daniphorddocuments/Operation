@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manager User Manual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link th:href="@{/ui/app-ui.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --ink: #16324f;
+            --sand: #f6f2ea;
+            --copper: #c97b42;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(201, 123, 66, 0.18), transparent 34%),
+                linear-gradient(180deg, #fbfaf7 0%, var(--sand) 100%);
+        }
+
+        .manual-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .manual-header {
+            background: rgba(22, 50, 79, 0.97);
+            color: white;
+            padding: 40px 24px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 18px 40px rgba(22, 50, 79, 0.08);
+        }
+
+        .manual-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .manual-header p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .manual-nav {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 18px 40px rgba(22, 50, 79, 0.08);
+            display: flex;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .manual-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 16px;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--ink);
+        }
+
+        .manual-nav-item:last-child {
+            border-right: none;
+        }
+
+        .manual-nav-item:hover {
+            background: rgba(201, 123, 66, 0.1);
+        }
+
+        .manual-nav-item.active {
+            background: var(--copper);
+            color: white;
+        }
+
+        .manual-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 18px 40px rgba(22, 50, 79, 0.08);
+            line-height: 1.8;
+        }
+
+        .manual-section {
+            display: none;
+        }
+
+        .manual-section.active {
+            display: block;
+        }
+
+        .manual-section h2 {
+            color: var(--ink);
+            font-weight: bold;
+            margin: 30px 0 20px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .manual-section h3 {
+            color: var(--copper);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .manual-section p {
+            color: var(--ink);
+            margin-bottom: 15px;
+        }
+
+        .manual-section ul {
+            margin: 15px 0 15px 30px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .manual-section li {
+            color: var(--ink);
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .manual-section li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--copper);
+            font-weight: bold;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--copper);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .highlight-box {
+            background: rgba(201, 123, 66, 0.1);
+            border-left: 4px solid var(--copper);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--copper);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-manual {
+            flex: 1;
+            padding: 12px 20px;
+            font-weight: 500;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-manual {
+            background: var(--copper);
+            color: white;
+        }
+
+        .btn-primary-manual:hover {
+            background: #a8653a;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary-manual {
+            background: rgba(22, 50, 79, 0.1);
+            color: var(--ink);
+        }
+
+        .btn-secondary-manual:hover {
+            background: rgba(22, 50, 79, 0.2);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .manual-container {
+                padding: 12px;
+            }
+
+            .manual-nav {
+                flex-wrap: wrap;
+            }
+
+            .manual-nav-item {
+                flex: 0 0 50%;
+                border-right: 1px solid rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .manual-nav-item:nth-child(2n) {
+                border-right: none;
+            }
+
+            .manual-content {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="manual-container">
+    <!-- Header -->
+    <div class="manual-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h1><i class="fas fa-graduation-cap me-2"></i>Manager User Manual</h1>
+                <p>Complete guide to shop management and daily operations</p>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 24px; margin-bottom: 10px;"><i class="fas fa-book"></i></div>
+                <div style="font-size: 12px; opacity: 0.7;">Version 1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="manual-nav">
+        <div class="manual-nav-item active" onclick="switchTab('getting-started')">
+            <i class="fas fa-play-circle me-2"></i>Getting Started
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('shop-management')">
+            <i class="fas fa-store me-2"></i>Shop Management
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('products')">
+            <i class="fas fa-box me-2"></i>Products
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('sales')">
+            <i class="fas fa-receipt me-2"></i>Sales
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('reports')">
+            <i class="fas fa-chart-bar me-2"></i>Reports
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('faq')">
+            <i class="fas fa-question-circle me-2"></i>FAQ
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="manual-content">
+        <!-- Getting Started Section -->
+        <div id="getting-started" class="manual-section active">
+            <h2>Getting Started</h2>
+            <p>Welcome to the Mahanga Manager Portal. This guide will help you master all the features and tools available to you.</p>
+
+            <h3>1.1 Accessing Your Dashboard</h3>
+            <p>After logging in with your manager credentials, you'll be taken directly to your shop dashboard. Here you can see:</p>
+            <ul>
+                <li>Quick overview of today's sales</li>
+                <li>Product inventory status</li>
+                <li>Staff on duty</li>
+                <li>Pending notifications and alerts</li>
+            </ul>
+
+            <h3>1.2 Dashboard Layout</h3>
+            <p>The manager dashboard is organized into several key areas:</p>
+            <ul>
+                <li><strong>Top Bar:</strong> Displays your name, current date/time, and quick actions</li>
+                <li><strong>Sidebar:</strong> Main navigation menu for all features</li>
+                <li><strong>Main Content Area:</strong> Detailed information and task management</li>
+                <li><strong>Quick Stats:</strong> Key performance metrics at a glance</li>
+            </ul>
+
+            <h3>1.3 First-Time Setup</h3>
+            <p>Before you start using the system:</p>
+            <ol style="margin-left: 30px;">
+                <li>Verify your shop information is correct</li>
+                <li>Set up your staff members</li>
+                <li>Add your products to the system</li>
+                <li>Configure your pricing</li>
+                <li>Review your settings</li>
+            </ol>
+
+            <div class="highlight-box">
+                <strong>💡 Tip:</strong> Take a screenshot of this manual or download the PDF for offline reference.
+            </div>
+        </div>
+
+        <!-- Shop Management Section -->
+        <div id="shop-management" class="manual-section">
+            <h2>Shop Management</h2>
+            <p>Manage your shop operations, information, and team.</p>
+
+            <h3>2.1 View Shop Information</h3>
+            <p>To view or update your shop details:</p>
+            <ul>
+                <li>Click the shop name in the top navigation</li>
+                <li>Review general information: name, location, contact</li>
+                <li>Update shop details as needed</li>
+                <li>Click Save to confirm changes</li>
+            </ul>
+
+            <h3>2.2 Managing Staff</h3>
+            <p>View all employees assigned to your shop:</p>
+            <ul>
+                <li>Navigate to the <strong>Staff</strong> section</li>
+                <li>View all employee details and roles</li>
+                <li>See who's currently working</li>
+                <li>View performance metrics per employee</li>
+                <li>Communicate with staff through the system</li>
+            </ul>
+
+            <h3>2.3 Shop Performance</h3>
+            <p>Monitor your shop's performance with real-time metrics:</p>
+            <ul>
+                <li>Daily sales total</li>
+                <li>Transaction count</li>
+                <li>Average transaction value</li>
+                <li>Top selling products</li>
+                <li>Inventory status</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>📊 Pro Tip:</strong> Review daily performance metrics every morning to set team goals.
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div id="products" class="manual-section">
+            <h2>Product Management</h2>
+            <p>Add, update, and manage your shop's product inventory.</p>
+
+            <h3>3.1 Adding New Products</h3>
+            <p>To add a product to your shop:</p>
+            <ul>
+                <li><span class="step-number">1</span>Click on "Add Product" button</li>
+                <li><span class="step-number">2</span>Enter product name</li>
+                <li><span class="step-number">3</span>Select category (e.g., Electronics, Clothing)</li>
+                <li><span class="step-number">4</span>Set the selling price</li>
+                <li><span class="step-number">5</span>Enter initial quantity in stock</li>
+                <li><span class="step-number">6</span>Add product description (optional)</li>
+                <li><span class="step-number">7</span>Click "Save" to confirm</li>
+            </ul>
+
+            <h3>3.2 Editing Products</h3>
+            <p>To modify an existing product:</p>
+            <ul>
+                <li>Find the product in the product list</li>
+                <li>Click the product name to open details</li>
+                <li>Make desired changes</li>
+                <li>Click "Update" to save changes</li>
+            </ul>
+
+            <h3>3.3 Managing Inventory</h3>
+            <p>Keep track of product quantities:</p>
+            <ul>
+                <li>View current stock levels in the Products section</li>
+                <li>Update quantities as inventory changes</li>
+                <li>The system automatically adjusts after each sale</li>
+                <li>Monitor products with low stock</li>
+                <li>Plan restocking based on trends</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>⚠️ Important:</strong> Regularly update inventory to prevent overselling and maintain accuracy.
+            </div>
+        </div>
+
+        <!-- Sales Section -->
+        <div id="sales" class="manual-section">
+            <h2>Sales Management</h2>
+            <p>Record and manage all sales transactions through your shop.</p>
+
+            <h3>4.1 Recording a Sale</h3>
+            <p>To process a new sale:</p>
+            <ul>
+                <li><span class="step-number">1</span>Click "New Sale" from the main menu</li>
+                <li><span class="step-number">2</span>Select customer (existing or create new)</li>
+                <li><span class="step-number">3</span>Add products to the cart</li>
+                <li><span class="step-number">4</span>Set quantities for each product</li>
+                <li><span class="step-number">5</span>Review the total amount</li>
+                <li><span class="step-number">6</span>Select payment method</li>
+                <li><span class="step-number">7</span>Process payment and complete sale</li>
+            </ul>
+
+            <h3>4.2 Payment Methods</h3>
+            <p>The system supports multiple payment methods:</p>
+            <ul>
+                <li>Cash payment</li>
+                <li>Mobile money (M-Pesa)</li>
+                <li>Bank transfer</li>
+                <li>Credit/Debit card</li>
+                <li>Credit on account (if approved)</li>
+            </ul>
+
+            <h3>4.3 Sales Receipt</h3>
+            <p>After completing a sale, you can:</p>
+            <ul>
+                <li>View the receipt on screen</li>
+                <li>Print the receipt for the customer</li>
+                <li>Email receipt to customer (if available)</li>
+                <li>Save receipt reference for future reference</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>✓ Tip:</strong> Keep receipts organized for easy reference and auditing purposes.
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports" class="manual-section">
+            <h2>Reports & Analytics</h2>
+            <p>Analyze your shop's performance through comprehensive reports.</p>
+
+            <h3>5.1 Available Reports</h3>
+            <ul>
+                <li><strong>Daily Sales Report:</strong> Summary of all sales for a specific day</li>
+                <li><strong>Weekly Summary:</strong> Week-over-week comparison and trends</li>
+                <li><strong>Monthly Performance:</strong> Complete monthly analysis</li>
+                <li><strong>Product Performance:</strong> Top sellers and low movers</li>
+                <li><strong>Staff Performance:</strong> Sales metrics per employee</li>
+                <li><strong>Customer Analysis:</strong> Repeat customers and purchasing patterns</li>
+            </ul>
+
+            <h3>5.2 Generating Reports</h3>
+            <p>To generate a report:</p>
+            <ul>
+                <li>Navigate to the Reports section</li>
+                <li>Select report type</li>
+                <li>Choose date range</li>
+                <li>Apply filters (optional)</li>
+                <li>Click "Generate"</li>
+                <li>View, print, or download report</li>
+            </ul>
+
+            <h3>5.3 Using Report Data</h3>
+            <p>Use reports to:</p>
+            <ul>
+                <li>Identify top-performing products</li>
+                <li>Monitor sales trends</li>
+                <li>Evaluate staff performance</li>
+                <li>Plan inventory and restocking</li>
+                <li>Set realistic sales targets</li>
+                <li>Make data-driven business decisions</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>📈 Strategy:</strong> Review reports weekly to identify trends and adjust strategy accordingly.
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div id="faq" class="manual-section">
+            <h2>Frequently Asked Questions</h2>
+
+            <h3>Q: How do I reset my password?</h3>
+            <p>A: On the login page, click "Forgot Password" and follow the instructions. You'll receive a reset link via email.</p>
+
+            <h3>Q: How do I record a product return?</h3>
+            <p>A: Create a negative sale transaction for the returned products. Go to "New Sale" and mark it as a return to adjust inventory accordingly.</p>
+
+            <h3>Q: What should I do if I make a mistake in a sale?</h3>
+            <p>A: Contact your administrator to void the transaction. Always verify details before completing a sale to prevent errors.</p>
+
+            <h3>Q: How often should I reconcile my sales?</h3>
+            <p>A: Reconcile daily at the end of your shift and weekly for more detailed analysis. Monthly reconciliation is mandatory.</p>
+
+            <h3>Q: Can I edit a completed sale?</h3>
+            <p>A: Most sales cannot be edited once completed. Create a return and new sale if correction is needed.</p>
+
+            <h3>Q: Who can I contact for technical support?</h3>
+            <p>A: Email: nkurushidaniphord@gmail.com | Phone: +255 679 299 258 | WhatsApp: Available</p>
+
+            <h3>Q: How do I access reports on mobile?</h3>
+            <p>A: The system is mobile-optimized. Simply log in from your smartphone browser to access all features.</p>
+
+            <h3>Q: What should I do if the system is slow?</h3>
+            <p>A: Check your internet connection. Clear browser cache and cookies. Refresh the page. Contact support if issues persist.</p>
+
+            <div class="highlight-box">
+                <strong>❓ Still have questions?</strong> Contact support or check the system documentation for more details.
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="javascript:void(0);" class="btn btn-manual btn-primary-manual" onclick="downloadManual()">
+            <i class="fas fa-download me-2"></i>Download as PDF
+        </a>
+        <a href="/manager" class="btn btn-manual btn-secondary-manual">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<script>
+function switchTab(tabName) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.manual-section');
+    sections.forEach(section => section.classList.remove('active'));
+
+    // Remove active class from all nav items
+    const navItems = document.querySelectorAll('.manual-nav-item');
+    navItems.forEach(item => item.classList.remove('active'));
+
+    // Show selected section
+    document.getElementById(tabName).classList.add('active');
+
+    // Add active class to clicked nav item
+    event.target.closest('.manual-nav-item').classList.add('active');
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+function downloadManual() {
+    const link = document.createElement('a');
+    link.href = '/manager/download/manual';
+    link.download = 'Manager_User_Manual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+</body>
+</html>
+

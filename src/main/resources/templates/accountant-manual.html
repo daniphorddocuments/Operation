@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Accountant User Manual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link th:href="@{/ui/app-ui.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --ink: #16324f;
+            --sand: #f6f2ea;
+            --copper: #c97b42;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top right, rgba(201, 123, 66, 0.18), transparent 28%),
+                linear-gradient(180deg, #fbfaf7 0%, var(--sand) 100%);
+        }
+
+        .manual-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .manual-header {
+            background: rgba(22, 50, 79, 0.97);
+            color: white;
+            padding: 40px 24px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 18px 40px rgba(22, 50, 79, 0.08);
+        }
+
+        .manual-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .manual-header p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .manual-nav {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 18px 40px rgba(22, 50, 79, 0.08);
+            display: flex;
+            gap: 0;
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+
+        .manual-nav-item {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 16px;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--ink);
+            font-size: 14px;
+        }
+
+        .manual-nav-item:last-child {
+            border-right: none;
+        }
+
+        .manual-nav-item:hover {
+            background: rgba(201, 123, 66, 0.1);
+        }
+
+        .manual-nav-item.active {
+            background: var(--copper);
+            color: white;
+        }
+
+        .manual-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 18px 40px rgba(22, 50, 79, 0.08);
+            line-height: 1.8;
+        }
+
+        .manual-section {
+            display: none;
+        }
+
+        .manual-section.active {
+            display: block;
+        }
+
+        .manual-section h2 {
+            color: var(--ink);
+            font-weight: bold;
+            margin: 30px 0 20px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .manual-section h3 {
+            color: var(--copper);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .manual-section p {
+            color: var(--ink);
+            margin-bottom: 15px;
+        }
+
+        .manual-section ul {
+            margin: 15px 0 15px 30px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .manual-section li {
+            color: var(--ink);
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .manual-section li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--copper);
+            font-weight: bold;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--copper);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .highlight-box {
+            background: rgba(201, 123, 66, 0.1);
+            border-left: 4px solid var(--copper);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--copper);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-manual {
+            flex: 1;
+            padding: 12px 20px;
+            font-weight: 500;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-manual {
+            background: var(--copper);
+            color: white;
+        }
+
+        .btn-primary-manual:hover {
+            background: #a8653a;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary-manual {
+            background: rgba(22, 50, 79, 0.1);
+            color: var(--ink);
+        }
+
+        .btn-secondary-manual:hover {
+            background: rgba(22, 50, 79, 0.2);
+            text-decoration: none;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .financial-table th {
+            background: rgba(201, 123, 66, 0.15);
+            color: var(--ink);
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid var(--copper);
+        }
+
+        .financial-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .financial-table tr:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        @media (max-width: 768px) {
+            .manual-container {
+                padding: 12px;
+            }
+
+            .manual-nav {
+                flex-wrap: wrap;
+            }
+
+            .manual-nav-item {
+                flex: 0 0 50%;
+                min-width: auto;
+            }
+
+            .manual-content {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="manual-container">
+    <!-- Header -->
+    <div class="manual-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h1><i class="fas fa-graduation-cap me-2"></i>Accountant User Manual</h1>
+                <p>Financial management, reporting, and compliance guide</p>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 24px; margin-bottom: 10px;"><i class="fas fa-chart-line"></i></div>
+                <div style="font-size: 12px; opacity: 0.7;">Version 1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="manual-nav">
+        <div class="manual-nav-item active" onclick="switchTab('getting-started')">
+            <i class="fas fa-play-circle me-2"></i>Getting Started
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('dashboard')">
+            <i class="fas fa-chart-pie me-2"></i>Dashboard
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('reports')">
+            <i class="fas fa-file-invoice-dollar me-2"></i>Reports
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('payments')">
+            <i class="fas fa-money-bill-wave me-2"></i>Payments
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('loans')">
+            <i class="fas fa-handshake me-2"></i>Loans
+        </div>
+        <div class="manual-nav-item" onclick="switchTab('faq')">
+            <i class="fas fa-question-circle me-2"></i>FAQ
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="manual-content">
+        <!-- Getting Started Section -->
+        <div id="getting-started" class="manual-section active">
+            <h2>Getting Started</h2>
+            <p>Welcome to the Mahanga Accountant Portal. This comprehensive guide will help you manage all financial operations and generate detailed reports.</p>
+
+            <h3>1.1 Accessing Your Dashboard</h3>
+            <p>Log in with your accountant credentials to access the accounting dashboard. You'll immediately see:</p>
+            <ul>
+                <li>Financial summary for the current period</li>
+                <li>Outstanding balances and payments</li>
+                <li>Recent transactions</li>
+                <li>Pending reconciliations</li>
+                <li>Important alerts and reminders</li>
+            </ul>
+
+            <h3>1.2 Dashboard Organization</h3>
+            <p>Your workspace includes:</p>
+            <ul>
+                <li><strong>Left Sidebar:</strong> Main navigation to all accounting functions</li>
+                <li><strong>Top Bar:</strong> Quick access to reports, search, and notifications</li>
+                <li><strong>Main Content Area:</strong> Detailed financial data and transaction management</li>
+                <li><strong>Status Panel:</strong> Real-time financial metrics</li>
+            </ul>
+
+            <h3>1.3 Before You Start</h3>
+            <p>Ensure you have:</p>
+            <ul>
+                <li>Access credentials for your accountant account</li>
+                <li>Understanding of your organization's chart of accounts</li>
+                <li>List of active shops and their account codes</li>
+                <li>Current period information (month, fiscal year)</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>💼 Important:</strong> Always download or print reports for your records and audit trails.
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="manual-section">
+            <h2>Financial Dashboard</h2>
+            <p>The dashboard provides a comprehensive view of your financial position at a glance.</p>
+
+            <h3>2.1 Key Metrics</h3>
+            <p>The dashboard displays the following important metrics:</p>
+
+            <div class="table-wrapper">
+                <table class="financial-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Description</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Total Revenue</strong></td>
+                            <td>Sum of all sales across all shops</td>
+                            <td>Monitor income generation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Expenses</strong></td>
+                            <td>Sum of recorded operational expenses</td>
+                            <td>Control cost management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Net Profit</strong></td>
+                            <td>Revenue minus expenses</td>
+                            <td>Measure profitability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Outstanding Payments</strong></td>
+                            <td>Invoices awaiting payment</td>
+                            <td>Cash flow planning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Outstanding Loans</strong></td>
+                            <td>Current loan balances</td>
+                            <td>Debt management</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>2.2 Dashboard Charts</h3>
+            <p>Visual representations help you quickly identify trends:</p>
+            <ul>
+                <li><strong>Revenue Trend:</strong> Line chart showing revenue over time</li>
+                <li><strong>Expense Breakdown:</strong> Pie chart of expense categories</li>
+                <li><strong>Shop Comparison:</strong> Bar chart comparing shop performance</li>
+                <li><strong>Monthly Performance:</strong> Combined chart of revenue vs expenses</li>
+            </ul>
+
+            <h3>2.3 Real-Time Updates</h3>
+            <p>Dashboard metrics update automatically as:</p>
+            <ul>
+                <li>Sales transactions are recorded</li>
+                <li>Expenses are entered</li>
+                <li>Payments are processed</li>
+                <li>Reconciliations are completed</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>📊 Tip:</strong> Refresh your browser periodically to ensure you're viewing the latest data.
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports" class="manual-section">
+            <h2>Financial Reports</h2>
+            <p>Generate comprehensive financial reports for analysis, compliance, and decision-making.</p>
+
+            <h3>3.1 Revenue Reports</h3>
+            <p>Track all incoming revenue:</p>
+            <ul>
+                <li><span class="step-number">1</span>Navigate to Reports → Revenue</li>
+                <li><span class="step-number">2</span>Select date range</li>
+                <li><span class="step-number">3</span>Choose breakdown level (by shop, product, etc.)</li>
+                <li><span class="step-number">4</span>Apply filters as needed</li>
+                <li><span class="step-number">5</span>Generate and review report</li>
+                <li><span class="step-number">6</span>Export or print for records</li>
+            </ul>
+
+            <h3>3.2 Expense Reports</h3>
+            <p>Analyze operational expenses:</p>
+            <ul>
+                <li>View expenses by category</li>
+                <li>Compare budgeted vs actual expenses</li>
+                <li>Identify cost-saving opportunities</li>
+                <li>Track expense trends over time</li>
+            </ul>
+
+            <h3>3.3 Profit & Loss Statement (P&L)</h3>
+            <p>The comprehensive P&L statement shows:</p>
+            <ul>
+                <li>Total revenue for period</li>
+                <li>Cost of goods sold (COGS)</li>
+                <li>Operating expenses</li>
+                <li>Net profit or loss</li>
+                <li>Profit margin percentage</li>
+            </ul>
+
+            <h3>3.4 Cash Flow Report</h3>
+            <p>Monitor cash movements:</p>
+            <ul>
+                <li>Cash inflows from sales</li>
+                <li>Cash outflows for expenses</li>
+                <li>Net cash position</li>
+                <li>Cash balance projections</li>
+            </ul>
+
+            <h3>3.5 Invoice Report</h3>
+            <p>Track invoicing and receivables:</p>
+            <ul>
+                <li>All issued invoices</li>
+                <li>Payment status</li>
+                <li>Outstanding amounts</li>
+                <li>Aging analysis</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>📈 Best Practice:</strong> Generate P&L reports monthly for management review and planning.
+            </div>
+        </div>
+
+        <!-- Payments Section -->
+        <div id="payments" class="manual-section">
+            <h2>Payment Processing</h2>
+            <p>Record and manage all financial transactions and payments.</p>
+
+            <h3>4.1 Recording Payments</h3>
+            <p>To record a payment:</p>
+            <ul>
+                <li><span class="step-number">1</span>Click on "Record Payment"</li>
+                <li><span class="step-number">2</span>Select payment type (Fee, Loan, Expense, etc.)</li>
+                <li><span class="step-number">3</span>Select recipient/shop</li>
+                <li><span class="step-number">4</span>Enter amount</li>
+                <li><span class="step-number">5</span>Choose payment method</li>
+                <li><span class="step-number">6</span>Add reference number (optional)</li>
+                <li><span class="step-number">7</span>Enter notes/description</li>
+                <li><span class="step-number">8</span>Confirm and save</li>
+            </ul>
+
+            <h3>4.2 Payment Methods</h3>
+            <p>Supported payment methods include:</p>
+            <ul>
+                <li>Cash transactions</li>
+                <li>Mobile money (M-Pesa, Airtel Money, etc.)</li>
+                <li>Bank transfers</li>
+                <li>Checks</li>
+                <li>Credit/Debit cards</li>
+            </ul>
+
+            <h3>4.3 Payment Reconciliation</h3>
+            <p>Reconcile payments regularly:</p>
+            <ul>
+                <li>Match recorded payments with bank statements</li>
+                <li>Investigate discrepancies</li>
+                <li>Mark reconciled transactions</li>
+                <li>Generate reconciliation reports</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>⚠️ Important:</strong> Always verify payment details before confirming to prevent errors.
+            </div>
+        </div>
+
+        <!-- Loans Section -->
+        <div id="loans" class="manual-section">
+            <h2>Loan Management</h2>
+            <p>Track and manage shop loans and financing.</p>
+
+            <h3>5.1 Viewing Active Loans</h3>
+            <p>Access all loan information:</p>
+            <ul>
+                <li>Navigate to Loans section</li>
+                <li>View list of all active and inactive loans</li>
+                <li>See loan details: amount, term, interest rate</li>
+                <li>Check repayment status</li>
+            </ul>
+
+            <h3>5.2 Loan Components</h3>
+            <p>Each loan record includes:</p>
+            <ul>
+                <li><strong>Principal Amount:</strong> Original loan amount</li>
+                <li><strong>Interest Rate:</strong> Annual percentage rate</li>
+                <li><strong>Repayment Term:</strong> Duration of loan</li>
+                <li><strong>Monthly Payment:</strong> Expected payment amount</li>
+                <li><strong>Outstanding Balance:</strong> Current owed amount</li>
+                <li><strong>Status:</strong> Active or paid off</li>
+            </ul>
+
+            <h3>5.3 Recording Loan Payments</h3>
+            <p>Process loan repayments:</p>
+            <ul>
+                <li>Go to the specific loan</li>
+                <li>Click "Record Payment"</li>
+                <li>Enter payment amount</li>
+                <li>Add payment date</li>
+                <li>Select payment method</li>
+                <li>Save and confirm</li>
+            </ul>
+
+            <h3>5.4 Loan Reports</h3>
+            <p>Generate loan-related reports:</p>
+            <ul>
+                <li>Loan summary by shop</li>
+                <li>Repayment schedules</li>
+                <li>Overdue payment alerts</li>
+                <li>Loan portfolio analysis</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>📋 Reminder:</strong> Review loan repayment schedules monthly and follow up on overdue payments promptly.
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div id="faq" class="manual-section">
+            <h2>Frequently Asked Questions</h2>
+
+            <h3>Q: How do I reconcile my bank account?</h3>
+            <p>A: In the Reconciliation section, select your bank account, download the bank statement, and match transactions with recorded payments. Mark each transaction as reconciled.</p>
+
+            <h3>Q: What should I do if a payment is recorded incorrectly?</h3>
+            <p>A: Contact your administrator to reverse the transaction. Maintain a record of all corrections for audit purposes.</p>
+
+            <h3>Q: How often should I generate financial reports?</h3>
+            <p>A: Daily for cash position monitoring, weekly for detailed analysis, and monthly for comprehensive reporting and management review.</p>
+
+            <h3>Q: Can I export reports in different formats?</h3>
+            <p>A: Yes, reports can be exported as PDF, Excel, or CSV depending on your needs.</p>
+
+            <h3>Q: How do I handle multi-currency transactions?</h3>
+            <p>A: All transactions are recorded in the system's base currency (typically TZS). Exchange rates are applied automatically at transaction time.</p>
+
+            <h3>Q: What is the audit trail?</h3>
+            <p>A: Every transaction is logged with timestamp, user information, and changes made. Access audit logs from the Audit section.</p>
+
+            <h3>Q: How do I monitor cash flow?</h3>
+            <p>A: Use the Cash Flow Report to see all inflows and outflows. Create projections based on historical data and planned transactions.</p>
+
+            <h3>Q: Who should I contact for complex accounting questions?</h3>
+            <p>A: Email: nkurushidaniphord@gmail.com | Phone: +255 679 299 258</p>
+
+            <div class="highlight-box">
+                <strong>❓ Additional Support:</strong> Consult the system documentation or contact support for comprehensive answers.
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="javascript:void(0);" class="btn btn-manual btn-primary-manual" onclick="downloadManual()">
+            <i class="fas fa-download me-2"></i>Download as PDF
+        </a>
+        <a href="/accountant-reports" class="btn btn-manual btn-secondary-manual">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<script>
+function switchTab(tabName) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.manual-section');
+    sections.forEach(section => section.classList.remove('active'));
+
+    // Remove active class from all nav items
+    const navItems = document.querySelectorAll('.manual-nav-item');
+    navItems.forEach(item => item.classList.remove('active'));
+
+    // Show selected section
+    document.getElementById(tabName).classList.add('active');
+
+    // Add active class to clicked nav item
+    event.target.closest('.manual-nav-item').classList.add('active');
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+function downloadManual() {
+    const link = document.createElement('a');
+    link.href = '/accountant/download/manual';
+    link.download = 'Accountant_User_Manual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+</body>
+</html>
+
