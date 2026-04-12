@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:replace="~{fragments/ui :: head('FROMS | Role Dashboard', true)}"></th:block>
+<body class="ui-body" th:attr="data-role=${loggedInRole},data-username=${loggedInUsername},data-page='role-dashboard',data-lang=${currentLang}">
+<style>
+    body[data-page='role-dashboard'] [id] { scroll-margin-top: 104px; }
+</style>
+<th:block th:replace="~{fragments/header :: dashboardHeader(
+    @{/dashboard},
+    ${dashboardDefinition.dashboardName},
+    @{/control-room/dashboard},
+    'Control Room',
+    ${canAccessControlRoomDashboard},
+    @{/operations/dashboard},
+    'Operations',
+    ${canAccessOperationsDashboard}
+)}"></th:block>
+
+<div class="ui-shell">
+    <div class="dashboard-workbench">
+        <aside th:replace="~{fragments/sidebar :: roleSidebar}"></aside>
+        <main class="dashboard-main ui-stack">
+    <nav class="ui-breadcrumbs ui-hide-center" aria-label="Breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span>/</span>
+        <span aria-current="page">Role Dashboard</span>
+    </nav>
+    <div th:if="${success}" class="alert alert-success ui-alert ui-hide-center" role="alert" data-alert-kind="success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger ui-alert ui-hide-center" role="alert" data-alert-kind="error" th:text="${error}"></div>
+    <section class="ui-hero ui-hide-center" id="overview-panel">
+        <div class="ui-hero-matrix">
+            <div>
+                <div class="ui-eyebrow mb-2" th:text="${dashboardDefinition.scopeLabel}">Operational scope</div>
+                <div class="ui-hero-chip-row">
+                    <span class="ui-chip"><i class="fas fa-chart-line"></i><span>Faster executive scan</span></span>
+                    <span class="ui-chip"><i class="fas fa-layer-group"></i><span>Role-focused modules</span></span>
+                    <span class="ui-chip"><i class="fas fa-bolt"></i><span>Quick operational access</span></span>
+                </div>
+                <h1 class="h3 fw-bold mb-3" th:text="${dashboardDefinition.dashboardName}">Role Dashboard</h1>
+                <p class="mb-0 text-white-50" th:text="${dashboardDefinition.overview}">Role overview.</p>
+                <div class="ui-hero-actions">
+                    <a href="#analytics-panel" class="btn ui-btn-primary">Open Analytics</a>
+                    <a href="#notification-center" class="btn ui-btn-outline">Notifications</a>
+                    <a href="#report-center-module" class="btn ui-btn-outline" th:if="${!#lists.isEmpty(availableReports)}">Reports</a>
+                    <a href="#user-management-module" class="btn ui-btn-outline" th:if="${canManageUsers}">User Management</a>
+                </div>
+            </div>
+            <div class="ui-hero-side">
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Signed In User</div>
+                    <div class="fw-semibold" th:text="${loggedInUsername ?: 'FROMS User'}">FROMS User</div>
+                </div>
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Assigned Role</div>
+                    <div class="fw-semibold" th:text="${loggedInRole ?: 'Operational Role'}">Operational Role</div>
+                </div>
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Tele-Support Mode</div>
+                    <div class="fw-semibold" th:text="${teleSupportMetrics.supportMode}">Monitor support readiness</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ui-command-grid ui-hide-center" th:if="${!isAdminWorkbench}">
+        <article class="ui-command-card ui-command-card-metric ui-command-card-incidents">
+            <div class="ui-command-icon"><i class="fas fa-fire"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Visible Incidents</div>
+                <div class="ui-command-value" th:text="${metrics.totalIncidents}">0</div>
+                <div class="ui-command-note">Incident scope available to this role.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-emergency">
+            <div class="ui-command-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Active Emergencies</div>
+                <div class="ui-command-value" th:text="${metrics.activeEmergencies}">0</div>
+                <div class="ui-command-note">Open incidents needing active command attention.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-tele">
+            <div class="ui-command-icon"><i class="fas fa-headset"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Pending Tele Requests</div>
+                <div class="ui-command-value" th:text="${teleSupportMetrics.pendingRequests}">0</div>
+                <div class="ui-command-note">High-priority scenes likely to need remote support.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-experts">
+            <div class="ui-command-icon"><i class="fas fa-user-shield"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Online Experts</div>
+                <div class="ui-command-value" th:text="${teleSupportMetrics.onlineExperts}">0</div>
+                <div class="ui-command-note">Available specialist pool for remote guidance.</div>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-card ui-hide-center" th:if="${roleWorkspace != null}">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1">Responsibility Boundaries</h2>
+                <div class="small ui-muted" th:text="${roleWorkspace.roleLabel}">Role scope</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span>Enforced</span></span>
+        </div>
+        <div class="ui-manual-grid">
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Assigned Responsibilities</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${roleWorkspace.responsibilities}" th:text="${item}">Assigned responsibility</li>
+                </ul>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Enforcement Rule</div>
+                <ul class="ui-manual-list">
+                    <li>No responsibility means no access and no visibility.</li>
+                    <li>Unauthorized buttons, forms, and modules are hidden in this UI.</li>
+                    <li>Backend role validation blocks direct URL and API access outside your scope.</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="ui-briefing-strip ui-hide-center" th:if="${!isAdminWorkbench}">
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Role Scope</div>
+            <div class="ui-briefing-stat">
+                <span>Visible incidents</span>
+                <strong class="ui-briefing-value" th:text="${metrics.totalIncidents}">0</strong>
+            </div>
+            <p class="ui-briefing-copy">This workspace now highlights the most relevant records first so a presenter or operator can explain the role quickly.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Current Pressure</div>
+            <div class="ui-briefing-stat">
+                <span>Active emergencies</span>
+                <strong class="ui-briefing-value" th:text="${metrics.activeEmergencies}">0</strong>
+            </div>
+            <p class="ui-briefing-copy">Operational urgency, tele-support demand, and next steps are easier to read without hunting across cards.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Priority Flow</div>
+            <h2 class="ui-briefing-title">Move from overview to action without losing context.</h2>
+            <div class="ui-briefing-actions">
+                <a href="#incident-feed-panel" class="ui-link-arrow" th:if="${!isAdminWorkbench}"><span>Review incidents</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#tele-support-module" class="ui-link-arrow" th:if="${canViewTeleSupport}"><span>Check tele-support</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#map-panel" class="ui-link-arrow" th:if="${canViewMap}"><span>Open map</span><i class="fas fa-arrow-right"></i></a>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-briefing-strip ui-hide-center" th:if="${isAdminWorkbench}">
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Admin Focus</div>
+            <h2 class="ui-briefing-title">Administrative modules are now easier to present and navigate.</h2>
+            <p class="ui-briefing-copy">The layout gives user management, geography, documents, and verification stronger hierarchy for oversight demos.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Control Area</div>
+            <div class="ui-briefing-actions">
+                <a href="#user-management-module" class="ui-link-arrow" th:if="${canManageUsers}"><span>Manage users</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#geography-module" class="ui-link-arrow" th:if="${canManageGeography}"><span>Review geography</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#documentation-module" class="ui-link-arrow" th:if="${canAccessAdminDocuments}"><span>Open documents</span><i class="fas fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Verification</div>
+            <div class="ui-briefing-actions">
+                <a href="#system-test-module" class="ui-link-arrow" th:if="${canRunSystemTests}"><span>Run system test</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#profile-actions" class="ui-link-arrow"><span>Update profile</span><i class="fas fa-arrow-right"></i></a>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="user-manual-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1" th:text="${internalUserManual.title}">Internal User Manual</h2>
+                <div class="small ui-muted" th:text="${internalUserManual.audience}">Role-specific guidance</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span>Role Guidance</span></span>
+        </div>
+        <p class="ui-muted mb-3" th:text="${internalUserManual.summary}">Use the internal dashboard as a role-filtered entry point.</p>
+        <div class="ui-manual-grid">
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Quick Start</div>
+                <ol class="ui-manual-list">
+                    <li th:each="item : ${internalUserManual.quickStart}" th:text="${item}">Review the overview card and notifications at sign-in.</li>
+                </ol>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Main Tasks</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${internalUserManual.keyTasks}" th:text="${item}">View assigned incidents and role-scoped records.</li>
+                </ul>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Access Boundaries</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${internalUserManual.accessBoundaries}" th:text="${item}">The system shows only the records your role is allowed to see.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="ui-soft-note mt-3">
+            <div class="fw-semibold mb-1">Operator Note</div>
+            <div class="small ui-muted" th:text="${internalUserManual.helpNote}">If a needed module is missing, request the correct role or station assignment.</div>
+        </div>
+    </section>
+
+<section class="ui-dual-grid" id="analytics-panel">
+        <div class="ui-section-shell">
+            <div class="ui-card">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Operational Overview</h2>
+                    <span class="small ui-muted">Live operational trend summary</span>
+                </div>
+                <div class="ui-analytics-grid">
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Incident Pressure</h3>
+                            <span class="small ui-muted">Active vs cleared workload</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="roleIncidentMixChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Helps presenters explain current operational pressure without opening detailed tables first.</div>
+                    </article>
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Support Readiness</h3>
+                            <span class="small ui-muted">Tele-support and staffing posture</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="roleSupportChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Shows pending requests, online experts, and visible workload in one fast scan.</div>
+                    </article>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="incident-feed-panel" th:if="${!isAdminWorkbench}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Registered Incidents</h2>
+                        <span class="small ui-muted">Role-filtered incident table showing report type, operational category, approval stage, and field details.</span>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="button" class="btn ui-btn-outline" data-history-back>Back</button>
+                        <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal" th:if="${canRegisterOperationalIncident}">Register Incident</button>
+                    </div>
+                </div>
+                <div class="ui-mini-grid mb-3">
+                    <div class="ui-kpi"><span>Total in Scope</span><strong th:text="${#lists.size(incidentRecords)}">0</strong></div>
+                    <div class="ui-kpi"><span>Full Reports</span><strong th:text="${incidentFullCount}">0</strong></div>
+                    <div class="ui-kpi"><span>Pending Approval</span><strong th:text="${pendingIncidentApprovalCount}">0</strong></div>
+                    <div class="ui-kpi"><span>Initial Reports</span><strong th:text="${incidentInitialCount}">0</strong></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Incident</th>
+                            <th>Report</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Approval</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="incident : ${incidentRecords}">
+                            <td>
+                                <div class="fw-semibold" th:text="${incident.incidentNumber}">INC-1</div>
+                                <div class="small ui-muted" th:text="${incident.incidentType}">FIRE</div>
+                            </td>
+                            <td>
+                                <div th:text="${incident.reportLevel}">INITIAL</div>
+                                <div class="small ui-muted" th:text="${incident.reportedAt}">2026-04-10T10:00</div>
+                            </td>
+                            <td th:text="${incident.operationCategory ?: 'GENERAL'}">FIRE_FIGHTING</td>
+                            <td>
+                                <div th:text="${incident.status}">ACTIVE</div>
+                                <div class="small ui-muted" th:text="${incident.severity}">HIGH</div>
+                            </td>
+                            <td>
+                                <div th:text="${incident.approvalStatus}">PENDING</div>
+                                <div class="small ui-muted" th:text="${incident.approvalCurrentLevel}">DISTRICT_OPERATION_OFFICER</div>
+                            </td>
+                            <td th:text="${incident.location}">Location</td>
+                            <td>
+                                <div class="ui-action-strip">
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-view-incident=${incident.id}">View</button>
+                                    <button type="button"
+                                            class="btn ui-btn-outline"
+                                            th:if="${canRegisterOperationalIncident and incident.createdById == currentUserId and #strings.equals(incident.approvalStatus, 'DENIED')}"
+                                            th:attr="data-edit-incident=${incident.id}">
+                                        Return &amp; Edit
+                                    </button>
+                                    <button type="button"
+                                            class="btn ui-btn-primary"
+                                            th:if="${canReviewOperationalApprovals and #strings.equals(loggedInRole, incident.approvalCurrentLevel) and #strings.equals(incident.approvalStatus, 'PENDING')}"
+                                            th:attr="data-approve-incident=${incident.id}">
+                                        Approve
+                                    </button>
+                                    <button type="button"
+                                            class="btn ui-btn-outline"
+                                            th:if="${canReviewOperationalApprovals and #strings.equals(loggedInRole, incident.approvalCurrentLevel) and #strings.equals(incident.approvalStatus, 'PENDING')}"
+                                            th:attr="data-deny-incident=${incident.id}">
+                                        Deny
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(incidentRecords)}">
+                            <td colspan="7" class="ui-muted">No incidents are visible for this role yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-section-shell">
+            <div class="ui-card">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Performance Analytics</h2>
+                    <span class="small ui-muted">Operational posture</span>
+                </div>
+                <div class="ui-analytics-grid">
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Resource Readiness</h3>
+                            <span class="small ui-muted">Equipment posture</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="roleResourceChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Monitors available equipment, deployed units, and maintenance pressure.</div>
+                    </article>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="tele-support-module" th:if="${!isAdminWorkbench and canViewTeleSupport}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Tele-Support Module</h2>
+                    <span class="small ui-muted">Integrated across all dashboards</span>
+                </div>
+                <div class="ui-stack">
+                    <div class="small ui-muted">Use this desk to request remote specialist guidance for an active incident. Tele-support specialists online will receive an alarm and can join the live video feed.</div>
+                    <div class="ui-action-strip" th:if="${!#lists.isEmpty(teleSupportRequestOptions)}">
+                        <select id="teleSupportIncidentId" class="form-select">
+                            <option value="">Select active incident</option>
+                            <option th:each="item : ${teleSupportRequestOptions}"
+                                    th:value="${item.id}"
+                                    th:text="${item.incidentNumber + ' - ' + item.incidentType + ' - ' + item.location + ' - ' + item.status}">
+                                Incident
+                            </option>
+                        </select>
+                        <button type="button" class="btn ui-btn-primary" id="teleSupportRequestButton">Request Tele-Support</button>
+                    </div>
+                    <div class="small ui-muted" th:if="${#lists.isEmpty(teleSupportRequestOptions)}">There is no active incident in your scope that can be sent for tele-support right now.</div>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" th:if="${canViewLiveVideo}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Live Field Video</h2>
+                    <span class="small ui-muted">Real-time field awareness</span>
+                </div>
+                <div class="ui-live-screen ui-live-screen-sm ui-live-screen-remote">
+                    <div class="ui-live-badge">LIVE</div>
+                    <video id="remoteVideo" autoplay playsinline controls class="ui-video-frame ui-video-frame-remote"></video>
+                    <div class="ui-live-overlay">
+                        <div>
+                            <div class="fw-semibold">Field streaming channel</div>
+                            <div class="small text-white-50">Control room and command viewers</div>
+                        </div>
+                        <div class="small text-white-50" id="videoSignalStatus">Signal offline</div>
+                    </div>
+                </div>
+                <div class="ui-action-strip mt-3">
+                    <button type="button" class="btn ui-btn-outline" data-toggle-remote-audio>Mute Speaker</button>
+                </div>
+                <div class="ui-action-strip mt-3" th:if="${canStartLiveVideo}">
+                    <select class="form-select ui-audio-select" data-stream-audio-mode>
+                        <option value="true">Allow voice</option>
+                        <option value="false">Mute microphone</option>
+                    </select>
+                    <button type="button" class="btn ui-btn-primary" data-start-stream>Start Live Video</button>
+                    <button type="button" class="btn ui-btn-outline" data-end-stream>End Stream</button>
+                </div>
+                <video id="localVideo" autoplay playsinline muted class="ui-video-preview ui-video-frame-preview" th:if="${canStartLiveVideo}"></video>
+                <div class="small ui-muted mt-2"
+                     th:text="${canStartLiveVideo} ? 'This role can publish live video because live reporting is part of its assigned responsibilities.' : 'This role has viewer-only access to live video under the responsibility matrix.'">
+                    This role has viewer-only access to live video under the responsibility matrix.
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="ai-recommendations-panel" th:if="${!isAdminWorkbench and canSeeAiRecommendations}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">AI Recommendations</h2>
+                    <span class="small ui-muted">Latest visible guidance</span>
+                </div>
+                <div class="ui-stack">
+                    <article class="ui-highlight-card" th:each="recommendation : ${recommendations}">
+                        <div class="ui-status-badge mb-2">
+                            <span class="ui-status-dot"></span>
+                            <span th:text="${recommendation.riskLevel}">HIGH</span>
+                        </div>
+                        <div class="fw-semibold mb-1" th:text="${recommendation.title}">Recommendation title</div>
+                        <div class="small ui-muted" th:text="${recommendation.summary}">Recommendation summary</div>
+                    </article>
+                    <div th:if="${#lists.isEmpty(recommendations)}" class="small ui-muted">AI guidance will appear here as soon as visible incidents or approved reports generate recommendations.</div>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" th:if="${!isAdminWorkbench}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Command Snapshot</h2>
+                    <span class="small ui-muted">Current posture</span>
+                </div>
+                <div class="small ui-muted mb-2">Stations in scope: <strong th:text="${#lists.size(stations)}">0</strong></div>
+                <div class="small ui-muted mb-2">Avg response time: <strong th:text="${#numbers.formatDecimal(metrics.averageResponseTime, 1, 1)} + 'm'">0.0m</strong></div>
+                <div class="small ui-muted mb-2">Available equipment: <strong th:text="${equipmentMetrics.availableUnits}">0</strong></div>
+                <div class="small ui-muted">Live calls in scope: <strong th:text="${#lists.size(calls)}">0</strong></div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="incident-registration-module" th:if="${canRegisterOperationalIncident}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Incident Registration Desk</h2>
+                        <div class="small ui-muted">Station operation officers and station fire operation officers can register both initial and full incident reports with the detailed fire or rescue fields requested for operational review.</div>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="button" class="btn ui-btn-outline" data-history-back>Back</button>
+                        <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#incidentModal">Open Incident Form</button>
+                    </div>
+                </div>
+                <div class="ui-soft-note">
+                    <div class="fw-semibold mb-1">Report flow</div>
+                    <div class="small ui-muted">Initial reports focus on type, location, equipment sent, personnel sent, names, and supervisor. Full reports add duration, other security organs, oil used, effects on people/environment, injuries, deaths, and AI recommendations.</div>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="equipment-summary-module" th:if="${canAccessStationOperationsModule or canManageEquipment or canManageHydrants or canReviewOperationalApprovals}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0" th:text="${#strings.equals(loggedInRole, 'STATION_FIRE_OPERATION_OFFICER') ? 'Equipment Management' : 'Equipments'}">Equipment Management</h2>
+                        <div class="small ui-muted">Station operation officers and station fire operation officers can register equipment and hydrant records. Higher operational levels review, approve, or deny each submission.</div>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="button" class="btn ui-btn-outline" data-history-back>Back</button>
+                        <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#equipmentModal" th:if="${canManageEquipment}">Register Equipment</button>
+                        <button type="button" class="btn ui-btn-outline" data-bs-toggle="modal" data-bs-target="#hydrantModal" th:if="${canManageHydrants}">Register Hydrants</button>
+                    </div>
+                </div>
+                <div class="ui-mini-grid mb-3">
+                    <div class="ui-kpi">
+                        <span>Total Equipment Records</span>
+                        <strong th:text="${#lists.size(equipmentRecords)}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Hydrant Reports</span>
+                        <strong th:text="${#lists.size(hydrantRecords)}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Maintenance Alerts</span>
+                        <strong th:text="${equipmentMetrics.maintenanceAlerts}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Pending Equipment Approvals</span>
+                        <strong th:text="${pendingOperationalApprovalCount}">0</strong>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Equipment Type</th>
+                            <th>Total Registered</th>
+                            <th>In Use</th>
+                            <th>Not In Use</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="summary : ${equipmentTypeSummaries}">
+                            <td th:text="${summary.label}">Fire Tender</td>
+                            <td th:text="${summary.total}">0</td>
+                            <td th:text="${summary.inUse}">0</td>
+                            <td th:text="${summary.notInUse}">0</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(equipmentTypeSummaries)}">
+                            <td colspan="4" class="ui-muted">No equipment has been registered yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="hydrants-module" th:if="${canManageHydrants or canReviewOperationalApprovals}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Hydrants</h2>
+                        <div class="small ui-muted">View or register hydrant coverage and working status by station scope.</div>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="button" class="btn ui-btn-outline" data-history-back>Back</button>
+                        <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#hydrantModal" th:if="${canManageHydrants}">Register Hydrants</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Station</th>
+                            <th>Total</th>
+                            <th>Working</th>
+                            <th>Not Working</th>
+                            <th>Low Pressure</th>
+                            <th>Approval</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="report : ${hydrantRecords}">
+                            <td>
+                                <div class="fw-semibold" th:text="${report.station}">Station</div>
+                                <div class="small ui-muted" th:text="${report.createdAt}">2026-04-10T10:00</div>
+                            </td>
+                            <td th:text="${report.totalHydrants}">0</td>
+                            <td th:text="${report.working}">0</td>
+                            <td th:text="${report.notWorking}">0</td>
+                            <td th:text="${report.lowPressure}">0</td>
+                            <td>
+                                <div th:text="${report.approvalStatus}">PENDING</div>
+                                <div class="small ui-muted" th:text="${report.approvalCurrentLevel}">DISTRICT_OPERATION_OFFICER</div>
+                            </td>
+                            <td>
+                                <div class="ui-action-strip">
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-view-hydrant=${report.id}">View</button>
+                                    <button type="button"
+                                            class="btn ui-btn-primary"
+                                            th:if="${canReviewOperationalApprovals and #strings.equals(loggedInRole, report.approvalCurrentLevel) and #strings.equals(report.approvalStatus, 'PENDING')}"
+                                            th:attr="data-approve-hydrant=${report.id}">
+                                        Approve
+                                    </button>
+                                    <button type="button"
+                                            class="btn ui-btn-outline"
+                                            th:if="${canReviewOperationalApprovals and #strings.equals(loggedInRole, report.approvalCurrentLevel) and #strings.equals(report.approvalStatus, 'PENDING')}"
+                                            th:attr="data-deny-hydrant=${report.id}">
+                                        Deny
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(hydrantRecords)}">
+                            <td colspan="7" class="ui-muted">No hydrant reports are visible at your level yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center"
+                 th:each="category : ${equipmentCategoryViews}"
+                 th:id="${category.anchorId}"
+                 th:if="${canManageEquipment or canReviewOperationalApprovals}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0" th:text="${category.label}">Fire Tender</h2>
+                        <div class="small ui-muted" th:text="${category.description}">Category description.</div>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="button" class="btn ui-btn-outline" data-history-back>Back</button>
+                        <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#equipmentModal" th:if="${canManageEquipment}">Register</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>Status</th>
+                            <th>Date Bought</th>
+                            <th>Maintenance</th>
+                            <th>Store Qty</th>
+                            <th>Approval</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${category.items}">
+                            <td>
+                                <div class="fw-semibold" th:text="${item.name}">Equipment</div>
+                                <div class="small ui-muted" th:text="${item.serialNumber}">Serial</div>
+                            </td>
+                            <td>
+                                <div th:text="${item.operationalStatus}">IN_USE</div>
+                                <div class="small ui-muted" th:text="${item.conditionStatus}">GOOD</div>
+                            </td>
+                            <td th:text="${item.purchaseDate ?: 'Not set'}">2026-01-01</td>
+                            <td th:text="${#strings.equals(item.operationalStatus, 'IN_USE') ? ('Last serviced: ' + item.lastServicedAt) : ('Maintenance required: ' + item.maintenanceRequired)}">Maintenance</td>
+                            <td th:text="${item.quantityInStore}">1</td>
+                            <td>
+                                <div th:text="${item.approvalStatus}">PENDING</div>
+                                <div class="small ui-muted" th:text="${item.approvalCurrentLevel}">DISTRICT_OPERATION_OFFICER</div>
+                            </td>
+                            <td>
+                                <div class="ui-action-strip">
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-view-equipment=${item.id}">View</button>
+                                    <button type="button"
+                                            class="btn ui-btn-outline"
+                                            th:if="${canManageEquipment and item.createdById == currentUserId and #strings.equals(item.approvalStatus, 'DENIED')}"
+                                            th:attr="data-edit-equipment=${item.id}">
+                                        Return &amp; Edit
+                                    </button>
+                                    <button type="button"
+                                            class="btn ui-btn-primary"
+                                            th:if="${canReviewOperationalApprovals and #strings.equals(loggedInRole, item.approvalCurrentLevel) and #strings.equals(item.approvalStatus, 'PENDING')}"
+                                            th:attr="data-approve-equipment=${item.id}">
+                                        Approve
+                                    </button>
+                                    <button type="button"
+                                            class="btn ui-btn-outline"
+                                            th:if="${canReviewOperationalApprovals and #strings.equals(loggedInRole, item.approvalCurrentLevel) and #strings.equals(item.approvalStatus, 'PENDING')}"
+                                            th:attr="data-deny-equipment=${item.id}">
+                                        Deny
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(category.items)}">
+                            <td colspan="7" class="ui-muted">No records have been registered for this equipment type yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="map-panel" th:if="${canViewMap}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">GIS and Routing</h2>
+                    <span class="small ui-muted">AI-selected dispatch path, distance, ETA, and printable route output</span>
+                </div>
+                <div class="ui-mini-grid mb-3" th:if="${priorityRoute != null}">
+                    <div class="ui-kpi"><span>Recommended Station</span><strong th:text="${priorityRoute.stationName}">Station</strong></div>
+                    <div class="ui-kpi"><span>Straight Distance</span><strong th:text="${priorityRoute.straightDistanceKm} + ' km'">0 km</strong></div>
+                    <div class="ui-kpi"><span>Road Distance</span><strong th:text="${priorityRoute.roadDistanceKm} + ' km'">0 km</strong></div>
+                    <div class="ui-kpi"><span>ETA</span><strong th:text="${priorityRoute.etaMinutes} + ' min'">0 min</strong></div>
+                </div>
+                <div class="ui-map-placeholder ui-map-shell" th:if="${priorityRoute != null}">
+                    <iframe
+                            class="ui-map-frame"
+                            title="AI dispatch route map"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            th:src="${priorityRoute.embedUrl}"></iframe>
+                    <div class="ui-map-meta">
+                        <div class="fw-semibold">AI route to <span th:text="${priorityRoute.stationName}">Station</span></div>
+                        <div class="small ui-muted">Built from Haversine distance, road-distance conversion, and learned response behavior from historical station performance.</div>
+                    </div>
+                </div>
+                <div class="ui-map-placeholder ui-map-shell" th:if="${priorityRoute == null}">
+                    <iframe
+                            class="ui-map-frame"
+                            th:title="${scopeMap.title}"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            th:src="${scopeMap.embedUrl}"></iframe>
+                    <div class="ui-map-meta">
+                        <div class="fw-semibold" th:text="${scopeMap.title}">Operational map</div>
+                        <div class="small ui-muted" th:text="${scopeMap.summary}">Use this live map for routing context, district positioning, and quick operational orientation before dispatch.</div>
+                    </div>
+                </div>
+                <div class="ui-action-strip mt-3">
+                    <a class="btn ui-btn-primary"
+                       th:if="${priorityRoute != null}"
+                       th:href="${priorityRoute.sourceType == 'INCIDENT' ? '/routes/print/incidents/' + priorityRoute.sourceId : '/routes/print/calls/' + priorityRoute.sourceId}"
+                       target="_blank">Print Map</a>
+                    <a class="btn ui-btn-outline" th:if="${priorityRoute != null}" th:href="${priorityRoute.directionsUrl}" target="_blank" rel="noopener">Live Directions</a>
+                    <a class="btn ui-btn-outline" th:href="${priorityRoute != null ? priorityRoute.directionsUrl : scopeMap.openUrl}" target="_blank" rel="noopener">Open Full Map</a>
+                </div>
+                <ol class="ui-manual-list mt-3 mb-0" th:if="${priorityRoute != null}">
+                    <li th:each="direction : ${priorityRoute.directions}" th:text="${direction}">Direction</li>
+                </ol>
+                <div class="ui-soft-note mt-3" th:if="${priorityRoute == null}">
+                    <div class="fw-semibold mb-1">No GPS-based route in current scope</div>
+                    <div class="small ui-muted">The system now falls back to the current level&apos;s own operational surroundings until a visible call or incident carries GPS coordinates.</div>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="investigation-module" th:if="${canAccessInvestigations}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Fire Investigation</h2>
+                        <div class="small ui-muted">Structured investigation, hierarchical approval, and document traceability.</div>
+                    </div>
+                    <div class="ui-action-strip" th:if="${canSubmitInvestigations and #strings.equals(loggedInRole, 'DISTRICT_INVESTIGATION_OFFICER')}" sec:authorize="hasRole('DISTRICT_INVESTIGATION_OFFICER')">
+                        <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#investigationModal">Start Investigation</button>
+                    </div>
+                </div>
+                <div class="ui-mini-grid mb-3">
+                    <div class="ui-kpi">
+                        <span>Pending Reports</span>
+                        <strong th:text="${investigationMetrics.pendingReports}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Submitted Reports</span>
+                        <strong th:text="${investigationMetrics.submittedReports}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Approved Reports</span>
+                        <strong th:text="${investigationMetrics.approvedReports}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Denied Reports</span>
+                        <strong th:text="${investigationMetrics.deniedReports}">0</strong>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Report</th>
+                            <th>Incident</th>
+                            <th>Status</th>
+                            <th>Current Level</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="investigation : ${investigations}">
+                            <td>
+                                <div class="fw-semibold" th:text="${investigation.investigationNumber}">INV-1</div>
+                                <div class="small ui-muted" th:text="${investigation.location}">Location</div>
+                            </td>
+                            <td>
+                                <div th:text="${investigation.incidentNumber}">INC-1</div>
+                                <div class="small ui-muted" th:text="${investigation.incidentType}">FIRE</div>
+                            </td>
+                            <td th:text="${investigation.status}">PENDING</td>
+                            <td th:text="${investigation.currentLevel}">LEVEL</td>
+                            <td>
+                                <div class="ui-action-strip">
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-view-investigation=${investigation.id}">History</button>
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-pdf-investigation=${investigation.id},data-pdf-lang='en'">EN PDF</button>
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-pdf-investigation=${investigation.id},data-pdf-lang='sw'">SW PDF</button>
+                                    <button type="button"
+                                            class="btn ui-btn-primary"
+                                            th:if="${canApproveInvestigations and #strings.equals(loggedInRole, investigation.currentLevel)}"
+                                            sec:authorize="hasAnyRole('DISTRICT_FIRE_OFFICER','REGIONAL_INVESTIGATION_OFFICER','REGIONAL_FIRE_OFFICER','FIRE_INVESTIGATION_HOD','COMMISSIONER_OPERATIONS','CGF')"
+                                            th:attr="data-approve-investigation=${investigation.id}">
+                                        Approve
+                                    </button>
+                                    <button type="button"
+                                            class="btn ui-btn-outline"
+                                            th:if="${canApproveInvestigations and #strings.equals(loggedInRole, investigation.currentLevel)}"
+                                            sec:authorize="hasAnyRole('DISTRICT_FIRE_OFFICER','REGIONAL_INVESTIGATION_OFFICER','REGIONAL_FIRE_OFFICER','FIRE_INVESTIGATION_HOD','COMMISSIONER_OPERATIONS','CGF')"
+                                            th:attr="data-deny-investigation=${investigation.id}">
+                                        Deny
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(investigations)}">
+                            <td colspan="5" class="ui-muted">No investigation reports are visible at your level yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui-card" id="notification-center" th:if="${canAccessInvestigations or !#lists.isEmpty(notifications)}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Notifications</h2>
+                    <span class="ui-status-badge"><span class="ui-status-dot"></span><span th:text="${notificationUnreadCount} + ' unread'">0 unread</span></span>
+                </div>
+                <div class="ui-list-grid">
+                    <div class="ui-list-row" th:each="notification : ${notifications}">
+                        <div>
+                            <div class="fw-semibold" th:text="${notification.title}">Notification</div>
+                            <div class="small ui-muted" th:text="${notification.message}">Message</div>
+                        </div>
+                        <strong th:text="${notification.createdAt}">Time</strong>
+                    </div>
+                <div class="small ui-muted" th:if="${#lists.isEmpty(notifications)}">No notifications available yet.</div>
+                </div>
+            </div>
+
+            <div class="ui-card" id="user-management-module" th:if="${canManageUsers}" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">User Directory</h2>
+                        <div class="small ui-muted">Use the dropdown to open the user list popup or the user registration popup.</div>
+                    </div>
+                </div>
+                <div class="ui-mini-grid mb-3">
+                    <div class="ui-kpi">
+                        <span>Total Users</span>
+                        <strong th:text="${userSecuritySummary.totalUsers}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Inactive Users</span>
+                        <strong th:text="${userSecuritySummary.inactiveUsers}">0</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Weak Passwords</span>
+                        <strong th:text="${userSecuritySummary.weakPasswords}">0</strong>
+                    </div>
+                </div>
+                <div class="ui-soft-note" th:if="${!#lists.isEmpty(lockedAccounts)}">
+                    <div class="fw-semibold mb-1">Locked accounts awaiting admin review</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge text-bg-light" th:each="lockedUser : ${lockedAccounts}" th:text="${lockedUser.username}">user</span>
+                    </div>
+                </div>
+                <div class="dropdown mt-3">
+                    <button class="btn ui-btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        User Management Menu
+                    </button>
+                    <ul class="dropdown-menu ui-dropdown-menu">
+                        <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#userListModal">View Users</button></li>
+                        <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#userFormModal" data-user-action="create">Register User</button></li>
+                    </ul>
+                </div>
+                <div class="small ui-muted mt-3">View users opens a popup directory. Register user opens the account-creation popup.</div>
+            </div>
+
+            <div class="ui-card" id="geography-module" th:if="${canManageGeography}" sec:authorize="hasRole('SUPER_ADMIN')">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Geography Management</h2>
+                        <div class="small ui-muted">Register regions, districts, and fire stations used by public reporting and routing.</div>
+                    </div>
+                </div>
+                <div class="ui-action-strip mb-3">
+                    <button type="button" class="btn ui-btn-primary" data-bs-toggle="modal" data-bs-target="#regionModal">Register Region</button>
+                    <button type="button" class="btn ui-btn-outline" data-bs-toggle="modal" data-bs-target="#districtModal">Register District</button>
+                    <button type="button" class="btn ui-btn-outline" data-bs-toggle="modal" data-bs-target="#stationModal">Register Station</button>
+                </div>
+                <div class="small ui-muted">Public users now select only admin-registered region, district, and nearby fire station. Reports are delivered only to the selected station control room.</div>
+            </div>
+
+            <div class="ui-card" id="report-center-module" th:if="${!#lists.isEmpty(availableReports)}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Report Center</h2>
+                        <div class="small ui-muted">Role-scoped downloadable reports for fire operations, rescue operations, investigations, and user guidance.</div>
+                    </div>
+                </div>
+                <div class="ui-list-grid">
+                    <div class="ui-list-row" th:each="reportItem : ${availableReports}">
+                        <div class="ui-report-row-copy">
+                            <div class="fw-semibold" th:text="${reportItem.title}">Report title</div>
+                            <div class="small ui-muted" th:text="${reportItem.description}">Report description</div>
+                        </div>
+                        <form class="ui-report-download-form" th:action="@{'/api/reports/' + ${reportItem.key} + '/pdf'}" method="get" target="_blank">
+                            <div class="ui-report-range" th:if="${reportItem.supportsDateRange}">
+                                <div>
+                                    <label class="ui-label form-label" th:for="${'reportFrom-' + reportItem.key}">From</label>
+                                    <input class="form-control" type="date" name="from" th:id="${'reportFrom-' + reportItem.key}">
+                                </div>
+                                <div>
+                                    <label class="ui-label form-label" th:for="${'reportTo-' + reportItem.key}">To</label>
+                                    <input class="form-control" type="date" name="to" th:id="${'reportTo-' + reportItem.key}">
+                                </div>
+                            </div>
+                            <div class="ui-action-strip">
+                                <button class="btn ui-btn-outline" type="submit" name="lang" value="en">EN PDF</button>
+                                <button class="btn ui-btn-outline" type="submit" name="lang" value="sw">SW PDF</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="system-test-module" th:if="${canRunSystemTests}" sec:authorize="hasRole('SUPER_ADMIN')">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">System Verification</h2>
+                        <div class="small ui-muted">AI-backed six-month audit reports covering functionality, user security, failed logins, runtime health, Python service readiness, performance, response rate, vulnerability posture, routing, and workflow readiness.</div>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="button" class="btn ui-btn-primary" id="runSystemTestButton">Start AI System Testing</button>
+                    </div>
+                </div>
+                <div class="ui-mini-grid mb-3" th:if="${!#lists.isEmpty(systemTestReports)}">
+                    <div class="ui-kpi">
+                        <span>Latest Status</span>
+                        <strong th:text="${systemTestReports[0].status}">PASS</strong>
+                    </div>
+                    <div class="ui-kpi">
+                        <span>Latest Report</span>
+                        <strong th:text="${systemTestReports[0].reportNumber}">TEST-1</strong>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Report</th>
+                            <th>Status</th>
+                            <th>Trigger</th>
+                            <th>Checks</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="testReport : ${systemTestReports}">
+                            <td>
+                                <div class="fw-semibold" th:text="${testReport.reportNumber}">TEST-1</div>
+                                <div class="small ui-muted" th:text="${testReport.startedAt}">Time</div>
+                            </td>
+                            <td th:text="${testReport.status}">PASS</td>
+                            <td th:text="${testReport.triggerMode}">MANUAL</td>
+                            <td th:text="${testReport.passedChecks + ' pass / ' + testReport.warningChecks + ' warn / ' + testReport.failedChecks + ' fail'}">0</td>
+                            <td>
+                                <div class="ui-action-strip">
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-view-system-test=${testReport.id}">View</button>
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-download-system-test=${testReport.id},data-pdf-lang='en'">EN PDF</button>
+                                    <button type="button" class="btn ui-btn-outline" th:attr="data-download-system-test=${testReport.id},data-pdf-lang='sw'">SW PDF</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(systemTestReports)}">
+                            <td colspan="5" class="ui-muted">No stored verification reports yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="documentation-module" th:if="${canAccessAdminDocuments}" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">System Documentation</h2>
+                        <div class="small ui-muted">Presentation-ready administrative documents with official Tanzania government branding.</div>
+                    </div>
+                </div>
+                <div class="ui-list-grid">
+                    <div class="ui-list-row" th:each="document : ${adminDocuments}">
+                        <div>
+                            <div class="fw-semibold" th:text="${document.title}">Document title</div>
+                            <div class="small ui-muted" th:text="${document.description}">Document description</div>
+                        </div>
+                        <div class="ui-action-strip">
+                            <a class="btn ui-btn-outline" th:href="@{'/api/admin/documents/' + ${document.key} + '/pdf?lang=en'}" target="_blank">EN PDF</a>
+                            <a class="btn ui-btn-outline" th:href="@{'/api/admin/documents/' + ${document.key} + '/pdf?lang=sw'}" target="_blank">SW PDF</a>
+                        </div>
+                    </div>
+                    <div class="small ui-muted" th:if="${#lists.isEmpty(adminDocuments)}">No administrative documents are available yet.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+        </main>
+    </div>
+    <div id="profile-actions"></div>
+    <script th:inline="javascript">
+        window.FROMS_CONTEXT = {
+            currentUserId: [[${session.userId}]],
+            role: [[${loggedInRole}]],
+            canStartLiveVideo: [[${canStartLiveVideo}]],
+            canViewTeleSupport: [[${canViewTeleSupport}]],
+            username: [[${loggedInUsername}]],
+            stationId: [[${currentStationId}]],
+            districtId: [[${currentDistrictId}]],
+            regionId: [[${currentRegionId}]],
+            signalUrl: [[@{/signal}]],
+            startVideoUrl: [[@{/api/video/sessions/start}]],
+            endVideoUrl: [[@{/api/video/sessions/__id__/end}]],
+            uploadVideoUrl: [[@{/api/video/upload}]],
+            sessionsUrl: [[@{/api/video/sessions}]],
+            incidentsApiUrl: [[@{/api/incidents}]],
+            equipmentApiUrl: [[@{/api/equipment}]],
+            hydrantApiUrl: [[@{/api/equipment/hydrants}]],
+            changePasswordUrl: [[@{/api/me/change-password}]],
+            usersApiUrl: [[@{/api/users}]],
+            canManageUsers: [[${canManageUsers}]],
+            canManageGeography: [[${canManageGeography}]],
+            canManageEquipment: [[${canManageEquipment}]],
+            canManageHydrants: [[${canManageHydrants}]],
+            canRegisterOperationalIncident: [[${canRegisterOperationalIncident}]],
+            canReviewOperationalApprovals: [[${canReviewOperationalApprovals}]],
+            canRunSystemTests: [[${canRunSystemTests}]],
+            canAccessInvestigations: [[${canAccessInvestigations}]],
+            roles: [[${T(com.daniphord.mahanga.Util.OperationRole).ALL_FROMS_ROLES}]],
+            stations: [[${stationOptions}]],
+            regions: [[${regionOptions}]],
+            investigationApiUrl: [[@{/api/investigations}]],
+            investigationEligibleIncidents: [[${investigationEligibleIncidents}]],
+            incidentRecords: [[${incidentRecords}]],
+            equipmentRecords: [[${equipmentRecords}]],
+            hydrantRecords: [[${hydrantRecords}]],
+            currentUserId: [[${currentUserId}]],
+            currentRole: [[${loggedInRole}]],
+            geographyApiUrl: [[@{/api/geography}]],
+            systemTestApiUrl: [[@{/api/system-tests}]],
+            teleSupportRequestUrlTemplate: [[@{/api/incidents/__id__/tele-support-request}]]
+        };
+        window.FROMS_ROLE_CHARTS = {
+            incidentLabels: ['Active incidents', 'Cleared / standby'],
+            incidentValues: [
+                [[${metrics.activeEmergencies}]],
+                [[${metrics.totalIncidents > metrics.activeEmergencies ? metrics.totalIncidents - metrics.activeEmergencies : 0}]]
+            ],
+            resourceLabels: ['Available units', 'Deployed units', 'Maintenance alerts'],
+            resourceValues: [
+                [[${equipmentMetrics.availableUnits}]],
+                [[${equipmentMetrics.inUseUnits}]],
+                [[${equipmentMetrics.maintenanceAlerts}]]
+            ],
+            supportLabels: ['Pending tele requests', 'Online experts', 'Visible incidents'],
+            supportValues: [
+                [[${teleSupportMetrics.pendingRequests}]],
+                [[${teleSupportMetrics.onlineExperts}]],
+                [[${metrics.totalIncidents}]]
+            ]
+        };
+    </script>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = window.FROMS_CONTEXT;
+            if (!ctx.canManageUsers) {
+                return;
+            }
+
+            const regionalRoles = ['REGIONAL_FIRE_OFFICER','REGIONAL_OPERATION_OFFICER','REGIONAL_INVESTIGATION_OFFICER'];
+            const districtRoles = ['DISTRICT_FIRE_OFFICER','DISTRICT_OPERATION_OFFICER','DISTRICT_INVESTIGATION_OFFICER'];
+            const stationRoles = [
+                'STATION_FIRE_OFFICER',
+                'STATION_FIRE_OPERATION_OFFICER',
+                'STATION_OPERATION_OFFICER',
+                'OPERATION_OFFICER',
+                'CONTROL_ROOM_OPERATOR',
+                'CONTROL_ROOM_ATTENDANT',
+                'TELE_SUPPORT_PERSONNEL'
+            ];
+
+            const checkInput = document.getElementById('managedCheckNumber');
+            const emailInput = document.getElementById('managedEmail');
+            const roleSelect = document.getElementById('managedRole');
+            const regionSelect = document.getElementById('managedRegionId');
+            const districtSelect = document.getElementById('managedDistrictId');
+            const stationSelect = document.getElementById('managedStationId');
+            const phoneInput = document.getElementById('managedPhoneNumber');
+            const fullNameInput = document.getElementById('managedFullName');
+            const designationInput = document.getElementById('managedDesignation');
+            const passwordInput = document.getElementById('managedPassword');
+            const form = document.getElementById('userManagementForm');
+            const userIdInput = document.getElementById('managedUserId');
+            const userFormTitle = document.getElementById('userFormTitle');
+            const userListModalElement = document.getElementById('userListModal');
+            const userFormModalElement = document.getElementById('userFormModal');
+            const userSearchInput = document.getElementById('userSearchInput');
+            const userRoleFilter = document.getElementById('userRoleFilter');
+            const userUnassignedToggle = document.getElementById('userUnassignedToggle');
+            const userEmptyState = document.getElementById('userEmptyState');
+            const userRows = Array.from(document.querySelectorAll('[data-user-row]'));
+
+            if (!checkInput || !emailInput || !roleSelect || !regionSelect || !districtSelect || !stationSelect || !phoneInput || !fullNameInput || !designationInput || !passwordInput || !form || !userIdInput || !userFormTitle || !userFormModalElement) {
+                return;
+            }
+
+            const readResponsePayload = async (response) => {
+                const contentType = response.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    return response.json();
+                }
+                const text = await response.text();
+                return { error: text };
+            };
+
+            const populateRoles = () => {
+                roleSelect.innerHTML = '';
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Select role';
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                roleSelect.appendChild(placeholder);
+                const seen = new Set();
+                (ctx.roles || []).forEach(r => {
+                    if (!r) return;
+                    const normalized = String(r).trim();
+                    if (!normalized || seen.has(normalized)) return;
+                    seen.add(normalized);
+                    const opt = document.createElement('option');
+                    opt.value = normalized;
+                    opt.textContent = normalized.replaceAll('_', ' ');
+                    roleSelect.appendChild(opt);
+                });
+                roleSelect.required = true;
+            };
+
+            const populateRegions = (selected) => {
+                regionSelect.innerHTML = '<option value=\"\">Select region</option>';
+                (ctx.regions || []).forEach(region => {
+                    const opt = document.createElement('option');
+                    opt.value = region.id;
+                    opt.textContent = region.name;
+                    if (selected && String(selected) === String(region.id)) opt.selected = true;
+                    regionSelect.appendChild(opt);
+                });
+            };
+
+            const populateDistricts = async (regionId, selected) => {
+                districtSelect.innerHTML = '<option value=\"\">Select district</option>';
+                districtSelect.disabled = true;
+                stationSelect.innerHTML = '<option value=\"\">Select station</option>';
+                stationSelect.disabled = true;
+                if (!regionId) return;
+                const res = await fetch(`${ctx.geographyApiUrl}/regions/${regionId}/districts`, {
+                    credentials: 'same-origin'
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                data.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = d.name;
+                    if (selected && String(selected) === String(d.id)) opt.selected = true;
+                    districtSelect.appendChild(opt);
+                });
+                districtSelect.disabled = false;
+            };
+
+            const populateStations = async (districtId, selected) => {
+                stationSelect.innerHTML = '<option value=\"\">Select station</option>';
+                stationSelect.disabled = true;
+                if (!districtId) return;
+                const res = await fetch(`${ctx.geographyApiUrl}/districts/${districtId}/stations`, {
+                    credentials: 'same-origin'
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                data.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.name;
+                    if (selected && String(selected) === String(s.id)) opt.selected = true;
+                    stationSelect.appendChild(opt);
+                });
+                stationSelect.disabled = false;
+            };
+
+            const applyScopeVisibility = () => {
+                const role = roleSelect.value;
+                const isRegional = regionalRoles.includes(role);
+                const isDistrict = districtRoles.includes(role);
+                const isStation = stationRoles.includes(role);
+
+                regionSelect.parentElement.style.display = (isRegional || isDistrict || isStation) ? 'block' : 'none';
+                districtSelect.parentElement.style.display = (isDistrict || isStation) ? 'block' : 'none';
+                stationSelect.parentElement.style.display = isStation ? 'block' : 'none';
+
+                regionSelect.required = isRegional || isDistrict || isStation;
+                districtSelect.required = isDistrict || isStation;
+                stationSelect.required = isStation;
+            };
+
+            const resetForm = () => {
+                userIdInput.value = '';
+                form.reset();
+                populateRoles();
+                populateRegions();
+                districtSelect.innerHTML = '<option value=\"\">Select district</option>';
+                stationSelect.innerHTML = '<option value=\"\">Select station</option>';
+                districtSelect.disabled = true;
+                stationSelect.disabled = true;
+                roleSelect.value = 'UNASSIGNED';
+                userFormTitle.textContent = 'Create User';
+                passwordInput.required = true;
+                applyScopeVisibility();
+            };
+
+            const populateFormFromTrigger = async (trigger) => {
+                resetForm();
+                userIdInput.value = trigger.dataset.userId || '';
+                checkInput.value = trigger.dataset.userCheck || trigger.dataset.userUsername || '';
+                emailInput.value = trigger.dataset.userEmail || '';
+                fullNameInput.value = trigger.dataset.userFullName || '';
+                designationInput.value = trigger.dataset.userDesignation || '';
+                phoneInput.value = trigger.dataset.userPhone || '';
+                roleSelect.value = trigger.dataset.userRole || 'UNASSIGNED';
+                userFormTitle.textContent = 'Edit User';
+                passwordInput.required = false;
+                applyScopeVisibility();
+                const regionId = trigger.dataset.userRegionId || '';
+                const districtId = trigger.dataset.userDistrictId || '';
+                const stationId = trigger.dataset.userStationId || '';
+                if (regionId) {
+                    populateRegions(regionId);
+                    await populateDistricts(regionId, districtId);
+                    if (districtId) {
+                        await populateStations(districtId, stationId);
+                    }
+                }
+            };
+
+            roleSelect.addEventListener('change', () => {
+                applyScopeVisibility();
+            });
+            regionSelect.addEventListener('change', () => populateDistricts(regionSelect.value));
+            districtSelect.addEventListener('change', () => populateStations(districtSelect.value));
+
+            userFormModalElement.addEventListener('show.bs.modal', event => {
+                const trigger = event.relatedTarget;
+                const userAction = trigger ? (trigger.dataset.userAction || '') : '';
+                const openListModal = userListModalElement ? bootstrap.Modal.getInstance(userListModalElement) : null;
+                if (openListModal) {
+                    openListModal.hide();
+                }
+                if (userAction === 'edit' && trigger) {
+                    populateFormFromTrigger(trigger).catch(error => {
+                        Swal.fire({ icon: 'error', title: 'User load failed', text: error.message || 'Unable to load the selected user.' });
+                    });
+                    return;
+                }
+                resetForm();
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const selectedRole = roleSelect.value || 'UNASSIGNED';
+                if (regionalRoles.includes(selectedRole) && !regionSelect.value) {
+                    Swal.fire({ icon: 'error', title: 'Region required', text: 'Select a region for the chosen role before saving.' });
+                    return;
+                }
+                if (districtRoles.includes(selectedRole) && !districtSelect.value) {
+                    Swal.fire({ icon: 'error', title: 'District required', text: 'Select a district for the chosen role before saving.' });
+                    return;
+                }
+                if (stationRoles.includes(selectedRole) && !stationSelect.value) {
+                    Swal.fire({ icon: 'error', title: 'Station required', text: 'Select a station for the chosen role before saving.' });
+                    return;
+                }
+
+                const payload = {
+                    username: checkInput.value.trim(),
+                    checkNumber: checkInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    fullName: fullNameInput.value.trim(),
+                    designation: designationInput.value.trim(),
+                    phoneNumber: phoneInput.value.trim(),
+                    role: selectedRole,
+                    password: passwordInput.value
+                };
+                const queryParams = new URLSearchParams();
+                if (regionalRoles.includes(selectedRole) && regionSelect.value) {
+                    queryParams.set('regionId', regionSelect.value);
+                }
+                if (districtRoles.includes(selectedRole) && districtSelect.value) {
+                    queryParams.set('districtId', districtSelect.value);
+                }
+                if (stationRoles.includes(selectedRole) && stationSelect.value) {
+                    queryParams.set('stationId', stationSelect.value);
+                }
+                const query = queryParams.toString();
+                const method = userIdInput.value ? 'PUT' : 'POST';
+                const url = userIdInput.value
+                    ? `${ctx.usersApiUrl}/${userIdInput.value}${query ? `?${query}` : ''}`
+                    : `${ctx.usersApiUrl}${query ? `?${query}` : ''}`;
+                const res = await fetch(url, {
+                    method,
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    const responsePayload = await readResponsePayload(res);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'User save failed',
+                        text: responsePayload.error || responsePayload.message || 'Unable to save the user account.'
+                    });
+                }
+            });
+
+            const applyUserFilters = () => {
+                const term = ((userSearchInput && userSearchInput.value) || '').toLowerCase().trim();
+                const selectedFilterRole = ((userRoleFilter && userRoleFilter.value) || '').toLowerCase();
+                const onlyUnassigned = userUnassignedToggle ? userUnassignedToggle.checked : false;
+                let visibleRows = 0;
+                userRows.forEach(row => {
+                    const rowRole = (row.dataset.role || '').toLowerCase();
+                    const searchBlob = (row.dataset.search || '').toLowerCase();
+                    const matchesSearch = !term || searchBlob.includes(term);
+                    const matchesRole = !selectedFilterRole || rowRole === selectedFilterRole;
+                    const matchesUnassigned = !onlyUnassigned || rowRole === 'unassigned' || rowRole === '';
+                    const show = matchesSearch && matchesRole && matchesUnassigned;
+                    row.style.display = show ? '' : 'none';
+                    if (show) visibleRows += 1;
+                });
+                if (userEmptyState) {
+                    if (visibleRows === 0) {
+                        userEmptyState.classList.remove('d-none');
+                    } else {
+                        userEmptyState.classList.add('d-none');
+                    }
+                }
+            };
+
+            [userSearchInput, userRoleFilter, userUnassignedToggle].forEach(control => {
+                if (!control) return;
+                const eventName = control.tagName === 'SELECT' || control.type === 'checkbox' ? 'change' : 'input';
+                control.addEventListener(eventName, applyUserFilters);
+            });
+            if (userListModalElement) {
+                userListModalElement.addEventListener('shown.bs.modal', applyUserFilters);
+            }
+            resetForm();
+            applyUserFilters();
+        });
+    </script>
+</div>
+<th:block th:replace="~{fragments/footer :: siteFooter}"></th:block>
+
+<th:block th:if="${canManageUsers}" th:replace="~{fragments/user-list-modal :: userListModal}"></th:block>
+
+<div class="modal fade" id="incidentModal" tabindex="-1" aria-hidden="true" th:if="${canRegisterOperationalIncident}">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <form id="incidentForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Register Incident</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input id="incidentEditId" type="hidden">
+                    <div class="ui-grid ui-grid-2">
+                        <div>
+                            <label class="ui-label form-label" for="incidentReportLevel">Report Level</label>
+                            <select id="incidentReportLevel" class="form-select">
+                                <option value="INITIAL">Initial Report</option>
+                                <option value="FULL">Full Report</option>
+                            </select>
+                        </div>
+                        <div data-incident-initial-only>
+                            <label class="ui-label form-label" for="incidentLinkedCallId">System Incident to Register</label>
+                            <select id="incidentLinkedCallId" class="form-select">
+                                <option value="">Physical or direct station report</option>
+                                <option th:each="call : ${incidentSourceCalls}"
+                                        th:value="${call.id}"
+                                        th:text="${call.reportNumber + ' - ' + call.incidentType + ' - ' + call.callerName}"
+                                        th:attr="data-caller-name=${call.callerName},data-caller-number=${call.callerNumber},data-reporting-means=${call.reportingMeans},data-location=${call.location}">
+                                    System incident
+                                </option>
+                            </select>
+                        </div>
+                        <div class="ui-form-span" data-incident-full-only style="display:none;">
+                            <label class="ui-label form-label" for="incidentParentIncidentId">Initial Report to Complete</label>
+                            <select id="incidentParentIncidentId" class="form-select">
+                                <option value="">Select an initial report</option>
+                                <option th:each="item : ${availableInitialReports}"
+                                        th:value="${item.id}"
+                                        th:text="${item.incidentNumber + ' - ' + item.incidentType + ' - ' + item.location}">
+                                    Initial report
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentOperationCategory">Operation Category</label>
+                            <select id="incidentOperationCategory" class="form-select">
+                                <option value="FIRE_FIGHTING">Fire Fighting</option>
+                                <option value="RESCUE">Rescue</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentTypeInput">Incident Type</label>
+                            <input id="incidentTypeInput" type="text" class="form-control" placeholder="Fire, rescue, accident, hazmat" required>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentSeverity">Severity</label>
+                            <select id="incidentSeverity" class="form-select">
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                                <option value="CRITICAL">Critical</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentReportingMeans">Means of Reporting</label>
+                            <select id="incidentReportingMeans" class="form-select">
+                                <option value="PHYSICAL">Physical / Walk-in</option>
+                                <option value="114_CALL">Via 114</option>
+                                <option value="PUBLIC_PORTAL">Public Portal</option>
+                                <option value="RADIO">Radio</option>
+                                <option value="SYSTEM">System Entry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentStatus">Status</label>
+                            <select id="incidentStatus" class="form-select">
+                                <option value="ACTIVE">Active</option>
+                                <option value="RESPONDING">Responding</option>
+                                <option value="RESOLVED">Resolved</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentReporterName">Reporter Name</label>
+                            <input id="incidentReporterName" type="text" class="form-control" placeholder="Reporter full name">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentReporterPhone">Reporter Phone Number</label>
+                            <input id="incidentReporterPhone" type="text" class="form-control" placeholder="Phone number">
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentLocationDetails">Location</label>
+                            <input id="incidentLocationDetails" type="text" class="form-control" placeholder="Station area, street, ward, or landmark" required>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentVillage">Village / Locality</label>
+                            <input id="incidentVillage" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentReportedAt">Reported Time</label>
+                            <input id="incidentReportedAt" type="datetime-local" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentResponseTime">Response Time (minutes)</label>
+                            <input id="incidentResponseTime" type="number" class="form-control" min="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentDuration">Incident Duration (minutes)</label>
+                            <input id="incidentDuration" type="number" class="form-control" min="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentOperationDuration">Operation Duration (minutes)</label>
+                            <input id="incidentOperationDuration" type="number" class="form-control" min="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentOilUsed">Oil Used</label>
+                            <input id="incidentOilUsed" type="number" step="0.1" class="form-control" min="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentOtherOrgans">Other Security Organs Involved</label>
+                            <input id="incidentOtherOrgans" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentInjuredCount">Injured People</label>
+                            <input id="incidentInjuredCount" type="number" class="form-control" min="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentDeadCount">Died People</label>
+                            <input id="incidentDeadCount" type="number" class="form-control" min="0">
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentEquipmentDispatched">Equipment Gone to Incident</label>
+                            <textarea id="incidentEquipmentDispatched" class="form-control" rows="3" placeholder="List equipment or units sent"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentPersonnelDispatched">People Gone to Incident Area</label>
+                            <textarea id="incidentPersonnelDispatched" class="form-control" rows="3" placeholder="Number or team composition"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentPersonnelNames">Personnel Names</label>
+                            <textarea id="incidentPersonnelNames" class="form-control" rows="3" placeholder="List names separated by commas or lines"></textarea>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentSupervisorName">In-Charge / Supervisor</label>
+                            <input id="incidentSupervisorName" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="incidentCommander">Operation Commander</label>
+                            <input id="incidentCommander" type="text" class="form-control">
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentDescription">Incident Description</label>
+                            <textarea id="incidentDescription" class="form-control" rows="4"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentResourcesUsed">Equipment Used</label>
+                            <textarea id="incidentResourcesUsed" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentEffectsPeople">Effects to People</label>
+                            <textarea id="incidentEffectsPeople" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentEffectsEnvironment">Effects to Environment</label>
+                            <textarea id="incidentEffectsEnvironment" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentInjuredDetails">Injured People Details</label>
+                            <textarea id="incidentInjuredDetails" class="form-control" rows="3" placeholder="Sex, age, and notes"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentDeadDetails">Died People Details</label>
+                            <textarea id="incidentDeadDetails" class="form-control" rows="3" placeholder="Sex, age, and notes"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentDemographics">Sex / Age Summary</label>
+                            <textarea id="incidentDemographics" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentActionTaken">Action Taken</label>
+                            <textarea id="incidentActionTaken" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="incidentOutcome">Outcome</label>
+                            <textarea id="incidentOutcome" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <div class="ui-soft-note">
+                                <div class="fw-semibold mb-1" id="incidentWorkflowHintTitle">Initial incident workflow</div>
+                                <div class="small ui-muted" id="incidentWorkflowHintText">Choose a routed system incident when the station is converting a public or 114 report into the first registered initial report. For full reports, select the related initial report first.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Back</button>
+                    <button type="submit" class="btn ui-btn-primary">Save Incident</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="equipmentModal" tabindex="-1" aria-hidden="true" th:if="${canManageEquipment}">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <form id="equipmentForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Register Equipment</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input id="equipmentEditId" type="hidden">
+                    <div class="ui-grid ui-grid-2">
+                        <div>
+                            <label class="ui-label form-label" for="equipmentNameInput">Equipment Name</label>
+                            <input id="equipmentNameInput" type="text" class="form-control" required>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentTypeInput">Equipment Type</label>
+                            <select id="equipmentTypeInput" class="form-select" required>
+                                <option value="FIRE_TENDER">Fire Tender</option>
+                                <option value="COMMAND_CAR">Command Car</option>
+                                <option value="MANAGEMENT_CAR">Management Car</option>
+                                <option value="HAZMAT_CAR">Hazmat Car</option>
+                                <option value="AMBULANCE">Ambulance</option>
+                                <option value="RESCUE_EQUIPMENT">Rescue Equipment</option>
+                                <option value="FIRE_FIGHTING_EQUIPMENT">Fire Fighting Equipment</option>
+                                <option value="BA">BA</option>
+                                <option value="FIRE_FIGHTING_CHEMICALS">Fire Fighting Chemicals</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentSerialNumber">Serial Number</label>
+                            <input id="equipmentSerialNumber" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentConditionStatus">Condition</label>
+                            <select id="equipmentConditionStatus" class="form-select">
+                                <option value="GOOD">Good</option>
+                                <option value="FAIR">Fair</option>
+                                <option value="DAMAGED">Damaged</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentOperationalStatus">Status</label>
+                            <select id="equipmentOperationalStatus" class="form-select">
+                                <option value="AVAILABLE">Available</option>
+                                <option value="IN_USE">In Use</option>
+                                <option value="NOT_IN_USE">Not In Use</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentPurchaseDate">Date Bought</label>
+                            <input id="equipmentPurchaseDate" type="date" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentLastServicedAt">Last Maintenance Date</label>
+                            <input id="equipmentLastServicedAt" type="datetime-local" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="equipmentQuantityInStore">Number in Store</label>
+                            <input id="equipmentQuantityInStore" type="number" class="form-control" min="1" value="1">
+                        </div>
+                        <div class="ui-form-span">
+                            <div class="form-check mt-4 pt-2">
+                                <input id="equipmentMaintenanceRequired" type="checkbox" class="form-check-input">
+                                <label class="form-check-label" for="equipmentMaintenanceRequired">Maintenance required when not in use</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Back</button>
+                    <button type="submit" class="btn ui-btn-primary">Save Equipment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="hydrantModal" tabindex="-1" aria-hidden="true" th:if="${canManageHydrants}">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <form id="hydrantForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Register Hydrants</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div class="ui-grid ui-grid-2">
+                        <div>
+                            <label class="ui-label form-label" for="hydrantWorking">Working</label>
+                            <input id="hydrantWorking" type="number" class="form-control" min="0" value="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="hydrantNotWorking">Not Working</label>
+                            <input id="hydrantNotWorking" type="number" class="form-control" min="0" value="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="hydrantLowPressure">Low Pressure</label>
+                            <input id="hydrantLowPressure" type="number" class="form-control" min="0" value="0">
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="hydrantRemarks">Remarks</label>
+                            <textarea id="hydrantRemarks" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="hydrantLocations">Hydrant Locations</label>
+                            <textarea id="hydrantLocations" class="form-control" rows="6" placeholder="One hydrant per line: Name | Status | Pressure"></textarea>
+                            <div class="small ui-muted mt-2">Example: Main Gate | WORKING | HIGH</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Back</button>
+                    <button type="submit" class="btn ui-btn-primary">Save Hydrant Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="incidentDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Incident Details</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="incidentDetailContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="equipmentDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Equipment Details</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="equipmentDetailContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="hydrantDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Hydrant Details</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="hydrantDetailContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dashboardAlarmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content ui-alarm-modal">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="dashboardAlarmTitle">Emergency Alarm</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="ui-alarm-banner" id="dashboardAlarmMessage">FIRE STATION FIRE STATION PUBLIC CALLING EMERGENCY PLEASE</div>
+                <div class="small ui-muted" id="dashboardAlarmMeta">Realtime emergency alert</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alarmVideoModal" tabindex="-1" aria-hidden="true" th:if="${canViewLiveVideo}">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="alarmVideoTitle">Emergency Live Video</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="small ui-muted" id="alarmVideoMeta">Live stream popup opened for the current emergency signal.</div>
+                <div class="ui-live-screen ui-live-screen-sm ui-live-screen-remote">
+                    <div class="ui-live-badge">LIVE</div>
+                    <video id="alarmRemoteVideo" autoplay playsinline controls class="ui-video-frame ui-video-frame-remote"></video>
+                    <div class="ui-live-overlay">
+                        <div>
+                            <div class="fw-semibold" id="alarmVideoOfficer">Awaiting live stream</div>
+                            <div class="small text-white-50" id="alarmVideoLocation">Popup live feed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userFormModal" tabindex="-1" aria-hidden="true" th:if="${canManageUsers}">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="userManagementForm" data-skip-legacy-handler="true">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="userFormTitle">Create User</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="managedUserId">
+                    <div class="ui-grid ui-grid-2">
+                        <div>
+                            <label class="ui-label form-label" for="managedCheckNumber">Check Number (Username)</label>
+                            <input id="managedCheckNumber" type="text" class="form-control" required>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedEmail">Email</label>
+                            <input id="managedEmail" type="email" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedRole">Role</label>
+                            <select id="managedRole" class="form-select"></select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedFullName">Full Name</label>
+                            <input id="managedFullName" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedDesignation">Designation</label>
+                            <input id="managedDesignation" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedRegionId">Region (if applicable)</label>
+                            <select id="managedRegionId" class="form-select"></select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedDistrictId">District (if applicable)</label>
+                            <select id="managedDistrictId" class="form-select" disabled></select>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedPhoneNumber">Phone Number</label>
+                            <input id="managedPhoneNumber" type="text" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="managedStationId">Station (if applicable)</label>
+                            <select id="managedStationId" class="form-select" disabled></select>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="managedPassword">Password</label>
+                            <input id="managedPassword" type="password" class="form-control">
+                            <div class="small ui-muted mt-2">Required when creating a user. Leave blank to keep the existing password when editing.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Profile</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="ui-kpi"><span>Username</span><strong th:text="${loggedInUsername}">username</strong></div>
+                <div class="ui-kpi"><span>Role</span><strong th:text="${loggedInRole}">role</strong></div>
+                <div class="small ui-muted">This dashboard only exposes the operational modules assigned to your role.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="changePasswordForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Change Password</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div>
+                        <label class="ui-label form-label" for="currentPassword">Current Password</label>
+                        <input id="currentPassword" name="currentPassword" type="password" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="newPassword">New Password</label>
+                        <input id="newPassword" name="newPassword" type="password" class="form-control" minlength="8" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="confirmPassword">Confirm Password</label>
+                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" minlength="8" required>
+                    </div>
+                    <div class="small ui-muted">Use a password with at least 8 characters.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="investigationModal" tabindex="-1" aria-hidden="true" th:if="${canAccessInvestigations and #strings.equals(loggedInRole, 'DISTRICT_INVESTIGATION_OFFICER')}">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="investigationForm" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Start Investigation</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ui-grid ui-grid-2">
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="investigationIncidentId">Incident</label>
+                            <select id="investigationIncidentId" class="form-select" required>
+                                <option value="">Select reported fire/rescue incident</option>
+                                <option th:each="incident : ${investigationEligibleIncidents}"
+                                        th:value="${incident.id}"
+                                        th:text="${incident.incidentNumber + ' - ' + incident.incidentType + ' - ' + incident.location}">
+                                    Incident
+                                </option>
+                            </select>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="investigationDetails">Incident Details</label>
+                            <textarea id="investigationDetails" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="investigationCauseAnalysis">Cause Analysis</label>
+                            <textarea id="investigationCauseAnalysis" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="investigationWitnessStatements">Witness Statements</label>
+                            <textarea id="investigationWitnessStatements" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="investigationAttachments">Evidence Files</label>
+                            <input id="investigationAttachments" type="file" class="form-control" multiple accept="image/*,video/*,.pdf,.doc,.docx">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Submit Investigation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="regionModal" tabindex="-1" aria-hidden="true" th:if="${canManageGeography}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="regionForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Register Region</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div>
+                        <label class="ui-label form-label" for="regionName">Region Name</label>
+                        <input id="regionName" type="text" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="regionCode">Region Code</label>
+                        <input id="regionCode" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Save Region</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="districtModal" tabindex="-1" aria-hidden="true" th:if="${canManageGeography}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="districtForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Register District</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div>
+                        <label class="ui-label form-label" for="districtRegionId">Region</label>
+                        <select id="districtRegionId" class="form-select" required>
+                            <option value="">Select region</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="districtName">District Name</label>
+                        <input id="districtName" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Save District</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stationModal" tabindex="-1" aria-hidden="true" th:if="${canManageGeography}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="stationForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Register Station</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div>
+                        <label class="ui-label form-label" for="stationRegionId">Region</label>
+                        <select id="stationRegionId" class="form-select" required>
+                            <option value="">Select region</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="stationDistrictId">District</label>
+                        <select id="stationDistrictId" class="form-select" required disabled>
+                            <option value="">Select district</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="stationName">Station Name</label>
+                        <input id="stationName" type="text" class="form-control" required readonly>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="stationVillage">Village / Locality</label>
+                        <input id="stationVillage" type="text" class="form-control">
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="stationControlRoomNumber">Control Room Number</label>
+                        <input id="stationControlRoomNumber" type="text" class="form-control">
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="stationPhoneNumber">Phone Number</label>
+                        <input id="stationPhoneNumber" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Save Station</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="systemTestModal" tabindex="-1" aria-hidden="true" th:if="${canRunSystemTests}">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">AI System Verification Report</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="small ui-muted" id="systemTestSummary">Verification summary</div>
+                <div class="ui-list-grid" id="systemTestDetailFeed"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

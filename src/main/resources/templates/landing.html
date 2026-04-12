@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/ui :: head('FROMS | Landing', false)}"></th:block>
+<body class="ui-body landing-plain landing-clean" th:attr="data-lang=${currentLang},data-page='landing-dashboard'">
+<th:block th:replace="~{fragments/header :: landingHeader}"></th:block>
+
+<section class="fire-command-banner" id="overview">
+    <div class="ui-shell fire-command-banner-shell">
+        <div class="fire-command-banner-head">
+            <img class="fire-command-banner-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo">
+            <div class="ui-hero-chip-row">
+                <span class="ui-chip"><i class="fas fa-landmark"></i><span>Executive-ready presentation</span></span>
+                <span class="ui-chip"><i class="fas fa-shield-heart"></i><span>Emergency-friendly design</span></span>
+                <span class="ui-chip"><i class="fas fa-tower-observation"></i><span>Real-time command feedback</span></span>
+            </div>
+            <div class="landing-kicker">Government Emergency Operations Platform</div>
+            <h1 class="fire-command-banner-title">Fire and Rescue Force Operation Management System</h1>
+            <p class="fire-command-banner-copy">High-visibility command access, public emergency intake, and operational coordination in one presentation-ready emergency platform.</p>
+            <div class="landing-hero-actions">
+                <a th:href="@{/login}" class="landing-btn landing-btn-primary">Open Command Access</a>
+                <a th:href="@{/public/emergency/report}" class="landing-btn landing-btn-secondary">Public Emergency Access</a>
+                <a href="#features" class="landing-btn landing-btn-secondary">Operational Modules</a>
+            </div>
+        </div>
+        <div class="fire-command-banner-grid">
+            <article class="fire-command-banner-card">
+                <span>Command</span>
+                <strong>National to station workflows</strong>
+                <p>Role-based dashboards surface the right incidents, reports, maps, and actions without clutter.</p>
+            </article>
+            <article class="fire-command-banner-card">
+                <span>Public Access</span>
+                <strong>Guided intake with feedback</strong>
+                <p>Citizens can report, track, chat, and share scene video through a controlled workflow.</p>
+            </article>
+            <article class="fire-command-banner-card">
+                <span>Presentation</span>
+                <strong>Cleaner storytelling for leadership</strong>
+                <p>Large controls, brighter hierarchy, and clearer module grouping improve demonstration flow.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<div class="ui-shell">
+    <nav class="ui-breadcrumbs" aria-label="Breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span>/</span>
+        <span aria-current="page">Platform Overview</span>
+    </nav>
+    <div class="landing-clean-layout dashboard-workbench">
+        <aside th:replace="~{fragments/sidebar :: landingSidebar}"></aside>
+
+        <main class="landing-clean-flow dashboard-main">
+            <section class="landing-clean-hero" id="executive-brief">
+                <div class="ui-hero-matrix">
+                    <div>
+                        <div class="landing-hero-copy-card">
+                            <div class="landing-kicker">Executive Brief</div>
+                            <div class="ui-hero-chip-row">
+                                <span class="ui-chip"><i class="fas fa-satellite-dish"></i><span>Operational visibility</span></span>
+                                <span class="ui-chip"><i class="fas fa-people-group"></i><span>Public safety focused</span></span>
+                                <span class="ui-chip"><i class="fas fa-bolt"></i><span>Fast command access</span></span>
+                            </div>
+                            <h1 class="landing-title">
+                                <span>FROMS keeps leadership,</span>
+                                <span>stations, and the public on</span>
+                                <span>one clear operational path.</span>
+                            </h1>
+                            <p class="landing-copy">The command view below complements the presentation banner above by summarizing readiness, public access, and operational coordination in language that is easier to present quickly.</p>
+                            <div class="landing-hero-actions">
+                                <a th:href="@{/login}" class="landing-btn landing-btn-primary">Open Command Access</a>
+                                <a th:href="@{/public/emergency/report}" class="landing-btn landing-btn-secondary">Public Emergency Access</a>
+                                <a href="#features" class="landing-btn landing-btn-secondary">Operational Modules</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-hero-side">
+                        <div class="ui-hero-panel">
+                            <div class="landing-kicker mb-2">National Readiness</div>
+                            <div class="fw-semibold">Built for headquarters, regional command, district command, station operations, and public intake.</div>
+                        </div>
+                        <div class="ui-hero-panel">
+                            <div class="landing-kicker mb-2">Competition Standard</div>
+                            <div class="small text-white-50">Clean visual hierarchy, strong operational clarity, and audit-aware workflows appropriate for international evaluation.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ui-briefing-strip landing-briefing-strip" aria-label="Executive briefing">
+                <article class="ui-briefing-card">
+                    <div class="ui-briefing-kicker">Command Story</div>
+                    <h2 class="ui-briefing-title">One screen tells the operational story faster.</h2>
+                    <p class="ui-briefing-copy">Leadership can understand readiness, incidents, and public communication without jumping between disconnected modules.</p>
+                </article>
+                <article class="ui-briefing-card">
+                    <div class="ui-briefing-kicker">Citizen Confidence</div>
+                    <div class="ui-briefing-stat">
+                        <span>Public entry point</span>
+                        <strong class="ui-briefing-value">Verified</strong>
+                    </div>
+                    <p class="ui-briefing-copy">A guided public access flow reduces confusion, improves intake quality, and moves valid emergencies to the control room faster.</p>
+                </article>
+                <article class="ui-briefing-card">
+                    <div class="ui-briefing-kicker">Quick Start</div>
+                    <ul class="ui-bullet-list">
+                        <li>Open command access for staff presentations and daily work.</li>
+                        <li>Show public reporting, live case updates, and routing in one flow.</li>
+                        <li>Move from overview to mission modules without losing context.</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section class="landing-clean-panel landing-center-panel" id="mission">
+                <div class="landing-panel-head mb-3">
+                    <div>
+                        <div class="landing-kicker">Mission</div>
+                        <div class="ui-section-title">Built for saving lives</div>
+                    </div>
+                    <div class="small ui-muted">The system is designed to improve response efficiency, accountability, and operational awareness.</div>
+                </div>
+                <div class="landing-feature-grid">
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Incident Visibility</div>
+                        <div class="small ui-muted">Capture fires, rescues, and accidents with severity, location hierarchy, GPS, status, and resource usage in one command view.</div>
+                    </div>
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Dispatch Coordination</div>
+                        <div class="small ui-muted">Coordinate station, district, regional, and headquarters response with role-based access and control room support.</div>
+                    </div>
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Equipment Readiness</div>
+                        <div class="small ui-muted">Track operational assets, maintenance alerts, and equipment availability before emergencies escalate.</div>
+                    </div>
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Decision Support</div>
+                        <div class="small ui-muted">Generate recommendations from response delays, hotspot frequency, call patterns, and recurring operational risks.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="landing-clean-panel landing-center-panel" id="command">
+                <div class="landing-panel-head mb-3">
+                    <div>
+                        <div class="landing-kicker">Command Structure</div>
+                        <div class="ui-section-title">Workspaces from headquarters to station level</div>
+                    </div>
+                    <div class="small ui-muted">Supports CGF, commissioners, departmental leaders, regional and district officers, station command, and control room teams.</div>
+                </div>
+                <div class="landing-role-grid">
+                    <article class="ui-highlight-card">
+                        <div class="small ui-muted mb-2">National Command</div>
+                        <div class="fw-semibold mb-2">CGF and Commissioner of Operations</div>
+                        <div class="small ui-muted">Monitor nationwide incidents, response times, resource pressure, and strategic AI recommendations.</div>
+                    </article>
+                    <article class="ui-highlight-card">
+                        <div class="small ui-muted mb-2">Field Command</div>
+                        <div class="fw-semibold mb-2">Department, regional, district, and station officers</div>
+                        <div class="small ui-muted">Manage incidents, dispatch units, monitor execution, and keep resources mission-ready.</div>
+                    </article>
+                    <article class="ui-highlight-card">
+                        <div class="small ui-muted mb-2">Control Room</div>
+                        <div class="fw-semibold mb-2">Attendants and operation officers</div>
+                        <div class="small ui-muted">Handle incoming calls, route incidents to stations, review recordings, and track active communication.</div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="landing-clean-panel landing-center-panel" id="features">
+                <div class="landing-panel-head mb-3">
+                    <div>
+                        <div class="landing-kicker">Core Features</div>
+                        <div class="ui-section-title">Integrated emergency response modules</div>
+                    </div>
+                    <div class="small ui-muted">Each module supports a measurable emergency response function.</div>
+                </div>
+                <div class="landing-feature-grid">
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Incident Management</div>
+                        <div class="small ui-muted">Register incident type, source, severity, response time, station assignment, and operational status.</div>
+                    </div>
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Emergency Response</div>
+                        <div class="small ui-muted">Dispatch teams, monitor ETA, track outcomes, and review response performance over time.</div>
+                    </div>
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Equipment and Maintenance</div>
+                        <div class="small ui-muted">Track full equipment lifecycle, maintenance schedules, assignments, and readiness by station.</div>
+                    </div>
+                    <div class="ui-highlight-card h-100">
+                        <div class="fw-semibold mb-2">Public Access and Control Room</div>
+                        <div class="small ui-muted">Provide no-login emergency reporting with CAPTCHA, rate limiting, logging, and call routing support.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="landing-clean-panel landing-center-panel" id="public-manual">
+                <div class="landing-panel-head mb-3">
+                    <div>
+                        <div class="landing-kicker">User Manual</div>
+                        <div class="ui-section-title" th:text="${publicUserManual.title}">Public User Manual</div>
+                    </div>
+                    <div class="small ui-muted" th:text="${publicUserManual.audience}">Citizens and field witnesses</div>
+                </div>
+                <div class="ui-soft-note mb-3">
+                    <div class="fw-semibold mb-1">What this public access flow is for</div>
+                    <div class="small ui-muted" th:text="${publicUserManual.summary}">Use the public access flow to submit verified emergency reports.</div>
+                </div>
+                <div class="ui-manual-grid">
+                    <article class="ui-highlight-card ui-manual-card">
+                        <div class="fw-semibold mb-2">Quick Start</div>
+                        <ol class="ui-manual-list">
+                            <li th:each="item : ${publicUserManual.quickStart}" th:text="${item}">Open Public Emergency Access.</li>
+                        </ol>
+                    </article>
+                    <article class="ui-highlight-card ui-manual-card">
+                        <div class="fw-semibold mb-2">What You Can Do</div>
+                        <ul class="ui-manual-list">
+                            <li th:each="item : ${publicUserManual.keyTasks}" th:text="${item}">Send a new emergency report.</li>
+                        </ul>
+                    </article>
+                    <article class="ui-highlight-card ui-manual-card">
+                        <div class="fw-semibold mb-2">Important Rules</div>
+                        <ul class="ui-manual-list">
+                            <li th:each="item : ${publicUserManual.accessBoundaries}" th:text="${item}">Use this channel only for real emergencies.</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="ui-soft-note mt-3">
+                    <div class="fw-semibold mb-1">Public Safety Note</div>
+                    <div class="small ui-muted" th:text="${publicUserManual.helpNote}">If life is in immediate danger, call 114 while also submitting the report.</div>
+                </div>
+            </section>
+
+            <section class="landing-clean-summary">
+                <article class="landing-clean-summary-card">
+                    <div class="small ui-muted mb-2">Impact</div>
+                    <div class="fw-semibold mb-2">Faster emergency decisions</div>
+                    <div class="small ui-muted">Leaders can see active emergencies, response delays, hotspot areas, and deployment pressure from one command view.</div>
+                </article>
+                <article class="landing-clean-summary-card">
+                    <div class="small ui-muted mb-2">Reliability</div>
+                    <div class="fw-semibold mb-2">Role-based command control</div>
+                    <div class="small ui-muted">Command leaders, operational officers, and control room attendants work within secure responsibilities and audit-aware workflows.</div>
+                </article>
+                <article class="landing-clean-summary-card">
+                    <div class="small ui-muted mb-2">Scalability</div>
+                    <div class="fw-semibold mb-2">Built for national operations</div>
+                    <div class="small ui-muted">The platform can scale across headquarters, departments, regions, districts, stations, and community reporting channels.</div>
+                </article>
+            </section>
+
+            <section class="landing-clean-panel landing-center-panel" id="faq">
+                <div class="landing-panel-head mb-3">
+                    <div>
+                        <div class="landing-kicker">Auto FAQ</div>
+                        <div class="ui-section-title">Frequently asked questions generated from the current public workflow</div>
+                    </div>
+                    <div class="small ui-muted">This section updates from the public access guidance and system flow instead of staying as static marketing copy.</div>
+                </div>
+                <div class="ui-faq-list">
+                    <details class="ui-faq-item" th:each="faq : ${landingFaqs}">
+                        <summary class="ui-faq-question" th:text="${faq.question}">Question</summary>
+                        <div class="ui-faq-answer" th:text="${faq.answer}">Answer</div>
+                    </details>
+                </div>
+            </section>
+
+            <section class="landing-clean-panel landing-center-panel" id="contact">
+                <div class="landing-kicker mb-3">Start Here</div>
+                <h2 class="h2 fw-bold mb-3">Open your command workspace or report an emergency.</h2>
+                <p class="landing-copy">Use the login page for officers and command staff, or use the public emergency access page for rapid field reporting.</p>
+                <div class="landing-hero-actions">
+                    <a th:href="@{/login}" class="landing-btn landing-btn-primary">Open Login</a>
+                    <a th:href="@{/public/emergency/report}" class="landing-btn landing-btn-secondary">Emergency Access</a>
+                    <a th:href="'mailto:' + ${supportEmail}" class="landing-btn landing-btn-secondary">Email</a>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{fragments/footer :: siteFooter}"></th:block>
+</body>
+</html>

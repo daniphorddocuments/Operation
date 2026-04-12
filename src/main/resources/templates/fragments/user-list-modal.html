@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="userListModal">
+    <div class="modal fade" id="userListModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content ui-modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">User Directory</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ui-user-filters mb-3">
+                        <div class="ui-search-wrap flex-grow-1">
+                            <i class="fa fa-search"></i>
+                            <input id="userSearchInput" type="search" class="form-control" placeholder="Search by name, username, or email">
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="ui-label small mb-0" for="userRoleFilter">Role</label>
+                            <select id="userRoleFilter" class="form-select">
+                                <option value="">All roles</option>
+                                <option th:each="roleOption : ${T(com.daniphord.mahanga.Util.OperationRole).ALL_FROMS_ROLES}"
+                                        th:value="${roleOption}"
+                                        th:text="${#strings.replace(roleOption, '_', ' ')}">Role</option>
+                            </select>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="userUnassignedToggle">
+                            <label class="form-check-label" for="userUnassignedToggle">Show unassigned only</label>
+                        </div>
+                        <button type="button" class="btn ui-btn-outline" data-bs-toggle="modal" data-bs-target="#userFormModal" data-user-action="create">Register User</button>
+                    </div>
+                    <div class="ui-table-shell table-responsive">
+                        <table class="table ui-table table-hover align-middle">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Scope</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="managedUser : ${allUsers}"
+                                th:attr="data-user-row='true',data-user-id=${managedUser.id},data-role=${managedUser.role ?: 'UNASSIGNED'},data-search=${(managedUser.username ?: '') + ' ' + (managedUser.fullName ?: '') + ' ' + (managedUser.email ?: '') + ' ' + (managedUser.role ?: '')}">
+                                <td>
+                                    <div class="fw-semibold" th:text="${managedUser.fullName ?: managedUser.username}">Name</div>
+                                    <div class="small ui-muted">
+                                        <span th:text="${managedUser.username}">username</span>
+                                        <span class="text-body-secondary mx-1">|</span>
+                                        <span th:text="${managedUser.checkNumber} ?: 'No check # provided'">check</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill ui-role-badge"
+                                          th:classappend="${#strings.isEmpty(managedUser.role) or #strings.equalsIgnoreCase(managedUser.role, 'UNASSIGNED')} ? 'text-bg-warning' : 'text-bg-primary'"
+                                          th:text="${#strings.isEmpty(managedUser.role) ? 'UNASSIGNED' : #strings.replace(managedUser.role, '_', ' ')}">ADMIN</span>
+                                </td>
+                                <td>
+                                    <div th:text="${managedUser.email} ?: 'No email provided'">email</div>
+                                    <div class="small ui-muted" th:text="${managedUser.designation} ?: ''">Designation</div>
+                                </td>
+                                <td th:text="${managedUser.phoneNumber} ?: '-'">phone</td>
+                                <td>
+                                    <div th:text="${managedUser.station != null ? managedUser.station.name : 'Headquarters'}">Scope</div>
+                                    <div class="small ui-muted" th:text="${managedUser.station != null && managedUser.station.district != null ? managedUser.station.district.name : ''}">District</div>
+                                </td>
+                                <td>
+                                    <span class="ui-status-badge" th:if="${managedUser.locked}">
+                                        <span class="ui-status-dot"></span><span>Locked</span>
+                                    </span>
+                                    <span class="ui-status-badge" th:if="${!managedUser.locked}">
+                                        <span class="ui-status-dot"></span><span th:text="${managedUser.active ? 'Active' : 'Inactive'}">Active</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="ui-action-strip">
+                                        <button type="button" class="btn ui-btn-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#userFormModal"
+                                                data-user-action="edit"
+                                                th:attr="data-user-id=${managedUser.id},data-user-username=${managedUser.username},data-user-check=${managedUser.checkNumber},data-user-email=${managedUser.email},data-user-full-name=${managedUser.fullName},data-user-designation=${managedUser.designation},data-user-phone=${managedUser.phoneNumber},data-user-role=${managedUser.role ?: 'UNASSIGNED'},data-user-station-id=${managedUser.station != null ? managedUser.station.id : ''},data-user-district-id=${managedUser.station != null && managedUser.station.district != null ? managedUser.station.district.id : ''},data-user-region-id=${managedUser.station != null && managedUser.station.district != null && managedUser.station.district.region != null ? managedUser.station.district.region.id : ''}">
+                                            <span th:text="${#strings.isEmpty(managedUser.role) or #strings.equalsIgnoreCase(managedUser.role, 'UNASSIGNED') ? 'Assign Role' : 'Edit'}">Edit</span>
+                                        </button>
+                                        <button type="button" class="btn ui-btn-outline" th:attr="data-lock-user=${managedUser.id}" th:if="${!managedUser.locked}">Lock</button>
+                                        <button type="button" class="btn ui-btn-outline" th:attr="data-unlock-user=${managedUser.id}" th:if="${managedUser.locked}">Unlock</button>
+                                        <button type="button" class="btn ui-btn-outline" th:attr="data-delete-user=${managedUser.id}" th:if="${managedUser.id != session.userId}">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="userEmptyState" th:classappend="${#lists.isEmpty(allUsers) ? '' : 'd-none'}">
+                                <td colspan="7" class="ui-muted">No user accounts match the current filters.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

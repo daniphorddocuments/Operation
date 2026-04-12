@@ -1,39 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Application Error</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-4">
-                    <h2 class="mb-3 text-danger">Request Failed</h2>
-                    <p class="text-muted">The application hit an internal error while processing your request.</p>
+<th:block th:replace="~{fragments/ui :: head('FROMS | Error', false)}"></th:block>
+<body class="ui-body">
+<div class="ui-shell ui-stack">
+    <section class="ui-hero">
+        <div class="ui-hero-chip mb-3"><i class="fas fa-triangle-exclamation"></i><span>Operational Error</span></div>
+        <h1 class="h3 mb-2">Request Failed</h1>
+        <p class="mb-0 text-white-50"
+           th:text="${status == 401} ? 'You need to sign in before using this page.' :
+                    (${status == 403} ? 'You are signed in, but this action or page is not allowed for your account.' :
+                    (${status == 404} ? 'The page or action you requested could not be found.' :
+                    'FROMS encountered an error while processing your request.'))">
+            FROMS encountered an error while processing your request.
+        </p>
+    </section>
 
-                    <div class="mb-3">
-                        <div><strong>Status:</strong> <span th:text="${status}">500</span></div>
-                        <div><strong>Error:</strong> <span th:text="${error}">Internal Server Error</span></div>
-                        <div><strong>Message:</strong> <span th:text="${message}">Unexpected error</span></div>
-                        <div><strong>Path:</strong> <span th:text="${path}">/login</span></div>
-                    </div>
+    <section class="ui-form-shell">
+        <div class="ui-stack">
+            <div class="ui-soft-note">
+                <strong>Cause</strong><br>
+                <span th:text="${message}">An unexpected error occurred</span>
+            </div>
+            <div class="ui-kpi" th:if="${reasonCode}">
+                <span>Exact Error</span>
+                <strong th:text="${reasonCode}">AUTHENTICATION_REQUIRED</strong>
+            </div>
+            <div class="ui-kpi">
+                <span>Status Code</span>
+                <strong th:text="${status}">500</strong>
+            </div>
+            <div class="ui-kpi">
+                <span>Error Type</span>
+                <strong th:text="${error}">Internal Server Error</strong>
+            </div>
+            <div class="ui-kpi">
+                <span>Message</span>
+                <strong th:text="${message}">An unexpected error occurred</strong>
+            </div>
+            <div class="ui-kpi">
+                <span>Request Path</span>
+                <strong th:text="${path}">/</strong>
+            </div>
 
-                    <div th:if="${trace}" class="mb-3">
-                        <label class="form-label"><strong>Stack Trace</strong></label>
-                        <textarea class="form-control" rows="14" readonly th:text="${trace}"></textarea>
-                    </div>
+            <div th:if="${timestamp}" class="ui-kpi">
+                <span>Timestamp</span>
+                <strong th:text="${timestamp}">2026-04-06 10:00:00</strong>
+            </div>
 
-                    <div class="d-flex gap-2">
-                        <a href="/login" class="btn btn-primary">Back to Login</a>
-                        <a href="/" class="btn btn-outline-secondary">Home</a>
-                    </div>
-                </div>
+            <div th:if="${trace}" class="mt-3">
+                <details class="ui-soft-note">
+                    <summary style="cursor: pointer; font-weight: 600; color: var(--ui-primary);">
+                        <i class="fas fa-code"></i> Technical Details
+                    </summary>
+                    <textarea class="form-control mt-2" rows="10" readonly th:text="${trace}"></textarea>
+                </details>
+            </div>
+
+            <div class="ui-page-actions mt-4">
+                <a href="/" class="btn ui-btn-primary">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+                <a href="javascript:history.back()" class="btn ui-btn-outline">
+                    <i class="fas fa-arrow-left me-2"></i>Go Back
+                </a>
+            </div>
+
+            <div class="ui-soft-note">
+                <strong>What to do next</strong><br>
+                <span th:if="${!#strings.isEmpty(nextStep)}" th:text="${nextStep}">
+                    Return to the dashboard and try the action again.
+                </span>
+                <span th:if="${#strings.isEmpty(nextStep) and status == 401}">
+                    Sign in again and retry the action.
+                </span>
+                <span th:if="${#strings.isEmpty(nextStep) and status == 403}">
+                    Check your permissions, refresh the page, or return to your dashboard.
+                </span>
+                <span th:if="${#strings.isEmpty(nextStep) and status == 404}">
+                    Use the dashboard links or navigation menu to return to a valid page.
+                </span>
+                <span th:if="${#strings.isEmpty(nextStep) and status != 401 and status != 403 and status != 404}">
+                    Return to the dashboard and try the action again.
+                </span>
+            </div>
+
+            <div class="ui-soft-note mt-3">
+                <p class="mb-0">
+                    <strong>Need Help?</strong><br>
+                    Contact support at <a href="mailto:nkurushidaniphord@gmail.com" style="color: var(--ui-primary);">nkurushidaniphord@gmail.com</a>
+                </p>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 </body>
 </html>

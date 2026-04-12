@@ -5,6 +5,8 @@ import com.daniphord.mahanga.Model.User;
 import com.daniphord.mahanga.Repositories.AuditLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +16,8 @@ import java.util.List;
  */
 @Service
 public class AuditService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuditService.class);
 
     @Autowired
     private AuditLogRepository auditLogRepository;
@@ -25,6 +29,10 @@ public class AuditService {
     }
 
     public void logFailure(User user, String action, String description, String ipAddress, String details) {
+        if (user == null) {
+            logger.warn("Skipped audit failure log without user. action={}, description={}, ip={}, details={}", action, description, ipAddress, details);
+            return;
+        }
         AuditLog log = new AuditLog(user, action, description, "SYSTEM", null, ipAddress);
         log.setStatus("FAILURE");
         log.setDetails(details);

@@ -1,0 +1,9 @@
+package com.daniphord.mahanga.Repositories;
+
+import com.daniphord.mahanga.Model.IncidentAttachment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface IncidentAttachmentRepository extends JpaRepository<IncidentAttachment, Long> {
+    List<IncidentAttachment> findByIncidentId(Long incidentId);
+}

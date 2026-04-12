@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:replace="~{fragments/ui :: head('FROMS | Control Room', true)}"></th:block>
+<body class="ui-body" th:attr="data-role=${loggedInRole},data-username=${loggedInUsername},data-page='control-room',data-lang=${currentLang}">
+<th:block th:replace="~{fragments/header :: dashboardHeader(
+    @{/control-room/dashboard},
+    'Control Room Dashboard',
+    @{/operations/dashboard},
+    'Operations',
+    ${canAccessOperationsDashboard},
+    @{/dashboard},
+    'Role Dashboard',
+    ${true}
+)}"></th:block>
+
+<div class="ui-shell">
+    <div class="dashboard-workbench">
+        <aside th:replace="~{fragments/sidebar :: controlRoomSidebar}"></aside>
+        <main class="dashboard-main ui-stack">
+    <nav class="ui-breadcrumbs ui-hide-center" aria-label="Breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span>/</span>
+        <a th:href="@{/dashboard}">Role Dashboard</a>
+        <span>/</span>
+        <span aria-current="page">Control Room</span>
+    </nav>
+    <div th:if="${success}" class="alert alert-success ui-alert ui-hide-center" role="alert" data-alert-kind="success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger ui-alert ui-hide-center" role="alert" data-alert-kind="error" th:text="${error}"></div>
+    <section class="ui-hero ui-hide-center" id="control-overview">
+        <div class="ui-hero-matrix">
+            <div>
+                <div class="ui-eyebrow mb-2">Control Room Command</div>
+                <div class="ui-hero-chip-row">
+                    <span class="ui-chip"><i class="fas fa-phone"></i><span>Incoming call clarity</span></span>
+                    <span class="ui-chip"><i class="fas fa-route"></i><span>Routing visibility</span></span>
+                    <span class="ui-chip"><i class="fas fa-video"></i><span>Live scene support</span></span>
+                </div>
+                <h1 class="h3 fw-bold mb-3">Incoming calls, active routing, and recording visibility</h1>
+                <p class="mb-0 text-white-50">Centralized view for rapid public intake, station routing, and communication accountability.</p>
+                <div class="ui-hero-actions">
+                    <a href="#control-video-panel" class="btn ui-btn-primary">Live Video Panel</a>
+                    <a href="#control-call-history" class="btn ui-btn-outline">Call History</a>
+                    <a href="#notification-center" class="btn ui-btn-outline">Notifications</a>
+                </div>
+            </div>
+            <div class="ui-hero-side">
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Signed In User</div>
+                    <div class="fw-semibold" th:text="${loggedInUsername} ?: 'Control Room User'">Control Room User</div>
+                </div>
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Assigned Role</div>
+                    <div class="fw-semibold" th:text="${loggedInRole} ?: 'CONTROL_ROOM_ATTENDANT'">CONTROL_ROOM_ATTENDANT</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ui-command-grid ui-hide-center">
+        <article class="ui-command-card ui-command-card-metric ui-command-card-calls">
+            <div class="ui-command-icon"><i class="fas fa-phone"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Incoming Calls</div>
+                <div class="ui-command-value" th:text="${callMetrics.incomingCalls}">0</div>
+                <div class="ui-command-note">New public reports awaiting action.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-active-calls">
+            <div class="ui-command-icon"><i class="fas fa-headset"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Active Calls</div>
+                <div class="ui-command-value" th:text="${callMetrics.activeCalls}">0</div>
+                <div class="ui-command-note">Calls currently routed or under handling.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-recordings">
+            <div class="ui-command-icon"><i class="fas fa-microphone-alt"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Recordings Available</div>
+                <div class="ui-command-value" th:text="${callMetrics.recordingsAvailable}">0</div>
+                <div class="ui-command-note">Stored communication evidence for review.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-streams">
+            <div class="ui-command-icon"><i class="fas fa-video"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Live Streams</div>
+                <div class="ui-command-value" th:text="${videoMetrics.liveStreams}">0</div>
+                <div class="ui-command-note">Field video feeds currently active.</div>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-briefing-strip ui-hide-center">
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Call Intake</div>
+            <div class="ui-briefing-stat">
+                <span>Incoming calls</span>
+                <strong class="ui-briefing-value" th:text="${callMetrics.incomingCalls}">0</strong>
+            </div>
+            <p class="ui-briefing-copy">The first screen now tells a clearer story for new reports, active handling, and communication readiness.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Live Handling</div>
+            <div class="ui-briefing-stat">
+                <span>Active calls</span>
+                <strong class="ui-briefing-value" th:text="${callMetrics.activeCalls}">0</strong>
+            </div>
+            <p class="ui-briefing-copy">Routing, live video, and recordings are easier to demonstrate because the workflow is grouped around action, not just data.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Next Action</div>
+            <div class="ui-briefing-actions">
+                <a href="#control-video-panel" class="ui-link-arrow"><span>Open live video</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#control-call-history" class="ui-link-arrow"><span>Check call history</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#control-reports-panel" class="ui-link-arrow" th:if="${!#lists.isEmpty(availableReports)}"><span>Open reports</span><i class="fas fa-arrow-right"></i></a>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="control-route-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-0">AI Route Engine</h2>
+                <div class="small ui-muted">Nearest-station recommendation, road distance conversion, ETA, and printable route sheet</div>
+            </div>
+            <div class="ui-action-strip" th:if="${priorityRoute != null}">
+                <a class="btn ui-btn-primary" th:href="@{'/routes/print/calls/' + ${priorityRoute.sourceId}}" target="_blank">Print Map</a>
+                <a class="btn ui-btn-outline" th:href="${priorityRoute.directionsUrl}" target="_blank" rel="noopener">Live Directions</a>
+            </div>
+        </div>
+        <div th:if="${priorityRoute != null}" class="ui-stack">
+            <div class="ui-mini-grid">
+                <div class="ui-kpi"><span>Recommended Station</span><strong th:text="${priorityRoute.stationName}">Station</strong></div>
+                <div class="ui-kpi"><span>Straight Distance</span><strong th:text="${priorityRoute.straightDistanceKm} + ' km'">0 km</strong></div>
+                <div class="ui-kpi"><span>Road Distance</span><strong th:text="${priorityRoute.roadDistanceKm} + ' km'">0 km</strong></div>
+                <div class="ui-kpi"><span>ETA</span><strong th:text="${priorityRoute.etaMinutes} + ' min'">0 min</strong></div>
+            </div>
+            <div class="ui-map-placeholder ui-map-shell">
+                <iframe
+                        class="ui-map-frame"
+                        title="Control room route map"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        th:src="${priorityRoute.embedUrl}"></iframe>
+                <div class="ui-map-meta">
+                    <div class="fw-semibold">Dispatch to <span th:text="${priorityRoute.stationName}">Station</span></div>
+                    <div class="small ui-muted">The route engine uses Haversine distance, road-distance conversion, and past response performance to estimate the best route.</div>
+                </div>
+            </div>
+            <ol class="ui-manual-list mb-0">
+                <li th:each="direction : ${priorityRoute.directions}" th:text="${direction}">Direction</li>
+            </ol>
+        </div>
+        <div th:if="${priorityRoute == null}" class="ui-soft-note">
+            <div class="fw-semibold mb-1" th:text="${scopeMap.title}">GPS route not available yet</div>
+            <div class="small ui-muted" th:text="${scopeMap.summary}">A printable route appears here after the caller or officer shares GPS coordinates with the system.</div>
+            <div class="ui-map-placeholder ui-map-shell mt-3">
+                <iframe
+                        class="ui-map-frame"
+                        th:title="${scopeMap.title}"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        th:src="${scopeMap.embedUrl}"></iframe>
+            </div>
+            <div class="ui-action-strip mt-3">
+                <a class="btn ui-btn-outline" th:href="${scopeMap.openUrl}" target="_blank" rel="noopener">Open Full Map</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="control-manual-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1" th:text="${controlRoomUserManual.title}">Control Room User Manual</h2>
+                <div class="small ui-muted" th:text="${controlRoomUserManual.audience}">Control-room guidance</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span>Control Room Guidance</span></span>
+        </div>
+        <p class="ui-muted mb-3" th:text="${controlRoomUserManual.summary}">Use this dashboard to receive public reports and monitor live streams.</p>
+        <div class="ui-manual-grid">
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Quick Start</div>
+                <ol class="ui-manual-list">
+                    <li th:each="item : ${controlRoomUserManual.quickStart}" th:text="${item}">Start with the incoming and active call counters.</li>
+                </ol>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Main Tasks</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${controlRoomUserManual.keyTasks}" th:text="${item}">Track incoming, active, and recorded calls.</li>
+                </ul>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Access Boundaries</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${controlRoomUserManual.accessBoundaries}" th:text="${item}">Caller information and recordings are controlled operational records.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="ui-soft-note mt-3">
+            <div class="fw-semibold mb-1">Operator Note</div>
+            <div class="small ui-muted" th:text="${controlRoomUserManual.helpNote}">Keep report numbers, caller updates, and routing actions synchronized.</div>
+        </div>
+    </section>
+
+    <section class="ui-command-center" id="control-analytics-panel">
+        <div class="ui-section-shell">
+            <div class="ui-card ui-hide-center">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Control Room Analytics</h2>
+                    <span class="small ui-muted">Calls and video readiness</span>
+                </div>
+                <div class="ui-analytics-grid">
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Call Handling Mix</h3>
+                            <span class="small ui-muted">Incoming, active, recorded</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="controlRoomCallChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Shows intake load and current handling pressure for the control room team.</div>
+                    </article>
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Video Operations</h3>
+                            <span class="small ui-muted">Live versus recorded sessions</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="controlRoomVideoChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Clarifies live visual support capacity during demonstrations and actual operations.</div>
+                    </article>
+                </div>
+            </div>
+            <div class="ui-card ui-hide-center" id="control-video-panel">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Live Video Command Panel</h2>
+                    <span class="small ui-muted">WebRTC field stream workspace</span>
+                </div>
+                <div class="ui-live-video-grid">
+                    <div class="ui-live-screen ui-live-screen-remote">
+                        <div class="ui-live-badge">LIVE</div>
+                        <video id="remoteVideo" autoplay playsinline controls poster="" class="ui-video-frame ui-video-frame-remote"></video>
+                        <div class="ui-live-overlay">
+                            <div>
+                                <div class="fw-semibold" id="videoOfficerLabel">Awaiting live video stream</div>
+                                <div class="small text-white-50" id="videoLocationLabel">Location appears when streaming starts</div>
+                            </div>
+                            <div class="small text-white-50" id="videoSignalStatus">Signal offline</div>
+                        </div>
+                    </div>
+                    <div class="ui-stack">
+                        <div class="ui-card ui-card-soft">
+                            <div class="ui-section-head mb-2">
+                                <h3 class="h6 mb-0">Signal Controls</h3>
+                                <span class="small ui-muted" th:text="${canStartLiveVideo} ? 'Live publishing enabled for this role' : 'Viewer mode only for this role'">Live publishing enabled for this role</span>
+                            </div>
+                            <div class="ui-action-strip">
+                                <button type="button" class="btn ui-btn-outline" data-toggle-remote-audio>Mute Speaker</button>
+                            </div>
+                            <div class="ui-action-strip" th:if="${canStartLiveVideo}" sec:authorize="hasRole('CONTROL_ROOM_ATTENDANT')">
+                                <select class="form-select ui-audio-select" data-stream-audio-mode>
+                                    <option value="true">Allow voice</option>
+                                    <option value="false">Mute microphone</option>
+                                </select>
+                                <button type="button" class="btn ui-btn-primary" data-start-stream>Start Live Video</button>
+                                <button type="button" class="btn ui-btn-outline" data-end-stream>End Stream</button>
+                            </div>
+                            <div class="small ui-muted mt-2"
+                                 th:text="${canStartLiveVideo} ? 'This role can publish, preview, and record a live stream from the control room panel.' : 'This role can monitor and record incoming live streams from this panel.'">
+                                This role can publish, preview, and record a live stream from the control room panel.
+                            </div>
+                        </div>
+                        <div class="ui-card ui-card-soft">
+                            <div class="ui-section-head mb-2">
+                                <h3 class="h6 mb-0">Recording Upload</h3>
+                                <span class="small ui-muted">Session evidence</span>
+                            </div>
+                            <input type="file" class="form-control" accept="video/webm" data-video-upload>
+                            <div class="small ui-muted mt-2">Uploads recording to `/api/video/upload` after stream end.</div>
+                        </div>
+                        <div class="ui-card ui-card-soft">
+                            <div class="ui-section-head mb-2">
+                                <h3 class="h6 mb-0">Live Session Feed</h3>
+                                <span class="small ui-muted">Latest live transmissions</span>
+                            </div>
+                            <div class="ui-list-grid" id="videoSessionFeed">
+                                <div class="ui-list-row" th:each="videoSession : ${videoSessions}">
+                                    <div>
+                                        <div class="fw-semibold" th:text="${videoSession.officer != null ? videoSession.officer.fullName : 'Live Operator'}">Live Operator</div>
+                                        <div class="small ui-muted" th:text="${videoSession.locationLabel} ?: 'Unspecified location'">Location</div>
+                                    </div>
+                                    <strong th:text="${videoSession.status}">LIVE</strong>
+                                </div>
+                                <div th:if="${#lists.isEmpty(videoSessions)}" class="small ui-muted">No live or recorded sessions yet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <video id="localVideo" autoplay playsinline muted class="ui-video-preview ui-video-frame-preview" th:if="${canStartLiveVideo}"></video>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="control-call-history" th:if="${canAccessCallHandling}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Call History</h2>
+                    <span class="small ui-muted">Latest 20 entries</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Caller</th>
+                            <th>Incident Type</th>
+                            <th>Status</th>
+                            <th>Station</th>
+                            <th>Recording</th>
+                            <th>Chat</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="call : ${calls}">
+                            <td>
+                                <div th:text="${call.callerName} ?: 'Unknown caller'">Caller</div>
+                                <div class="small ui-muted" th:text="${call.reportNumber}">REP-1</div>
+                                <div class="small ui-muted" th:text="${call.callerNumber}">Phone</div>
+                            </td>
+                            <td th:text="${call.incidentType}">FIRE</td>
+                            <td th:text="${call.status}">ROUTED</td>
+                            <td th:text="${call.routedStation != null ? call.routedStation.name : 'Pending route'}">Station</td>
+                            <td>
+                                <span th:if="${call.recordingUrl == null || call.recordingUrl.isBlank()}" class="small ui-muted">Pending</span>
+                                <a th:if="${call.recordingUrl != null && !call.recordingUrl.isBlank()}" th:href="${call.recordingUrl}" target="_blank" class="ui-status-badge text-decoration-none"><span class="ui-status-dot"></span><span>Open</span></a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn ui-btn-outline"
+                                        th:if="${currentUserStationId != null and call.routedStation != null and currentUserStationId == call.routedStation.id}"
+                                        th:attr="data-open-call-chat=${call.id},data-call-report=${call.reportNumber}">
+                                    Chat
+                                </button>
+                                <span class="small ui-muted" th:unless="${currentUserStationId != null and call.routedStation != null and currentUserStationId == call.routedStation.id}">Unavailable</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(calls)}">
+                            <td colspan="6" class="ui-muted">No public or routed calls recorded yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-section-shell">
+            <div class="ui-card" id="notification-center">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Notification Feed</h2>
+                    <span class="ui-status-badge"><span class="ui-status-dot"></span><span th:text="${notificationUnreadCount} + ' unread'">0 unread</span></span>
+                </div>
+                <div class="ui-list-grid" id="realtimeFeed">
+                    <div class="ui-list-row" th:each="notification : ${notifications}">
+                        <div>
+                            <div class="fw-semibold" th:text="${notification.title}">Notification</div>
+                            <div class="small ui-muted" th:text="${notification.message}">Message</div>
+                        </div>
+                        <strong th:text="${notification.createdAt}">Time</strong>
+                    </div>
+                    <div class="ui-list-row" th:if="${#lists.isEmpty(notifications)}">
+                        <span>Signal service idle</span>
+                        <strong>WAITING</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-card ui-hide-center" id="control-reports-panel" th:if="${!#lists.isEmpty(availableReports)}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Reports</h2>
+                    <span class="small ui-muted">Downloads available for this control room level</span>
+                </div>
+                <div class="ui-list-grid">
+                    <div class="ui-list-row" th:each="reportItem : ${availableReports}">
+                        <div class="ui-report-row-copy">
+                            <div class="fw-semibold" th:text="${reportItem.title}">Report</div>
+                            <div class="small ui-muted" th:text="${reportItem.description}">Description</div>
+                        </div>
+                        <form class="ui-report-download-form" th:action="@{'/api/reports/' + ${reportItem.key} + '/pdf'}" method="get" target="_blank">
+                            <div class="ui-report-range" th:if="${reportItem.supportsDateRange}">
+                                <div>
+                                    <label class="ui-label form-label" th:for="${'controlReportFrom-' + reportItem.key}">From</label>
+                                    <input class="form-control" type="date" name="from" th:id="${'controlReportFrom-' + reportItem.key}">
+                                </div>
+                                <div>
+                                    <label class="ui-label form-label" th:for="${'controlReportTo-' + reportItem.key}">To</label>
+                                    <input class="form-control" type="date" name="to" th:id="${'controlReportTo-' + reportItem.key}">
+                                </div>
+                            </div>
+                            <div class="ui-action-strip">
+                                <button class="btn ui-btn-outline" type="submit" name="lang" value="en">EN PDF</button>
+                                <button class="btn ui-btn-outline" type="submit" name="lang" value="sw">SW PDF</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        </main>
+    </div>
+    <div id="profile-actions"></div>
+    <script th:inline="javascript">
+        window.FROMS_CONTEXT = {
+            currentUserId: [[${currentUserId}]],
+            role: [[${loggedInRole}]],
+            canStartLiveVideo: [[${canStartLiveVideo}]],
+            canViewTeleSupport: false,
+            username: [[${loggedInUsername}]],
+            stationId: [[${currentUserStationId}]],
+            districtId: [[${currentDistrictId}]],
+            regionId: [[${currentRegionId}]],
+            signalUrl: [[@{/signal}]],
+            startVideoUrl: [[@{/api/video/sessions/start}]],
+            endVideoUrl: [[@{/api/video/sessions/__id__/end}]],
+            uploadVideoUrl: [[@{/api/video/upload}]],
+            sessionsUrl: [[@{/api/video/sessions}]],
+            changePasswordUrl: [[@{/api/me/change-password}]],
+            controlRoomCallsUrl: [[@{/api/control-room/calls}]],
+            acceptCallUrlTemplate: [[@{/api/control-room/calls/__id__/accept}]],
+            rejectCallUrlTemplate: [[@{/api/control-room/calls/__id__/reject}]]
+        };
+        window.FROMS_CONTROL_ROOM_CHARTS = {
+            callValues: [
+                [[${callMetrics.incomingCalls}]],
+                [[${callMetrics.activeCalls}]],
+                [[${callMetrics.recordingsAvailable}]]
+            ],
+            videoValues: [
+                [[${videoMetrics.liveStreams}]],
+                [[${videoMetrics.recordedStreams}]],
+                [[${videoMetrics.totalSessions}]]
+            ]
+        };
+    </script>
+</div>
+<div class="modal fade" id="incomingCallModal" tabindex="-1" aria-hidden="true" th:if="${incomingCall != null}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Incoming 114 Call</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="ui-kpi"><span>Caller Number</span><strong th:text="${incomingCall.callerNumber} ?: 'Unavailable'">Number</strong></div>
+                <div class="ui-kpi"><span>Incident Type</span><strong th:text="${incomingCall.incidentType} ?: 'Unspecified'">Type</strong></div>
+                <div class="small ui-muted">Accepting routes the call to the station and alerts the assigned station team so the Station Operation Officer can register the initial incident report.</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn ui-btn-outline" th:attr="data-reject-call=${incomingCall.id}" sec:authorize="hasAnyRole('CONTROL_ROOM_ATTENDANT','CONTROL_ROOM_OPERATOR')">Reject</button>
+                <button type="button" class="btn ui-btn-primary" th:attr="data-accept-call=${incomingCall.id}" sec:authorize="hasAnyRole('CONTROL_ROOM_ATTENDANT','CONTROL_ROOM_OPERATOR')">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="callChatModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="controlRoomChatForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Report Chat</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <input type="hidden" id="controlRoomChatCallId">
+                    <div class="small ui-muted" id="controlRoomChatReportNumber"></div>
+                    <div class="ui-list-grid public-chat-feed" id="controlRoomChatFeed"></div>
+                    <div class="ui-action-strip">
+                        <input id="controlRoomChatMessage" class="form-control" type="text" placeholder="Type a reply" required>
+                        <button type="submit" class="btn ui-btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dashboardAlarmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content ui-alarm-modal">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="dashboardAlarmTitle">Emergency Alarm</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="ui-alarm-banner" id="dashboardAlarmMessage">FIRE STATION FIRE STATION PUBLIC CALLING EMERGENCY PLEASE</div>
+                <div class="small ui-muted" id="dashboardAlarmMeta">Realtime emergency alert</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="alarmVideoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="alarmVideoTitle">Emergency Live Video</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="small ui-muted" id="alarmVideoMeta">Live stream popup opened for the current emergency signal.</div>
+                <div class="ui-live-screen ui-live-screen-sm ui-live-screen-remote">
+                    <div class="ui-live-badge">LIVE</div>
+                    <video id="alarmRemoteVideo" autoplay playsinline controls class="ui-video-frame ui-video-frame-remote"></video>
+                    <div class="ui-live-overlay">
+                        <div>
+                            <div class="fw-semibold" id="alarmVideoOfficer">Awaiting live stream</div>
+                            <div class="small text-white-50" id="alarmVideoLocation">Popup live feed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/footer :: siteFooter}"></th:block>
+<div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Profile</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="ui-kpi"><span>Username</span><strong th:text="${loggedInUsername}">username</strong></div>
+                <div class="ui-kpi"><span>Role</span><strong th:text="${loggedInRole}">role</strong></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="changePasswordForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Change Password</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div>
+                        <label class="ui-label form-label" for="currentPassword">Current Password</label>
+                        <input id="currentPassword" name="currentPassword" type="password" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="newPassword">New Password</label>
+                        <input id="newPassword" name="newPassword" type="password" class="form-control" minlength="8" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="confirmPassword">Confirm Password</label>
+                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" minlength="8" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,3926 @@
+:root {
+    --ui-primary: #f57c00;
+    --ui-primary-strong: #d96b00;
+    --ui-primary-deep: #7c3c00;
+    --ui-heading: "Manrope", "Public Sans", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --ui-accent: #f5a524;
+    --ui-accent-strong: #e68c00;
+    --ui-button-start: #ffb347;
+    --ui-button-end: #f59a23;
+    --ui-button-soft-start: #ffd58f;
+    --ui-button-soft-end: #ffbf66;
+    --ui-button-hover-start: #ffbf5e;
+    --ui-button-hover-end: #f2a128;
+    --ui-secondary: #ffffff;
+    --ui-surface: rgba(255, 255, 255, 0.98);
+    --ui-surface-soft: rgba(245, 124, 0, 0.05);
+    --ui-border: rgba(245, 124, 0, 0.12);
+    --ui-border-strong: rgba(245, 124, 0, 0.22);
+    --ui-text: #121826;
+    --ui-text-soft: rgba(18, 24, 38, 0.78);
+    --ui-text-faint: rgba(18, 24, 38, 0.55);
+    --ui-shadow: 0 18px 44px rgba(124, 60, 0, 0.12);
+    --ui-shadow-strong: 0 26px 60px rgba(124, 60, 0, 0.16);
+    --ui-radius-xl: 32px;
+    --ui-radius-lg: 24px;
+    --ui-radius-md: 18px;
+    --ui-radius-sm: 14px;
+    --transition: 180ms ease;
+    --bs-primary: #f57c00;
+    --bs-primary-rgb: 245, 124, 0;
+    --bs-link-color: #d96b00;
+    --bs-link-hover-color: #b85a00;
+    --bs-focus-ring-color: rgba(245, 124, 0, 0.24);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.ui-body,
+body.ui-body-print,
+body.ui-operations,
+body.ui-manual {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Public Sans", "Inter", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 0.96rem;
+    line-height: 1.6;
+    color: var(--ui-text);
+    background:
+        radial-gradient(circle at 18% 12%, rgba(245, 165, 36, 0.18), transparent 24%),
+        radial-gradient(circle at 82% 8%, rgba(245, 124, 0, 0.12), transparent 22%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 240, 0.98)),
+        #ffffff;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+
+body.ui-body::before,
+body.ui-operations::before,
+body.ui-manual::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at top left, rgba(245, 165, 36, 0.16), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(245, 124, 0, 0.10), transparent 28%);
+    z-index: -1;
+}
+
+body.ui-body::after,
+body.ui-operations::after,
+body.ui-manual::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.42), transparent 76%);
+    opacity: 0.24;
+    z-index: -1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.landing-title,
+.login-clean-title,
+.login-command-title,
+.ui-section-title,
+.ui-command-value,
+.ui-briefing-title,
+.dashboard-sidebar-brand-name {
+    font-family: var(--ui-heading);
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+}
+
+a {
+    color: inherit;
+}
+
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(245, 165, 36, 0.4);
+    outline-offset: 2px;
+}
+
+.ui-shell,
+.ui-report-shell {
+    width: min(1240px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 28px 0 42px;
+}
+
+.ui-stack {
+    display: grid;
+    gap: 20px;
+}
+
+.ui-site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: linear-gradient(90deg, rgba(245, 124, 0, 0.98), rgba(255, 171, 64, 0.98));
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.landing-topbar-fire {
+    position: sticky;
+    overflow: hidden;
+}
+
+.landing-topbar-fire::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(245, 124, 0, 0.92), rgba(255, 171, 64, 0.84)),
+        url("/images/landing-topbar-fire.png") center 68% / cover no-repeat;
+    opacity: 0.28;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+.landing-topbar-fire::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(245, 124, 0, 0.08));
+    pointer-events: none;
+}
+
+.landing-topbar-fire .ui-site-topbar-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.ui-site-topbar-inner {
+    width: min(1260px, calc(100% - 24px));
+    min-height: 72px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.ui-site-footer {
+    margin-top: 24px;
+    background: rgba(255, 255, 255, 0.98);
+    border-top: 3px solid rgba(245, 124, 0, 0.45);
+    box-shadow: 0 -10px 28px rgba(124, 60, 0, 0.08);
+}
+
+.ui-site-footer-inner {
+    width: min(1260px, calc(100% - 24px));
+    margin: 0 auto;
+    padding: 18px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    color: var(--ui-text);
+}
+
+.ui-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--ui-secondary);
+    font-size: 1.08rem;
+}
+
+.ui-topbar-mark {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--ui-secondary);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+.ui-topbar-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
+    flex: 0 0 auto;
+}
+
+.ui-topbar-links,
+.ui-topbar-right,
+.ui-topbar-link-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ui-topbar-right {
+    justify-content: flex-end;
+}
+
+.ui-topbar-links a {
+    padding: 10px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background var(--transition), color var(--transition);
+}
+
+.ui-profile-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(124, 60, 0, 0.22);
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-end) 100%);
+    color: var(--ui-primary-deep);
+    font-weight: 700;
+    box-shadow: 0 10px 22px rgba(124, 60, 0, 0.12);
+}
+
+.ui-profile-toggle:hover,
+.ui-profile-toggle:focus {
+    color: var(--ui-primary-deep);
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+}
+
+.ui-profile-avatar {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(124, 60, 0, 0.12);
+    color: var(--ui-primary-deep);
+    font-size: 0.86rem;
+}
+
+.ui-dropdown-menu {
+    border: 1px solid var(--ui-border);
+    border-radius: 18px;
+    box-shadow: var(--ui-shadow);
+    padding: 8px;
+}
+
+.ui-dropdown-menu .dropdown-item {
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-weight: 600;
+}
+
+.ui-site-topbar .small,
+.ui-site-topbar strong,
+.ui-site-topbar span,
+.ui-site-topbar a,
+.ui-site-topbar .ui-muted {
+    color: var(--ui-secondary) !important;
+}
+
+.ui-site-topbar .btn.ui-btn-primary,
+.ui-site-topbar .btn.ui-btn-outline,
+.ui-site-topbar .landing-btn,
+.ui-site-topbar .ui-profile-toggle,
+.ui-site-topbar .ui-language-select {
+    color: var(--ui-primary-deep) !important;
+}
+
+.ui-site-topbar .btn.ui-btn-primary *,
+.ui-site-topbar .btn.ui-btn-outline *,
+.ui-site-topbar .landing-btn *,
+.ui-site-topbar .ui-profile-toggle * {
+    color: inherit !important;
+}
+
+.ui-site-topbar .ui-language-select,
+.ui-site-topbar .btn.ui-btn-outline,
+.ui-site-topbar .landing-login-corner,
+.ui-site-topbar .ui-profile-toggle {
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-end) 100%);
+    border: 1px solid rgba(124, 60, 0, 0.22);
+    box-shadow: 0 10px 22px rgba(124, 60, 0, 0.12);
+}
+
+.ui-site-topbar .ui-language-select:focus,
+.ui-site-topbar .btn.ui-btn-outline:hover,
+.ui-site-topbar .btn.ui-btn-outline:focus,
+.ui-site-topbar .landing-login-corner:hover,
+.ui-site-topbar .landing-login-corner:focus,
+.ui-site-topbar .ui-profile-toggle:hover,
+.ui-site-topbar .ui-profile-toggle:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+}
+
+.ui-topbar-links a:hover,
+.ui-topbar-links a:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    color: var(--ui-primary-deep);
+    box-shadow: 0 10px 20px rgba(124, 60, 0, 0.12);
+}
+
+.ui-topbar,
+.ui-panel,
+.ui-card,
+.ui-hero,
+.ui-form-shell,
+.ui-summary-card,
+.ui-table-shell,
+.ui-receipt-shell,
+.landing-clean-panel,
+.landing-clean-summary-card,
+.landing-clean-sidebar,
+.landing-clean-hero,
+.login-clean-card,
+.login-support-card {
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    box-shadow: var(--ui-shadow);
+}
+
+.ui-topbar,
+.ui-panel,
+.ui-card,
+.ui-form-shell,
+.ui-summary-card,
+.ui-table-shell,
+.ui-receipt-shell {
+    border-radius: var(--ui-radius-lg);
+    padding: 24px;
+}
+
+.ui-modal-content .modal-body {
+    max-height: min(72vh, 860px);
+    overflow-y: auto;
+}
+
+.ui-card,
+.ui-panel,
+.ui-summary-card,
+.landing-clean-panel,
+.landing-clean-summary-card,
+.login-support-card {
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    animation: cardFade 360ms ease;
+}
+
+.ui-card:hover,
+.ui-panel:hover,
+.ui-summary-card:hover,
+.landing-clean-panel:hover,
+.landing-clean-summary-card:hover,
+.login-support-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ui-shadow-strong);
+    border-color: var(--ui-border-strong);
+}
+
+.ui-hero {
+    border-radius: var(--ui-radius-xl);
+    padding: 30px;
+    color: var(--ui-secondary);
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        linear-gradient(135deg, var(--ui-primary), var(--ui-accent));
+    position: relative;
+    overflow: hidden;
+}
+
+.ui-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -12% -38% auto;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+@keyframes cardFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ui-hero-chip,
+.ui-chip,
+.ui-metric-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.ui-hero-chip {
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.ui-chip,
+.ui-metric-chip {
+    background: rgba(245, 124, 0, 0.08);
+    color: var(--ui-primary);
+}
+
+.ui-eyebrow,
+.landing-kicker,
+.landing-sidebar-title {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ui-text-faint);
+}
+
+.ui-section-title {
+    font-size: 1.22rem;
+    font-weight: 700;
+    color: var(--ui-primary);
+}
+
+.ui-muted,
+.ui-soft-note,
+.ui-empty {
+    color: var(--ui-text-soft);
+}
+
+.ui-soft-note,
+.ui-empty {
+    padding: 16px 18px;
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-surface-soft);
+    border: 1px solid rgba(124, 60, 0, 0.08);
+}
+
+.ui-highlight-card {
+    padding: 18px;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid rgba(124, 60, 0, 0.08);
+    background: linear-gradient(180deg, rgba(124, 60, 0, 0.02), rgba(124, 60, 0, 0.01));
+}
+
+.ui-command-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ui-command-card {
+    padding: 20px;
+    border-radius: var(--ui-radius-lg);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    box-shadow: var(--ui-shadow);
+}
+
+.ui-command-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ui-text-faint);
+}
+
+.ui-command-value {
+    margin-top: 12px;
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--ui-primary);
+}
+
+.ui-command-note {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--ui-text-soft);
+}
+
+.ui-dual-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.9fr);
+}
+
+.dashboard-workbench {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.sidebar-toggle {
+    min-width: 138px;
+    justify-content: center;
+}
+
+.dashboard-workbench.dashboard-sidebar-collapsed {
+    grid-template-columns: 168px minmax(0, 1fr);
+}
+
+.dashboard-workbench.dashboard-sidebar-collapsed .dashboard-sidebar {
+    padding-inline: 12px;
+}
+
+.dashboard-workbench.dashboard-sidebar-collapsed .dashboard-sidebar-brand-meta,
+.dashboard-workbench.dashboard-sidebar-collapsed .dashboard-sidebar .ui-soft-note {
+    display: none;
+}
+
+.dashboard-workbench.dashboard-sidebar-collapsed .dashboard-sidebar-brand-logo {
+    width: 58px;
+    height: 58px;
+}
+
+.dashboard-workbench.dashboard-sidebar-collapsed .landing-sidebar-link {
+    font-size: 0.84rem;
+    padding: 10px 11px;
+}
+
+.dashboard-sidebar {
+    position: sticky;
+    top: 94px;
+    border-radius: var(--ui-radius-lg);
+    padding: 22px 18px;
+    background: linear-gradient(180deg, rgba(255, 249, 243, 0.98), rgba(255, 239, 224, 0.96));
+    color: var(--ui-primary-deep);
+    border: 1px solid rgba(229, 139, 36, 0.18);
+    box-shadow: 0 18px 36px rgba(124, 60, 0, 0.08);
+    overflow: hidden;
+}
+
+.dashboard-sidebar-fire::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(245, 124, 0, 0.96), rgba(191, 54, 12, 0.92)),
+        url("/images/landing-topbar-fire.png") center 62% / cover no-repeat;
+    opacity: 0.24;
+    pointer-events: none;
+}
+
+.dashboard-sidebar-fire::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 191, 102, 0.22));
+    pointer-events: none;
+}
+
+.dashboard-sidebar-milky::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(245, 165, 36, 0.08), rgba(255, 255, 255, 0.02));
+    pointer-events: none;
+}
+
+.dashboard-sidebar-milky::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(245, 124, 0, 0.03), rgba(255, 255, 255, 0));
+    pointer-events: none;
+}
+
+.dashboard-sidebar > * {
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-sidebar .landing-sidebar-title,
+.dashboard-sidebar .landing-sidebar-link,
+.dashboard-sidebar .fw-semibold,
+.dashboard-sidebar .small,
+.dashboard-sidebar span,
+.dashboard-sidebar a,
+.dashboard-sidebar .ui-muted,
+.dashboard-sidebar .ui-soft-note,
+.dashboard-sidebar .ui-soft-note .small,
+.dashboard-sidebar .ui-soft-note .fw-semibold {
+    color: var(--ui-primary-deep) !important;
+}
+
+.dashboard-sidebar .landing-sidebar-link:hover,
+.dashboard-sidebar .landing-sidebar-link:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    border-color: rgba(245, 124, 0, 0.28);
+    color: var(--ui-primary-deep) !important;
+    box-shadow: 0 10px 22px rgba(124, 60, 0, 0.12);
+}
+
+.dashboard-sidebar .landing-sidebar-link {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(245, 124, 0, 0.12);
+}
+
+.dashboard-sidebar .ui-soft-note {
+    background: rgba(245, 165, 36, 0.08);
+    border-color: rgba(245, 124, 0, 0.08);
+}
+
+.dashboard-main {
+    min-width: 0;
+}
+
+.ui-section-shell {
+    display: grid;
+    gap: 16px;
+}
+
+.ui-section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.ui-analytics-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-chart-card {
+    min-height: 320px;
+}
+
+.ui-chart-shell {
+    position: relative;
+    min-height: 240px;
+    padding-top: 8px;
+}
+
+.ui-chart-caption {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: var(--ui-text-soft);
+}
+
+.ui-list-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.ui-manual-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ui-manual-card {
+    height: 100%;
+}
+
+.ui-manual-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 10px;
+    color: var(--ui-text-soft);
+}
+
+.ui-manual-list li::marker {
+    color: var(--ui-accent-strong);
+    font-weight: 700;
+}
+
+.ui-list-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(124, 60, 0, 0.08);
+}
+
+.ui-skeleton-row {
+    align-items: center;
+}
+
+.ui-skeleton-stack {
+    display: grid;
+    gap: 8px;
+    min-width: min(240px, 100%);
+}
+
+.ui-skeleton-block {
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(245, 124, 0, 0.08), rgba(245, 124, 0, 0.16), rgba(245, 124, 0, 0.08));
+    background-size: 220% 100%;
+    animation: ui-skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+.ui-skeleton-block-lg {
+    width: 168px;
+    height: 12px;
+}
+
+.ui-skeleton-block-sm {
+    width: 70px;
+}
+
+@keyframes ui-skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.ui-list-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.ui-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(124, 60, 0, 0.1);
+    background: rgba(124, 60, 0, 0.05);
+    color: var(--ui-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.ui-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ui-primary);
+}
+
+.ui-hero-matrix {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+    position: relative;
+    z-index: 1;
+}
+
+.ui-hero-side {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+}
+
+.ui-hero-panel {
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ui-mini-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-map-placeholder {
+    min-height: 220px;
+    border-radius: 24px;
+    border: 1px dashed rgba(124, 60, 0, 0.18);
+    background:
+        linear-gradient(180deg, rgba(124, 60, 0, 0.02), rgba(124, 60, 0, 0.05)),
+        #ffffff;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 28px;
+}
+
+.ui-map-shell {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    display: grid;
+    place-items: stretch;
+}
+
+.ui-map-frame {
+    width: 100%;
+    min-height: 340px;
+    border: 0;
+    display: block;
+}
+
+.ui-map-meta {
+    display: grid;
+    gap: 4px;
+    padding: 16px 18px;
+    border-top: 1px solid rgba(124, 60, 0, 0.08);
+    background: rgba(255, 255, 255, 0.92);
+    text-align: left;
+}
+
+.ui-command-center {
+    display: grid;
+    gap: 20px;
+    align-items: start;
+    grid-template-columns: minmax(0, 1.9fr) minmax(300px, 0.78fr);
+}
+
+.ui-live-video-grid {
+    display: grid;
+    gap: 16px;
+    align-items: start;
+    grid-template-columns: minmax(0, 1.85fr) minmax(280px, 0.75fr);
+}
+
+.ui-live-screen {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    min-height: 360px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(124, 60, 0, 0.92), rgba(124, 60, 0, 0.96));
+    border: 2px solid rgba(249, 115, 22, 0.66);
+    box-shadow: 0 20px 40px rgba(124, 60, 0, 0.24);
+}
+
+.ui-live-screen-sm {
+    min-height: 280px;
+}
+
+.ui-live-screen-remote {
+    min-height: clamp(360px, 40vw, 620px);
+    aspect-ratio: 16 / 9;
+}
+
+.ui-live-screen-preview {
+    aspect-ratio: 16 / 9;
+}
+
+.ui-video-frame,
+.ui-video-preview {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #020617;
+    object-fit: cover;
+}
+
+.ui-video-frame {
+    min-height: 360px;
+    max-height: none;
+}
+
+.ui-live-screen-sm .ui-video-frame {
+    min-height: 280px;
+}
+
+.ui-video-frame-remote {
+    object-fit: contain;
+    background:
+        radial-gradient(circle at top, rgba(248, 250, 252, 0.08), transparent 30%),
+        linear-gradient(180deg, rgba(2, 6, 23, 0.98), rgba(124, 60, 0, 0.96));
+}
+
+.ui-video-frame-preview {
+    object-fit: cover;
+}
+
+.ui-video-preview {
+    margin-top: 16px;
+    min-height: 180px;
+    max-height: 260px;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    border: 1px solid rgba(249, 115, 22, 0.34);
+}
+
+.ui-live-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-end;
+    background: linear-gradient(180deg, rgba(124, 60, 0, 0), rgba(124, 60, 0, 0.86));
+    color: #ffffff;
+}
+
+.ui-live-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 0.84rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.ui-card-soft {
+    background: linear-gradient(180deg, rgba(249, 115, 22, 0.04), rgba(255, 255, 255, 0.98));
+}
+
+.ui-kpi {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: var(--ui-radius-sm);
+    background: rgba(124, 60, 0, 0.04);
+    border: 1px solid rgba(124, 60, 0, 0.08);
+}
+
+.ui-page-actions,
+.ui-action-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ui-btn-primary,
+.ui-btn-outline {
+    border-radius: 999px;
+    padding: 0.82rem 1.15rem;
+    font-weight: 600;
+    transition: transform var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.ui-btn-primary {
+    background: linear-gradient(180deg, var(--ui-button-start) 0%, var(--ui-button-end) 100%);
+    color: var(--ui-primary-deep);
+    border: 1px solid rgba(124, 60, 0, 0.22);
+    box-shadow: 0 10px 22px rgba(124, 60, 0, 0.12);
+}
+
+.ui-btn-primary:hover,
+.ui-btn-primary:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    color: var(--ui-primary-deep);
+    transform: translateY(-1px);
+}
+
+.ui-btn-outline {
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-soft-end) 100%);
+    color: var(--ui-primary-deep);
+    border: 1px solid rgba(124, 60, 0, 0.22);
+    box-shadow: 0 10px 22px rgba(124, 60, 0, 0.1);
+}
+
+.ui-btn-outline:hover,
+.ui-btn-outline:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    color: var(--ui-primary-deep);
+    transform: translateY(-1px);
+}
+
+.bg-primary,
+.text-bg-primary {
+    background-color: var(--ui-primary) !important;
+}
+
+.text-primary,
+.link-primary {
+    color: var(--ui-primary-strong) !important;
+}
+
+.border-primary {
+    border-color: rgba(245, 124, 0, 0.45) !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active,
+.page-link.active,
+.active > .page-link,
+.nav-pills .nav-link.active,
+.list-group-item.active,
+.form-check-input:checked {
+    background-color: var(--ui-primary) !important;
+    border-color: var(--ui-primary) !important;
+}
+
+.page-link {
+    color: var(--ui-primary-strong);
+}
+
+.page-link:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(245, 124, 0, 0.2) !important;
+}
+
+.ui-language-form {
+    margin: 0;
+}
+
+.ui-language-select {
+    min-width: 132px;
+    border-radius: 999px;
+    border: 1px solid var(--ui-border-strong);
+    background: var(--ui-secondary);
+    color: var(--ui-primary);
+    padding: 0.74rem 2.2rem 0.74rem 0.9rem;
+    font-weight: 600;
+}
+
+.ui-form-shell {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.ui-form-shell.ui-form-shell-sm {
+    max-width: 560px;
+}
+
+.ui-label {
+    font-weight: 700;
+    color: var(--ui-primary);
+    margin-bottom: 8px;
+}
+
+.ui-shell .form-control,
+.ui-shell .form-select,
+.ui-report-shell .form-control,
+.ui-report-shell .form-select {
+    border-radius: 16px;
+    border: 1px solid var(--ui-border);
+    color: var(--ui-primary);
+    background: var(--ui-secondary);
+    padding: 0.9rem 1rem;
+}
+
+.ui-shell .form-control::placeholder,
+.ui-report-shell .form-control::placeholder {
+    color: var(--ui-text-faint);
+}
+
+.ui-shell .form-control:focus,
+.ui-shell .form-select:focus,
+.ui-report-shell .form-control:focus,
+.ui-report-shell .form-select:focus,
+.ui-language-select:focus {
+    border-color: var(--ui-border-strong);
+    box-shadow: 0 0 0 0.22rem rgba(124, 60, 0, 0.1);
+    outline: 0;
+}
+
+.ui-summary-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ui-summary-card-value {
+    margin-top: 10px;
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--ui-primary);
+}
+
+.ui-alert {
+    padding: 14px 16px;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius-md);
+    background: linear-gradient(180deg, rgba(255, 244, 229, 0.98), rgba(255, 255, 255, 0.98));
+    box-shadow: 0 12px 24px rgba(124, 60, 0, 0.08);
+}
+
+.ui-breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    margin-bottom: 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(245, 124, 0, 0.14);
+    box-shadow: 0 12px 28px rgba(124, 60, 0, 0.06);
+    color: var(--ui-text-soft);
+    font-size: 0.92rem;
+}
+
+.ui-breadcrumbs a {
+    color: var(--ui-primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.ui-breadcrumbs [aria-current="page"] {
+    color: var(--ui-primary-deep);
+    font-weight: 700;
+}
+
+.fire-command-banner {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 18px;
+    padding: 52px 0 34px;
+    background:
+        linear-gradient(100deg, rgba(194, 35, 0, 0.97), rgba(255, 123, 0, 0.93)),
+        url("/images/landing-topbar-fire.png") center center / cover no-repeat;
+    background-blend-mode: multiply;
+}
+
+.fire-command-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(255, 210, 135, 0.28), transparent 26%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(194, 35, 0, 0.08));
+    pointer-events: none;
+}
+
+.fire-command-banner-shell {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 22px;
+}
+
+.fire-command-banner-head {
+    display: grid;
+    gap: 16px;
+    max-width: 760px;
+    color: #ffffff;
+}
+
+.fire-command-banner-head .landing-kicker,
+.fire-command-banner-head .ui-chip,
+.fire-command-banner-head .ui-chip span,
+.fire-command-banner-head .ui-chip i {
+    color: #ffffff !important;
+}
+
+.fire-command-banner-head .ui-chip {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.fire-command-banner-head-centered {
+    margin: 0 auto;
+    text-align: center;
+    max-width: 860px;
+    justify-items: center;
+}
+
+.fire-command-banner-logo,
+.login-presentation-logo {
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.22));
+}
+
+.fire-command-banner-title {
+    margin: 0;
+    font-size: clamp(2.3rem, 4.8vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+}
+
+.fire-command-banner-copy {
+    max-width: 720px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.fire-command-banner-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.fire-command-banner-card {
+    padding: 18px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(12px);
+    color: #ffffff;
+    box-shadow: 0 18px 34px rgba(89, 18, 0, 0.16);
+}
+
+.fire-command-banner-card span {
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.76rem;
+    opacity: 0.82;
+}
+
+.fire-command-banner-card strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.08rem;
+}
+
+.fire-command-banner-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.login-presentation-shell {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 18px;
+    margin-top: -88px;
+}
+
+.login-presentation-card {
+    width: min(560px, 100%);
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 34px;
+    border: 1px solid rgba(245, 124, 0, 0.16);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 28px 56px rgba(124, 60, 0, 0.16);
+}
+
+.login-presentation-card-head {
+    padding: 30px 32px;
+    text-align: center;
+    background:
+        linear-gradient(145deg, rgba(255, 123, 0, 0.98), rgba(210, 59, 0, 0.98)),
+        url("/images/landing-topbar-fire.png") center center / cover no-repeat;
+    color: #ffffff;
+}
+
+.login-presentation-card-body {
+    display: grid;
+    gap: 20px;
+    padding: 28px 32px 32px;
+}
+
+.login-presentation-title {
+    margin: 0;
+    font-size: clamp(2rem, 4.4vw, 2.9rem);
+    color: #ffffff;
+}
+
+.login-presentation-copy {
+    margin: 10px auto 0;
+    max-width: 430px;
+    color: rgba(255, 255, 255, 0.84);
+    line-height: 1.75;
+}
+
+.login-presentation-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.login-support-ribbon {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.login-support-ribbon-card {
+    padding: 18px 20px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(245, 124, 0, 0.14);
+    box-shadow: 0 16px 28px rgba(124, 60, 0, 0.08);
+}
+
+.login-support-ribbon-card span {
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.76rem;
+    color: var(--ui-text-faint);
+}
+
+.login-support-ribbon-card strong {
+    color: var(--ui-primary-deep);
+    font-size: 1.08rem;
+}
+
+@media (max-width: 991px) {
+    .fire-command-banner-grid,
+    .login-support-ribbon {
+        grid-template-columns: 1fr;
+    }
+
+    .login-presentation-shell {
+        margin-top: -64px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ui-breadcrumbs {
+        gap: 8px;
+        font-size: 0.88rem;
+    }
+
+    .fire-command-banner {
+        padding: 38px 0 28px;
+    }
+
+    .fire-command-banner-logo,
+    .login-presentation-logo {
+        width: 72px;
+        height: 72px;
+    }
+
+    .fire-command-banner-copy {
+        font-size: 0.98rem;
+        line-height: 1.7;
+    }
+
+    .login-presentation-shell {
+        margin-top: -54px;
+    }
+
+    .login-presentation-card-head,
+    .login-presentation-card-body {
+        padding: 22px;
+    }
+
+    .login-support-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-presentation-actions {
+        flex-direction: column;
+    }
+}
+
+.ui-table-shell {
+    overflow: hidden;
+}
+
+.ui-table thead th,
+table thead th {
+    background: rgba(124, 60, 0, 0.04);
+    color: var(--ui-primary);
+    border-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem 0.9rem;
+    vertical-align: middle;
+}
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(124, 60, 0, 0.02);
+    --bs-table-hover-bg: rgba(124, 60, 0, 0.04);
+    margin-bottom: 0;
+}
+
+.ui-user-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.ui-search-wrap {
+    position: relative;
+    min-width: 260px;
+    flex: 1 1 260px;
+}
+
+.ui-search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ui-text-faint);
+    pointer-events: none;
+}
+
+.ui-search-wrap input {
+    padding-left: 36px;
+}
+
+.ui-role-badge {
+    letter-spacing: 0.04em;
+    font-weight: 700;
+}
+
+.ui-user-submenu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ui-user-submenu-btn {
+    min-width: 160px;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(124, 60, 0, 0.18);
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-soft-end) 100%);
+    color: var(--ui-primary-deep);
+    font-weight: 700;
+}
+
+.ui-user-submenu-btn.is-active {
+    background: linear-gradient(180deg, var(--ui-button-start) 0%, var(--ui-button-end) 100%);
+    border-color: rgba(124, 60, 0, 0.22);
+    color: var(--ui-primary-deep);
+    box-shadow: 0 18px 36px rgba(124, 60, 0, 0.16);
+}
+
+.ui-user-panel[hidden] {
+    display: none !important;
+}
+
+.ui-user-form-shell {
+    border: 1px solid var(--ui-border);
+    border-radius: 24px;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(236, 253, 245, 0.72));
+}
+
+body.dark-mode .ui-user-submenu-btn {
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-soft-end) 100%);
+    color: var(--ui-primary-deep);
+    border-color: rgba(124, 60, 0, 0.22);
+}
+
+body.dark-mode .ui-user-submenu-btn.is-active {
+    background: linear-gradient(180deg, var(--ui-button-start) 0%, var(--ui-button-end) 100%);
+    color: var(--ui-primary-deep);
+}
+
+body.dark-mode .ui-user-form-shell {
+    background: linear-gradient(180deg, rgba(124, 60, 0, 0.9), rgba(8, 47, 73, 0.78));
+}
+
+body[data-page='role-dashboard'],
+body[data-page='operations-dashboard'],
+body[data-page='control-room'] {
+    background: linear-gradient(180deg, #f6f0e0 0%, #f8f6ef 34%, #fcfbf7 100%);
+    color: #2b2116;
+}
+
+body[data-page='role-dashboard']::before,
+body[data-page='operations-dashboard']::before,
+body[data-page='control-room']::before {
+    background:
+        radial-gradient(circle at top left, rgba(229, 139, 36, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(245, 124, 0, 0.08), transparent 30%);
+}
+
+body[data-page='role-dashboard'] .ui-shell {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar,
+body[data-page='operations-dashboard'] .ui-role-topbar,
+body[data-page='control-room'] .ui-role-topbar {
+    background: linear-gradient(180deg, #ff922b 0%, #e26e12 100%);
+    border-bottom: 1px solid rgba(119, 58, 12, 0.18);
+    box-shadow: 0 8px 26px rgba(153, 81, 17, 0.18);
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-inner,
+body[data-page='operations-dashboard'] .ui-role-topbar-inner,
+body[data-page='control-room'] .ui-role-topbar-inner {
+    width: min(100% - 28px, 1440px);
+    min-height: 70px;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand,
+body[data-page='role-dashboard'] .ui-role-topbar-brand span,
+body[data-page='role-dashboard'] .ui-role-topbar-brand strong {
+    color: #5f2400 !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand {
+    gap: 0;
+    font-size: 1rem;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand-copy {
+    display: grid;
+    gap: 2px;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand strong {
+    font-size: 1.02rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand .small {
+    color: rgba(95, 36, 0, 0.74) !important;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+body[data-page='role-dashboard'] .ui-topbar-links a {
+    color: rgba(255, 248, 237, 0.96) !important;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+body[data-page='role-dashboard'] .ui-topbar-links a:hover,
+body[data-page='role-dashboard'] .ui-topbar-links a:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    color: var(--ui-primary-deep) !important;
+    box-shadow: 0 10px 20px rgba(124, 60, 0, 0.14);
+}
+
+body[data-page='role-dashboard'] .ui-language-select,
+body[data-page='role-dashboard'] .ui-profile-toggle,
+body[data-page='role-dashboard'] .ui-topbar-right > .btn.ui-btn-outline,
+body[data-page='role-dashboard'] .ui-topbar-right .btn.ui-btn-outline {
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-end) 100%);
+    color: var(--ui-primary-deep) !important;
+    border: 1px solid rgba(124, 60, 0, 0.22);
+    box-shadow: 0 8px 18px rgba(124, 60, 0, 0.12);
+}
+
+body[data-page='role-dashboard'] .ui-language-select {
+    padding-block: 0.62rem;
+}
+
+body[data-page='role-dashboard'] .ui-profile-avatar {
+    background: rgba(124, 60, 0, 0.12);
+    color: var(--ui-primary-deep);
+}
+
+body[data-page='role-dashboard'] .dashboard-workbench,
+body[data-page='operations-dashboard'] .dashboard-workbench,
+body[data-page='control-room'] .dashboard-workbench {
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 0;
+    min-height: calc(100vh - 70px);
+}
+
+body[data-page='role-dashboard'] .dashboard-workbench.dashboard-sidebar-collapsed,
+body[data-page='operations-dashboard'] .dashboard-workbench.dashboard-sidebar-collapsed,
+body[data-page='control-room'] .dashboard-workbench.dashboard-sidebar-collapsed {
+    grid-template-columns: 168px minmax(0, 1fr);
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar,
+body[data-page='operations-dashboard'] .dashboard-sidebar,
+body[data-page='control-room'] .dashboard-sidebar {
+    position: sticky;
+    top: 70px;
+    align-self: stretch;
+    min-height: calc(100vh - 70px);
+    border-radius: 0;
+    padding: 28px 18px 24px;
+    background: #ffffff;
+    color: var(--ui-primary-deep);
+    border: 0;
+    border-right: 1px solid rgba(245, 124, 0, 0.12);
+    box-shadow: none;
+    overflow: visible;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar::before,
+body[data-page='role-dashboard'] .dashboard-sidebar::after,
+body[data-page='operations-dashboard'] .dashboard-sidebar::before,
+body[data-page='operations-dashboard'] .dashboard-sidebar::after,
+body[data-page='control-room'] .dashboard-sidebar::before,
+body[data-page='control-room'] .dashboard-sidebar::after {
+    display: none;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand {
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+    padding: 4px 10px 22px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    background: #ffffff;
+    border-radius: 18px;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-logo {
+    width: 78px;
+    height: 78px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 18px rgba(124, 60, 0, 0.12));
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-copy {
+    display: grid;
+    gap: 4px;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #c06a17;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-name {
+    font-size: 0.96rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--ui-primary-deep);
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-meta {
+    font-size: 0.84rem;
+    color: rgba(124, 60, 0, 0.72);
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='role-dashboard'] .dashboard-sidebar .fw-semibold,
+body[data-page='role-dashboard'] .dashboard-sidebar .small,
+body[data-page='role-dashboard'] .dashboard-sidebar span,
+body[data-page='role-dashboard'] .dashboard-sidebar a,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-muted,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note .small,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note .fw-semibold {
+    color: var(--ui-primary-deep) !important;
+}
+
+body[data-page='role-dashboard'] .landing-sidebar-link {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(183, 144, 81, 0.14);
+    background: #ffffff;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link:hover,
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    border-color: rgba(245, 124, 0, 0.22);
+    color: var(--ui-primary-deep) !important;
+    box-shadow: 0 10px 22px rgba(124, 60, 0, 0.12);
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note {
+    background: rgba(245, 165, 36, 0.08);
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    box-shadow: none;
+}
+
+body[data-page='role-dashboard'] .dashboard-main,
+body[data-page='operations-dashboard'] .dashboard-main,
+body[data-page='control-room'] .dashboard-main {
+    min-width: 0;
+    padding: 24px 28px 40px;
+    background: #ffffff;
+}
+
+body[data-page='role-dashboard'] .ui-card,
+body[data-page='role-dashboard'] .ui-panel,
+body[data-page='role-dashboard'] .ui-form-shell,
+body[data-page='role-dashboard'] .ui-summary-card,
+body[data-page='role-dashboard'] .ui-table-shell,
+body[data-page='role-dashboard'] .ui-hero-panel,
+body[data-page='role-dashboard'] .ui-command-card,
+body[data-page='operations-dashboard'] .ui-card,
+body[data-page='operations-dashboard'] .ui-panel,
+body[data-page='operations-dashboard'] .ui-form-shell,
+body[data-page='operations-dashboard'] .ui-summary-card,
+body[data-page='operations-dashboard'] .ui-table-shell,
+body[data-page='operations-dashboard'] .ui-hero-panel,
+body[data-page='operations-dashboard'] .ui-command-card,
+body[data-page='control-room'] .ui-card,
+body[data-page='control-room'] .ui-panel,
+body[data-page='control-room'] .ui-form-shell,
+body[data-page='control-room'] .ui-summary-card,
+body[data-page='control-room'] .ui-table-shell,
+body[data-page='control-room'] .ui-hero-panel,
+body[data-page='control-room'] .ui-command-card {
+    background: rgba(255, 255, 255, 0.94);
+    border-color: rgba(183, 144, 81, 0.16);
+    box-shadow: 0 12px 30px rgba(106, 79, 32, 0.08);
+}
+
+body[data-page='role-dashboard'] .ui-hero,
+body[data-page='operations-dashboard'] .ui-hero,
+body[data-page='control-room'] .ui-hero {
+    color: #4d2c10;
+    background: #ffffff;
+    border: 1px solid rgba(183, 144, 81, 0.18);
+    border-left: 5px solid #e58b24;
+    box-shadow: 0 16px 36px rgba(106, 79, 32, 0.09);
+}
+
+body[data-page='role-dashboard'] .ui-hero::after,
+body[data-page='operations-dashboard'] .ui-hero::after,
+body[data-page='control-room'] .ui-hero::after {
+    display: none;
+}
+
+body[data-page='role-dashboard'] .ui-hero .text-white-50,
+body[data-page='role-dashboard'] .ui-hero-panel .text-white-50,
+body[data-page='operations-dashboard'] .ui-hero .text-white-50,
+body[data-page='operations-dashboard'] .ui-hero-panel .text-white-50,
+body[data-page='control-room'] .ui-hero .text-white-50,
+body[data-page='control-room'] .ui-hero-panel .text-white-50 {
+    color: rgba(77, 44, 16, 0.7) !important;
+}
+
+body[data-page='role-dashboard'] .ui-hero-panel,
+body[data-page='role-dashboard'] .ui-kpi,
+body[data-page='role-dashboard'] .ui-highlight-card,
+body[data-page='role-dashboard'] .ui-card-soft,
+body[data-page='role-dashboard'] .ui-map-placeholder,
+body[data-page='role-dashboard'] .ui-user-form-shell,
+body[data-page='operations-dashboard'] .ui-hero-panel,
+body[data-page='operations-dashboard'] .ui-kpi,
+body[data-page='operations-dashboard'] .ui-highlight-card,
+body[data-page='operations-dashboard'] .ui-card-soft,
+body[data-page='operations-dashboard'] .ui-map-placeholder,
+body[data-page='operations-dashboard'] .ui-user-form-shell,
+body[data-page='control-room'] .ui-hero-panel,
+body[data-page='control-room'] .ui-kpi,
+body[data-page='control-room'] .ui-highlight-card,
+body[data-page='control-room'] .ui-card-soft,
+body[data-page='control-room'] .ui-map-placeholder,
+body[data-page='control-room'] .ui-user-form-shell {
+    background: #ffffff;
+    border-color: rgba(183, 144, 81, 0.16);
+}
+
+body[data-page='role-dashboard'] .ui-map-meta,
+body[data-page='operations-dashboard'] .ui-map-meta,
+body[data-page='control-room'] .ui-map-meta {
+    background: rgba(255, 255, 255, 0.96);
+}
+
+body[data-page='role-dashboard'] .ui-section-title,
+body[data-page='role-dashboard'] .ui-command-value,
+body[data-page='operations-dashboard'] .ui-section-title,
+body[data-page='operations-dashboard'] .ui-command-value,
+body[data-page='control-room'] .ui-section-title,
+body[data-page='control-room'] .ui-command-value {
+    color: #7c3c00;
+}
+
+body[data-page='role-dashboard'] .ui-muted,
+body[data-page='role-dashboard'] .ui-command-label,
+body[data-page='role-dashboard'] .ui-command-note,
+body[data-page='role-dashboard'] .ui-eyebrow,
+body[data-page='operations-dashboard'] .ui-muted,
+body[data-page='operations-dashboard'] .ui-command-label,
+body[data-page='operations-dashboard'] .ui-command-note,
+body[data-page='operations-dashboard'] .ui-eyebrow,
+body[data-page='control-room'] .ui-muted,
+body[data-page='control-room'] .ui-command-label,
+body[data-page='control-room'] .ui-command-note,
+body[data-page='control-room'] .ui-eyebrow {
+    color: rgba(71, 50, 24, 0.74) !important;
+}
+
+body[data-page='role-dashboard'] .ui-table thead th,
+body[data-page='role-dashboard'] table thead th,
+body[data-page='operations-dashboard'] .ui-table thead th,
+body[data-page='operations-dashboard'] table thead th,
+body[data-page='control-room'] .ui-table thead th,
+body[data-page='control-room'] table thead th {
+    color: #8d4a08;
+}
+
+body[data-page='role-dashboard'] .ui-status-badge,
+body[data-page='operations-dashboard'] .ui-status-badge,
+body[data-page='control-room'] .ui-status-badge {
+    background: rgba(229, 139, 36, 0.12);
+    color: #7c3c00;
+    border: 1px solid rgba(229, 139, 36, 0.14);
+}
+
+body[data-page='role-dashboard'] .ui-status-dot,
+body[data-page='operations-dashboard'] .ui-status-dot,
+body[data-page='control-room'] .ui-status-dot {
+    background: #e58b24;
+}
+
+body[data-page='role-dashboard'] .ui-btn-primary,
+body[data-page='role-dashboard'] .ui-user-submenu-btn.is-active,
+body[data-page='operations-dashboard'] .ui-btn-primary,
+body[data-page='operations-dashboard'] .ui-user-submenu-btn.is-active,
+body[data-page='control-room'] .ui-btn-primary,
+body[data-page='control-room'] .ui-user-submenu-btn.is-active {
+    background: linear-gradient(180deg, var(--ui-button-start) 0%, var(--ui-button-end) 100%);
+    border-color: rgba(124, 60, 0, 0.18);
+    color: var(--ui-primary-deep);
+}
+
+body[data-page='role-dashboard'] .ui-btn-outline,
+body[data-page='role-dashboard'] .ui-user-submenu-btn,
+body[data-page='operations-dashboard'] .ui-btn-outline,
+body[data-page='operations-dashboard'] .ui-user-submenu-btn,
+body[data-page='control-room'] .ui-btn-outline,
+body[data-page='control-room'] .ui-user-submenu-btn {
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-soft-end) 100%);
+    color: var(--ui-primary-deep);
+    border-color: rgba(124, 60, 0, 0.22);
+}
+
+body[data-page='role-dashboard'] .ui-user-submenu-btn:hover,
+body[data-page='role-dashboard'] .ui-user-submenu-btn:focus,
+body[data-page='role-dashboard'] .ui-btn-outline:hover,
+body[data-page='role-dashboard'] .ui-btn-outline:focus,
+body[data-page='operations-dashboard'] .ui-user-submenu-btn:hover,
+body[data-page='operations-dashboard'] .ui-user-submenu-btn:focus,
+body[data-page='operations-dashboard'] .ui-btn-outline:hover,
+body[data-page='operations-dashboard'] .ui-btn-outline:focus,
+body[data-page='control-room'] .ui-user-submenu-btn:hover,
+body[data-page='control-room'] .ui-user-submenu-btn:focus,
+body[data-page='control-room'] .ui-btn-outline:hover,
+body[data-page='control-room'] .ui-btn-outline:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    color: var(--ui-primary-deep);
+}
+
+.ui-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.ui-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-form-span {
+    grid-column: 1 / -1;
+}
+
+.ui-modal-content {
+    border-radius: 24px;
+    border: 1px solid var(--ui-border);
+    box-shadow: var(--ui-shadow-strong);
+}
+
+.landing-plain .ui-shell {
+    padding-top: 22px;
+}
+
+.landing-clean-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.landing-clean-sidebar {
+    position: sticky;
+    top: 98px;
+    border-radius: var(--ui-radius-lg);
+    padding: 24px 20px;
+    background: #ffffff;
+    color: var(--ui-primary-deep);
+    border-color: rgba(245, 124, 0, 0.18);
+}
+
+.landing-clean-sidebar .landing-sidebar-title,
+.landing-clean-sidebar .landing-sidebar-link,
+.landing-clean-sidebar .fw-semibold,
+.landing-clean-sidebar .small,
+.landing-clean-sidebar span,
+.landing-clean-sidebar a,
+.landing-clean-sidebar .ui-muted,
+.landing-clean-sidebar .ui-soft-note,
+.landing-clean-sidebar .ui-soft-note .small,
+.landing-clean-sidebar .ui-soft-note .fw-semibold {
+    color: var(--ui-primary-deep) !important;
+}
+
+.landing-clean-sidebar .landing-sidebar-link:hover,
+.landing-clean-sidebar .landing-sidebar-link:focus {
+    background: rgba(245, 165, 36, 0.12);
+    color: var(--ui-primary-deep) !important;
+}
+
+.landing-clean-sidebar .landing-sidebar-link {
+    background: #ffffff;
+    border: 1px solid rgba(245, 124, 0, 0.08);
+}
+
+.landing-clean-sidebar .ui-soft-note {
+    background: rgba(245, 165, 36, 0.08);
+    border-color: rgba(245, 124, 0, 0.08);
+}
+
+.landing-clean-flow {
+    display: grid;
+    gap: 24px;
+}
+
+.landing-clean-panel,
+.landing-clean-summary-card {
+    border-radius: var(--ui-radius-lg);
+    padding: 24px;
+    background: #ffffff;
+    color: var(--ui-text);
+    border-color: var(--ui-border);
+}
+
+.landing-clean-hero {
+    border-radius: 36px;
+    padding: 36px;
+    background:
+        linear-gradient(130deg, rgba(255, 255, 255, 0.98), rgba(250, 246, 240, 0.98)),
+        #ffffff;
+    color: var(--ui-text);
+    border: 1px solid var(--ui-border);
+    box-shadow: var(--ui-shadow-strong);
+}
+
+.landing-hero-copy-card {
+    max-width: 760px;
+    padding: 22px 24px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 242, 234, 0.9));
+    border: 1px solid rgba(124, 60, 0, 0.08);
+    box-shadow: 0 18px 38px rgba(124, 60, 0, 0.08);
+}
+
+.landing-sidebar-links,
+.landing-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.landing-sidebar-links {
+    flex-direction: column;
+}
+
+.landing-sidebar-link {
+    display: block;
+    padding: 11px 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--ui-text-soft);
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background var(--transition), color var(--transition);
+}
+
+.landing-sidebar-link:hover,
+.landing-sidebar-link:focus {
+    background: rgba(245, 165, 36, 0.12);
+    color: var(--ui-primary-deep);
+}
+
+.landing-title {
+    max-width: 920px;
+    margin: 12px 0 14px;
+    font-size: clamp(2rem, 3.8vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: #111111;
+    display: grid;
+    gap: 2px;
+}
+
+.landing-copy {
+    max-width: 690px;
+    margin-bottom: 18px;
+    font-size: 0.98rem;
+    line-height: 1.72;
+    color: #222222;
+}
+
+.landing-hero-actions {
+    align-items: center;
+    gap: 10px;
+}
+
+.landing-hero-actions .landing-btn {
+    min-width: 190px;
+}
+
+.landing-login-corner {
+    min-width: 110px;
+    padding-inline: 18px;
+    background: linear-gradient(180deg, var(--ui-button-start) 0%, var(--ui-button-end) 100%);
+    color: var(--ui-primary-deep);
+    border: 1px solid rgba(124, 60, 0, 0.22);
+}
+
+.landing-login-corner:hover,
+.landing-login-corner:focus {
+    color: var(--ui-primary-deep);
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+}
+
+.landing-panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.landing-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.84rem 1.18rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform var(--transition), background var(--transition);
+}
+
+.landing-btn-primary {
+    background: linear-gradient(180deg, var(--ui-button-start) 0%, var(--ui-button-end) 100%);
+    color: var(--ui-primary-deep);
+    border: 1px solid rgba(124, 60, 0, 0.22);
+}
+
+.landing-btn-secondary {
+    background: linear-gradient(180deg, var(--ui-button-soft-start) 0%, var(--ui-button-soft-end) 100%);
+    color: var(--ui-primary-deep);
+    border: 1px solid rgba(124, 60, 0, 0.22);
+}
+
+.landing-btn-primary:hover,
+.landing-btn-primary:focus,
+.landing-btn-secondary:hover,
+.landing-btn-secondary:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    color: var(--ui-primary-deep);
+}
+
+.landing-btn:hover,
+.landing-btn:focus {
+    transform: translateY(-1px);
+}
+
+.landing-clean-summary,
+.landing-role-grid,
+.landing-feature-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.landing-clean-panel .ui-section-title,
+.landing-clean-panel .fw-semibold,
+.landing-clean-panel .small,
+.landing-clean-panel .ui-muted,
+.landing-clean-panel .landing-kicker,
+.landing-clean-summary-card .fw-semibold,
+.landing-clean-summary-card .small,
+.landing-clean-summary-card .ui-muted,
+.landing-clean-summary-card .landing-kicker,
+.landing-clean-hero .landing-kicker {
+    color: var(--ui-text) !important;
+}
+
+.landing-clean-panel .fw-semibold,
+.landing-clean-summary-card .fw-semibold {
+    font-size: 1.12rem;
+}
+
+.landing-clean-panel .small,
+.landing-clean-summary-card .small,
+.landing-clean-panel .ui-muted,
+.landing-clean-summary-card .ui-muted {
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.landing-clean-summary,
+.landing-role-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.landing-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.login-shell-centered {
+    min-height: calc(100vh - 72px);
+    display: grid;
+    place-items: center;
+    padding: 30px 16px 40px;
+}
+
+.login-clean-wrap {
+    width: min(480px, 100%);
+}
+
+.login-clean-card {
+    border-radius: 34px;
+    padding: 34px;
+    display: grid;
+    gap: 22px;
+}
+
+.login-clean-head {
+    text-align: center;
+}
+
+.login-clean-title {
+    margin: 0;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    letter-spacing: -0.04em;
+    color: var(--ui-primary);
+}
+
+.login-support-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.login-support-card {
+    border-radius: 20px;
+    padding: 18px;
+    text-decoration: none;
+}
+
+.ui-button-loader {
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-loading .ui-button-text {
+    display: none;
+}
+
+.btn-loading .ui-button-loader {
+    display: inline-flex;
+}
+
+.ui-print-page {
+    max-width: 1040px;
+    margin: 24px auto;
+    padding: 0 16px 32px;
+}
+
+.ui-loader-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(124, 60, 0, 0.16);
+    z-index: 2000;
+}
+
+.ui-loader-card {
+    min-width: 240px;
+    padding: 22px;
+    border-radius: var(--ui-radius-lg);
+    background: var(--ui-secondary);
+    box-shadow: var(--ui-shadow-strong);
+    text-align: center;
+}
+
+.ui-loader-ring {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    border: 5px solid rgba(124, 60, 0, 0.12);
+    border-top-color: var(--ui-primary);
+    animation: ui-loader-spin 0.8s linear infinite;
+}
+
+@keyframes ui-loader-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 991px) {
+    .landing-clean-layout,
+    .dashboard-workbench,
+    .landing-clean-summary,
+    .landing-role-grid,
+    .landing-feature-grid,
+    .ui-summary-grid,
+    .login-support-grid,
+    .ui-command-grid,
+    .ui-command-center,
+    .ui-dual-grid,
+    .ui-manual-grid,
+    .ui-live-video-grid,
+    .ui-hero-matrix,
+    .ui-mini-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-clean-sidebar,
+    .dashboard-sidebar {
+        position: relative;
+        top: 0;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-workbench,
+    body[data-page='operations-dashboard'] .dashboard-workbench,
+    body[data-page='control-room'] .dashboard-workbench {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar,
+    body[data-page='operations-dashboard'] .dashboard-sidebar,
+    body[data-page='control-room'] .dashboard-sidebar {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid rgba(245, 124, 0, 0.12);
+    }
+
+    body[data-page='role-dashboard'] .dashboard-main,
+    body[data-page='operations-dashboard'] .dashboard-main,
+    body[data-page='control-room'] .dashboard-main {
+        padding: 20px 20px 30px;
+    }
+
+    body[data-page='role-dashboard']::before,
+    body[data-page='operations-dashboard']::before,
+    body[data-page='control-room']::before {
+        background:
+            radial-gradient(circle at top left, rgba(229, 139, 36, 0.16), transparent 32%),
+            radial-gradient(circle at top right, rgba(245, 124, 0, 0.08), transparent 28%);
+    }
+
+    .landing-hero-copy-card {
+        padding: 18px;
+    }
+
+    .ui-shell,
+    .ui-report-shell {
+        width: min(100% - 24px, 1240px);
+    }
+}
+
+body.dark-mode {
+    background:
+        linear-gradient(180deg, rgba(249, 115, 22, 0.08), rgba(124, 60, 0, 0.92)),
+        #7c3c00;
+    color: #ffffff;
+}
+
+body.dark-mode::before {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.16), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.12), transparent 28%);
+}
+
+body.dark-mode .ui-card,
+body.dark-mode .ui-panel,
+body.dark-mode .ui-form-shell,
+body.dark-mode .ui-summary-card,
+body.dark-mode .ui-table-shell,
+body.dark-mode .ui-hero-panel,
+body.dark-mode .landing-clean-panel,
+body.dark-mode .landing-clean-summary-card,
+body.dark-mode .login-clean-card,
+body.dark-mode .login-support-card,
+body.dark-mode .ui-command-card {
+    background: rgba(124, 60, 0, 0.86);
+    color: #ffffff;
+    border-color: rgba(249, 115, 22, 0.18);
+}
+
+body.dark-mode .ui-muted,
+body.dark-mode .small,
+body.dark-mode .ui-command-note,
+body.dark-mode .ui-command-label,
+body.dark-mode .ui-eyebrow {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+body.dark-mode .ui-map-placeholder,
+body.dark-mode .ui-kpi,
+body.dark-mode .ui-highlight-card,
+body.dark-mode .ui-card-soft,
+body.dark-mode .ui-modal-content,
+body.dark-mode .ui-dropdown-menu {
+    background: rgba(124, 60, 0, 0.78);
+    color: #ffffff;
+    border-color: rgba(249, 115, 22, 0.18);
+}
+
+body.dark-mode .table,
+body.dark-mode .ui-table thead th,
+body.dark-mode table thead th {
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .ui-shell,
+    .ui-report-shell {
+        width: min(100% - 16px, 1240px);
+        padding: 20px 0 28px;
+    }
+
+    .ui-site-topbar-inner {
+        width: min(100% - 16px, 1260px);
+        min-height: auto;
+        padding: 12px 0;
+        align-items: flex-start;
+    }
+
+    .ui-site-footer-inner {
+        width: min(100% - 16px, 1260px);
+        align-items: flex-start;
+    }
+
+    body[data-page='role-dashboard'] .ui-role-topbar-inner,
+    body[data-page='operations-dashboard'] .ui-role-topbar-inner,
+    body[data-page='control-room'] .ui-role-topbar-inner {
+        width: min(100% - 16px, 1440px);
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar-brand {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        justify-items: start;
+        text-align: left;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar-brand-logo {
+        width: 64px;
+        height: 64px;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-main,
+    body[data-page='operations-dashboard'] .dashboard-main,
+    body[data-page='control-room'] .dashboard-main {
+        padding: 18px 14px 26px;
+    }
+
+    body[data-page='role-dashboard'] .ui-map-frame {
+        min-height: 280px;
+    }
+
+    .ui-topbar-brand,
+    .ui-topbar-links,
+    .ui-topbar-right {
+        width: 100%;
+    }
+
+    .ui-profile-toggle {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ui-topbar-links a,
+    .ui-page-actions .btn,
+    .ui-action-strip .btn,
+    .landing-btn {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
+    .ui-topbar,
+    .ui-panel,
+    .ui-card,
+    .ui-form-shell,
+    .ui-summary-card,
+    .ui-table-shell,
+    .ui-receipt-shell,
+    .landing-clean-panel,
+    .landing-clean-summary-card,
+    .landing-clean-sidebar,
+    .landing-clean-hero,
+    .login-clean-card {
+        border-radius: 20px;
+        padding: 18px;
+    }
+
+    .ui-hero {
+        border-radius: 24px;
+        padding: 22px;
+    }
+}
+
+.form-control,
+.form-select,
+textarea.form-control {
+    min-height: 52px;
+    border-radius: 16px;
+    border: 1px solid rgba(245, 124, 0, 0.14);
+    box-shadow: inset 0 1px 2px rgba(124, 60, 0, 0.05);
+    padding: 0.85rem 1rem;
+}
+
+textarea.form-control {
+    min-height: 136px;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea.form-control:focus {
+    border-color: rgba(245, 124, 0, 0.34);
+    box-shadow: 0 0 0 0.25rem rgba(245, 165, 36, 0.14);
+}
+
+.ui-chip,
+.ui-metric-chip {
+    border: 1px solid rgba(245, 124, 0, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.ui-chip i,
+.ui-metric-chip i,
+.ui-hero-chip i {
+    font-size: 0.86rem;
+}
+
+.ui-list-grid {
+    gap: 10px;
+}
+
+.ui-list-row {
+    align-items: flex-start;
+    padding: 16px 14px;
+    border: 1px solid rgba(124, 60, 0, 0.08);
+    border-radius: 18px;
+    border-bottom: 1px solid rgba(124, 60, 0, 0.08);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 245, 239, 0.96));
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.ui-list-row:last-child {
+    padding-bottom: 16px;
+}
+
+.ui-list-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(124, 60, 0, 0.08);
+    border-color: rgba(245, 124, 0, 0.18);
+}
+
+.ui-command-card,
+.ui-highlight-card,
+.ui-kpi,
+.ui-soft-note {
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.ui-command-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.ui-command-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ui-accent), rgba(245, 124, 0, 0.86));
+}
+
+.ui-command-card:hover,
+.ui-highlight-card:hover,
+.ui-kpi:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ui-shadow-strong);
+    border-color: var(--ui-border-strong);
+}
+
+.ui-kpi {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 244, 237, 0.94));
+}
+
+.ui-hero-matrix {
+    align-items: stretch;
+}
+
+.ui-hero-chip-row,
+.ui-hero-actions,
+.ui-briefing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ui-hero-chip-row {
+    margin-bottom: 18px;
+}
+
+.ui-hero-actions {
+    margin-top: 20px;
+}
+
+.ui-hero-actions .btn,
+.ui-hero-actions .landing-btn {
+    min-width: 180px;
+}
+
+.ui-briefing-strip {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ui-briefing-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 26px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 244, 236, 0.98));
+    border: 1px solid rgba(245, 124, 0, 0.12);
+    box-shadow: 0 20px 42px rgba(124, 60, 0, 0.09);
+}
+
+.ui-briefing-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #f5a524, #f57c00);
+}
+
+.ui-briefing-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: rgba(18, 24, 38, 0.54);
+}
+
+.ui-briefing-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #7c3c00;
+}
+
+.ui-briefing-copy {
+    margin: 0;
+    color: var(--ui-text-soft);
+    line-height: 1.65;
+}
+
+.ui-briefing-stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(245, 124, 0, 0.04);
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    color: var(--ui-text-soft);
+}
+
+.ui-briefing-value {
+    color: #7c3c00;
+    font-family: var(--ui-heading);
+    font-size: 1.08rem;
+    font-weight: 800;
+}
+
+.ui-bullet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.ui-bullet-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--ui-text-soft);
+}
+
+.ui-bullet-list li::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    margin-top: 8px;
+    flex: 0 0 10px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--ui-accent), var(--ui-primary));
+    box-shadow: 0 0 0 4px rgba(245, 165, 36, 0.12);
+}
+
+.ui-link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    color: #7c3c00;
+}
+
+.ui-link-arrow i {
+    transition: transform var(--transition);
+}
+
+.ui-link-arrow:hover i,
+.ui-link-arrow:focus i {
+    transform: translateX(2px);
+}
+
+.ui-table thead th,
+table thead th {
+    background: linear-gradient(180deg, rgba(245, 165, 36, 0.12), rgba(245, 124, 0, 0.03));
+}
+
+.table tbody tr {
+    transition: background var(--transition), transform var(--transition);
+}
+
+.table tbody tr:hover {
+    background: rgba(245, 165, 36, 0.08);
+}
+
+.landing-briefing-strip {
+    margin-top: 8px;
+}
+
+.login-command-grid {
+    width: min(1120px, 100%);
+    display: grid;
+    gap: 24px;
+    grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
+    align-items: stretch;
+}
+
+.login-command-aside {
+    display: grid;
+    gap: 20px;
+    padding: 34px;
+    border-radius: 36px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 247, 236, 0.98));
+    border: 1px solid rgba(245, 124, 0, 0.1);
+    box-shadow: var(--ui-shadow-strong);
+}
+
+.login-command-title {
+    margin: 0;
+    font-size: clamp(2.5rem, 4vw, 3.8rem);
+    color: var(--ui-primary-deep);
+}
+
+.login-command-copy {
+    margin: 0;
+    color: var(--ui-text-soft);
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.login-stat-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.login-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.login-checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(245, 124, 0, 0.04);
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    color: var(--ui-text-soft);
+}
+
+.login-checklist i {
+    margin-top: 2px;
+    color: #c06a17;
+}
+
+.login-clean-wrap {
+    width: 100%;
+}
+
+.login-clean-card {
+    height: 100%;
+}
+
+.ui-form-section {
+    display: grid;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 244, 237, 0.96));
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    box-shadow: 0 16px 36px rgba(124, 60, 0, 0.06);
+}
+
+.ui-form-section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand,
+body[data-page='role-dashboard'] .ui-role-topbar-brand span,
+body[data-page='role-dashboard'] .ui-role-topbar-brand strong,
+body[data-page='operations-dashboard'] .ui-role-topbar-brand,
+body[data-page='operations-dashboard'] .ui-role-topbar-brand span,
+body[data-page='operations-dashboard'] .ui-role-topbar-brand strong,
+body[data-page='control-room'] .ui-role-topbar-brand,
+body[data-page='control-room'] .ui-role-topbar-brand span,
+body[data-page='control-room'] .ui-role-topbar-brand strong {
+    color: #5f2400 !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand,
+body[data-page='operations-dashboard'] .ui-role-topbar-brand,
+body[data-page='control-room'] .ui-role-topbar-brand {
+    gap: 0;
+    font-size: 1rem;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand-copy,
+body[data-page='operations-dashboard'] .ui-role-topbar-brand-copy,
+body[data-page='control-room'] .ui-role-topbar-brand-copy {
+    display: grid;
+    gap: 2px;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-brand .small,
+body[data-page='operations-dashboard'] .ui-role-topbar-brand .small,
+body[data-page='control-room'] .ui-role-topbar-brand .small {
+    color: rgba(95, 36, 0, 0.74) !important;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand,
+body[data-page='control-room'] .dashboard-sidebar-brand {
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+    padding: 4px 10px 22px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    background: #ffffff;
+    border-radius: 18px;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-logo,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-logo,
+body[data-page='control-room'] .dashboard-sidebar-brand-logo {
+    width: 78px;
+    height: 78px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 18px rgba(124, 60, 0, 0.12));
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-copy,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-copy,
+body[data-page='control-room'] .dashboard-sidebar-brand-copy {
+    display: grid;
+    gap: 4px;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-kicker,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-kicker,
+body[data-page='control-room'] .dashboard-sidebar-brand-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #c06a17;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-meta,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-meta,
+body[data-page='control-room'] .dashboard-sidebar-brand-meta {
+    font-size: 0.84rem;
+    color: rgba(124, 60, 0, 0.72);
+}
+
+body[data-page='role-dashboard'] .ui-briefing-card,
+body[data-page='operations-dashboard'] .ui-briefing-card,
+body[data-page='control-room'] .ui-briefing-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 247, 236, 0.98));
+    border-color: rgba(183, 144, 81, 0.16);
+}
+
+body[data-page='role-dashboard'] .ui-chip,
+body[data-page='operations-dashboard'] .ui-chip,
+body[data-page='control-room'] .ui-chip {
+    background: rgba(229, 139, 36, 0.12);
+    color: #7c3c00;
+}
+
+body[data-page='role-dashboard'],
+body[data-page='operations-dashboard'],
+body[data-page='control-room'] {
+    background: #edf1f7;
+}
+
+body[data-page='role-dashboard']::before,
+body[data-page='role-dashboard']::after,
+body[data-page='operations-dashboard']::before,
+body[data-page='operations-dashboard']::after,
+body[data-page='control-room']::before,
+body[data-page='control-room']::after {
+    display: none;
+}
+
+body[data-page='role-dashboard'] .ui-shell,
+body[data-page='operations-dashboard'] .ui-shell,
+body[data-page='control-room'] .ui-shell {
+    width: min(100% - 24px, 1480px);
+    padding: 24px 0 42px;
+}
+
+body[data-page='role-dashboard'] .dashboard-workbench,
+body[data-page='operations-dashboard'] .dashboard-workbench,
+body[data-page='control-room'] .dashboard-workbench {
+    grid-template-columns: 292px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+body[data-page='role-dashboard'] .dashboard-main,
+body[data-page='operations-dashboard'] .dashboard-main,
+body[data-page='control-room'] .dashboard-main {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar,
+body[data-page='operations-dashboard'] .dashboard-sidebar,
+body[data-page='control-room'] .dashboard-sidebar {
+    top: 86px;
+    min-height: calc(100vh - 118px);
+    padding: 0 18px 22px;
+    background: linear-gradient(180deg, #f03a07 0%, #ff7d00 100%);
+    border: none;
+    box-shadow: 0 24px 44px rgba(198, 85, 0, 0.24);
+    color: #ffffff;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar::before,
+body[data-page='operations-dashboard'] .dashboard-sidebar::before,
+body[data-page='control-room'] .dashboard-sidebar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 26%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 36%);
+    opacity: 1;
+    pointer-events: none;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar::after,
+body[data-page='operations-dashboard'] .dashboard-sidebar::after,
+body[data-page='control-room'] .dashboard-sidebar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(255, 255, 255, 0) 30%);
+    pointer-events: none;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='operations-dashboard'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='control-room'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='operations-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='control-room'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='role-dashboard'] .dashboard-sidebar .fw-semibold,
+body[data-page='operations-dashboard'] .dashboard-sidebar .fw-semibold,
+body[data-page='control-room'] .dashboard-sidebar .fw-semibold,
+body[data-page='role-dashboard'] .dashboard-sidebar .small,
+body[data-page='operations-dashboard'] .dashboard-sidebar .small,
+body[data-page='control-room'] .dashboard-sidebar .small,
+body[data-page='role-dashboard'] .dashboard-sidebar span,
+body[data-page='operations-dashboard'] .dashboard-sidebar span,
+body[data-page='control-room'] .dashboard-sidebar span,
+body[data-page='role-dashboard'] .dashboard-sidebar a,
+body[data-page='operations-dashboard'] .dashboard-sidebar a,
+body[data-page='control-room'] .dashboard-sidebar a,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-muted,
+body[data-page='operations-dashboard'] .dashboard-sidebar .ui-muted,
+body[data-page='control-room'] .dashboard-sidebar .ui-muted,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='operations-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='control-room'] .dashboard-sidebar .ui-soft-note,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note .small,
+body[data-page='operations-dashboard'] .dashboard-sidebar .ui-soft-note .small,
+body[data-page='control-room'] .dashboard-sidebar .ui-soft-note .small,
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note .fw-semibold,
+body[data-page='operations-dashboard'] .dashboard-sidebar .ui-soft-note .fw-semibold,
+body[data-page='control-room'] .dashboard-sidebar .ui-soft-note .fw-semibold {
+    color: #ffffff !important;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand,
+body[data-page='control-room'] .dashboard-sidebar-brand {
+    margin: 0 -18px 18px;
+    padding: 28px 22px 24px;
+    border: none;
+    border-radius: 24px 24px 18px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-kicker,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-kicker,
+body[data-page='control-room'] .dashboard-sidebar-brand-kicker,
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-meta,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-meta,
+body[data-page='control-room'] .dashboard-sidebar-brand-meta {
+    color: rgba(255, 255, 255, 0.82) !important;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand-logo,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand-logo,
+body[data-page='control-room'] .dashboard-sidebar-brand-logo {
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.16));
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='operations-dashboard'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='control-room'] .dashboard-sidebar .landing-sidebar-title {
+    color: rgba(255, 245, 238, 0.78) !important;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='operations-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='control-room'] .dashboard-sidebar .landing-sidebar-link {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid transparent;
+    color: rgba(255, 255, 255, 0.96) !important;
+    border-radius: 14px;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link:hover,
+body[data-page='role-dashboard'] .dashboard-sidebar .landing-sidebar-link:focus,
+body[data-page='operations-dashboard'] .dashboard-sidebar .landing-sidebar-link:hover,
+body[data-page='operations-dashboard'] .dashboard-sidebar .landing-sidebar-link:focus,
+body[data-page='control-room'] .dashboard-sidebar .landing-sidebar-link:hover,
+body[data-page='control-room'] .dashboard-sidebar .landing-sidebar-link:focus {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff !important;
+    box-shadow: none;
+    transform: translateX(4px);
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='operations-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='control-room'] .dashboard-sidebar .ui-soft-note {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: none;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar,
+body[data-page='operations-dashboard'] .ui-role-topbar,
+body[data-page='control-room'] .ui-role-topbar {
+    background: linear-gradient(90deg, #f03a07 0%, #ff9800 100%);
+    border-bottom: none;
+    box-shadow: 0 16px 30px rgba(226, 101, 0, 0.2);
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar-inner,
+body[data-page='operations-dashboard'] .ui-role-topbar-inner,
+body[data-page='control-room'] .ui-role-topbar-inner {
+    width: min(100% - 24px, 1480px);
+    min-height: 78px;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand span,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand span,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand span,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand strong,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand strong,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand strong {
+    color: #ffffff !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand .small,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand .small,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand .small {
+    color: rgba(255, 255, 255, 0.78) !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-links a,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-links a,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-links a {
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-links a:hover,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-links a:focus,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-links a:hover,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-links a:focus,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-links a:hover,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-links a:focus {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-btn-outline,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-profile-toggle,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-language-select,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-btn-outline,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-profile-toggle,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-language-select,
+body[data-page='control-room'] .ui-role-topbar .ui-btn-outline,
+body[data-page='control-room'] .ui-role-topbar .ui-profile-toggle,
+body[data-page='control-room'] .ui-role-topbar .ui-language-select {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #ffffff !important;
+    box-shadow: none;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-btn-outline:hover,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-btn-outline:focus,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-profile-toggle:hover,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-profile-toggle:focus,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-btn-outline:hover,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-btn-outline:focus,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-profile-toggle:hover,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-profile-toggle:focus,
+body[data-page='control-room'] .ui-role-topbar .ui-btn-outline:hover,
+body[data-page='control-room'] .ui-role-topbar .ui-btn-outline:focus,
+body[data-page='control-room'] .ui-role-topbar .ui-profile-toggle:hover,
+body[data-page='control-room'] .ui-role-topbar .ui-profile-toggle:focus {
+    background: rgba(255, 255, 255, 0.24);
+    color: #ffffff !important;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar .ui-language-select option,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-language-select option,
+body[data-page='control-room'] .ui-role-topbar .ui-language-select option {
+    color: #121826;
+}
+
+body[data-page='role-dashboard'] .ui-topbar-icon,
+body[data-page='operations-dashboard'] .ui-topbar-icon,
+body[data-page='control-room'] .ui-topbar-icon {
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 14px;
+}
+
+body[data-page='role-dashboard'] .sidebar-toggle,
+body[data-page='operations-dashboard'] .sidebar-toggle,
+body[data-page='control-room'] .sidebar-toggle {
+    min-width: 48px;
+}
+
+body[data-page='role-dashboard'] .ui-hero,
+body[data-page='operations-dashboard'] .ui-hero,
+body[data-page='control-room'] .ui-hero {
+    padding: 28px 30px;
+    border-radius: 18px;
+    background: #ffffff;
+    color: var(--ui-text);
+    border: 1px solid rgba(213, 222, 236, 0.96);
+    box-shadow: 0 14px 28px rgba(31, 42, 68, 0.08);
+}
+
+body[data-page='role-dashboard'] .ui-hero::after,
+body[data-page='operations-dashboard'] .ui-hero::after,
+body[data-page='control-room'] .ui-hero::after {
+    display: none;
+}
+
+body[data-page='role-dashboard'] .ui-hero-matrix,
+body[data-page='operations-dashboard'] .ui-hero-matrix,
+body[data-page='control-room'] .ui-hero-matrix {
+    grid-template-columns: minmax(0, 1.75fr) minmax(320px, 0.85fr);
+}
+
+body[data-page='role-dashboard'] .ui-hero .ui-eyebrow,
+body[data-page='operations-dashboard'] .ui-hero .ui-eyebrow,
+body[data-page='control-room'] .ui-hero .ui-eyebrow {
+    color: #f57c00 !important;
+}
+
+body[data-page='role-dashboard'] .ui-hero .ui-chip,
+body[data-page='operations-dashboard'] .ui-hero .ui-chip,
+body[data-page='control-room'] .ui-hero .ui-chip {
+    background: rgba(245, 124, 0, 0.08);
+    color: #c96800;
+}
+
+body[data-page='role-dashboard'] .ui-hero h1,
+body[data-page='operations-dashboard'] .ui-hero h1,
+body[data-page='control-room'] .ui-hero h1 {
+    color: #f57c00;
+    font-size: clamp(1.85rem, 2.3vw, 2.45rem);
+    margin-bottom: 0.65rem;
+}
+
+body[data-page='role-dashboard'] .ui-hero .text-white-50,
+body[data-page='operations-dashboard'] .ui-hero .text-white-50,
+body[data-page='control-room'] .ui-hero .text-white-50 {
+    color: rgba(31, 42, 68, 0.72) !important;
+}
+
+body[data-page='role-dashboard'] .ui-hero-panel,
+body[data-page='operations-dashboard'] .ui-hero-panel,
+body[data-page='control-room'] .ui-hero-panel {
+    background: linear-gradient(180deg, #f9fafc, #eff3f8);
+    border: 1px solid rgba(31, 42, 68, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+body[data-page='role-dashboard'] .ui-card,
+body[data-page='role-dashboard'] .ui-briefing-card,
+body[data-page='role-dashboard'] .ui-highlight-card,
+body[data-page='role-dashboard'] .ui-kpi,
+body[data-page='role-dashboard'] .ui-soft-note,
+body[data-page='operations-dashboard'] .ui-card,
+body[data-page='operations-dashboard'] .ui-briefing-card,
+body[data-page='operations-dashboard'] .ui-highlight-card,
+body[data-page='operations-dashboard'] .ui-kpi,
+body[data-page='operations-dashboard'] .ui-soft-note,
+body[data-page='control-room'] .ui-card,
+body[data-page='control-room'] .ui-briefing-card,
+body[data-page='control-room'] .ui-highlight-card,
+body[data-page='control-room'] .ui-kpi,
+body[data-page='control-room'] .ui-soft-note {
+    background: #ffffff;
+    border: 1px solid rgba(213, 222, 236, 0.96);
+    box-shadow: 0 12px 26px rgba(31, 42, 68, 0.06);
+}
+
+body[data-page='role-dashboard'] .ui-section-head h2,
+body[data-page='role-dashboard'] .ui-section-head h3,
+body[data-page='operations-dashboard'] .ui-section-head h2,
+body[data-page='operations-dashboard'] .ui-section-head h3,
+body[data-page='control-room'] .ui-section-head h2,
+body[data-page='control-room'] .ui-section-head h3 {
+    color: #f57c00;
+}
+
+body[data-page='role-dashboard'] .ui-briefing-card::before,
+body[data-page='operations-dashboard'] .ui-briefing-card::before,
+body[data-page='control-room'] .ui-briefing-card::before {
+    height: 5px;
+    background: linear-gradient(90deg, #f03a07, #ff9800);
+}
+
+body[data-page='role-dashboard'] .ui-command-grid,
+body[data-page='operations-dashboard'] .ui-command-grid,
+body[data-page='control-room'] .ui-command-grid {
+    gap: 22px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+body[data-page='role-dashboard'] .ui-command-card,
+body[data-page='operations-dashboard'] .ui-command-card,
+body[data-page='control-room'] .ui-command-card {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    padding: 18px;
+    min-height: 136px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid rgba(213, 222, 236, 0.96);
+    box-shadow: 0 12px 24px rgba(31, 42, 68, 0.07);
+}
+
+body[data-page='role-dashboard'] .ui-command-card::before,
+body[data-page='operations-dashboard'] .ui-command-card::before,
+body[data-page='control-room'] .ui-command-card::before {
+    display: none;
+}
+
+body[data-page='role-dashboard'] .ui-command-card-copy,
+body[data-page='operations-dashboard'] .ui-command-card-copy,
+body[data-page='control-room'] .ui-command-card-copy {
+    display: grid;
+    gap: 4px;
+}
+
+body[data-page='role-dashboard'] .ui-command-icon,
+body[data-page='operations-dashboard'] .ui-command-icon,
+body[data-page='control-room'] .ui-command-icon {
+    width: 80px;
+    height: 80px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: #ffffff;
+    font-size: 1.5rem;
+    box-shadow: 0 14px 24px rgba(31, 42, 68, 0.14);
+}
+
+body[data-page='role-dashboard'] .ui-command-label,
+body[data-page='operations-dashboard'] .ui-command-label,
+body[data-page='control-room'] .ui-command-label {
+    font-size: 1rem;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #ff8b00;
+    font-weight: 700;
+}
+
+body[data-page='role-dashboard'] .ui-command-value,
+body[data-page='operations-dashboard'] .ui-command-value,
+body[data-page='control-room'] .ui-command-value {
+    font-size: clamp(1.8rem, 2.15vw, 2.35rem);
+    color: #1c2943;
+    line-height: 1.05;
+}
+
+body[data-page='role-dashboard'] .ui-command-note,
+body[data-page='operations-dashboard'] .ui-command-note,
+body[data-page='control-room'] .ui-command-note {
+    color: rgba(31, 42, 68, 0.66);
+    font-size: 0.92rem;
+}
+
+.ui-command-card-incidents .ui-command-icon,
+.ui-command-card-calls .ui-command-icon {
+    background: linear-gradient(135deg, #2d7cf0, #14c9a3);
+}
+
+.ui-command-card-emergency .ui-command-icon,
+.ui-command-card-active-calls .ui-command-icon {
+    background: linear-gradient(135deg, #8e3bbd, #d24bb8);
+}
+
+.ui-command-card-tele .ui-command-icon,
+.ui-command-card-response .ui-command-icon {
+    background: linear-gradient(135deg, #5ca2ff, #6677ff);
+}
+
+.ui-command-card-experts .ui-command-icon,
+.ui-command-card-streams .ui-command-icon {
+    background: linear-gradient(135deg, #ff5b68, #d61f58);
+}
+
+.ui-command-card-maintenance .ui-command-icon,
+.ui-command-card-recordings .ui-command-icon {
+    background: linear-gradient(135deg, #ff8a3d, #ff4d4f);
+}
+
+.ui-detail-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-detail-card {
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(213, 222, 236, 0.96);
+    background: #ffffff;
+    box-shadow: 0 10px 22px rgba(31, 42, 68, 0.06);
+}
+
+.ui-detail-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(31, 42, 68, 0.56);
+}
+
+.ui-detail-value {
+    margin-top: 6px;
+    color: #1c2943;
+    word-break: break-word;
+}
+
+.ui-report-download-form {
+    display: grid;
+    gap: 12px;
+    min-width: min(440px, 100%);
+}
+
+.ui-report-range {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ui-report-row-copy {
+    min-width: 0;
+}
+
+.ui-audio-select {
+    min-width: 180px;
+}
+
+.ui-faq-list {
+    display: grid;
+    gap: 14px;
+}
+
+.ui-faq-item {
+    border: 1px solid rgba(213, 222, 236, 0.96);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 12px 24px rgba(31, 42, 68, 0.06);
+    overflow: hidden;
+}
+
+.ui-faq-question {
+    padding: 18px 22px;
+    font-weight: 700;
+    color: #1c2943;
+    cursor: pointer;
+    list-style: none;
+}
+
+.ui-faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.ui-faq-answer {
+    padding: 0 22px 20px;
+    color: rgba(31, 42, 68, 0.74);
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar,
+body[data-page='login-dashboard'] .dashboard-sidebar {
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 16px 30px rgba(226, 101, 0, 0.2);
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar .landing-sidebar-title,
+body[data-page='landing-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='landing-dashboard'] .dashboard-sidebar .fw-semibold,
+body[data-page='landing-dashboard'] .dashboard-sidebar .small,
+body[data-page='landing-dashboard'] .dashboard-sidebar span,
+body[data-page='landing-dashboard'] .dashboard-sidebar a,
+body[data-page='landing-dashboard'] .dashboard-sidebar .ui-muted,
+body[data-page='landing-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='landing-dashboard'] .dashboard-sidebar .ui-soft-note .small,
+body[data-page='landing-dashboard'] .dashboard-sidebar .ui-soft-note .fw-semibold,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-eyebrow,
+body[data-page='login-dashboard'] .dashboard-sidebar .login-command-title,
+body[data-page='login-dashboard'] .dashboard-sidebar .login-command-copy,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-briefing-value,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-muted,
+body[data-page='login-dashboard'] .dashboard-sidebar .login-checklist span,
+body[data-page='login-dashboard'] .dashboard-sidebar .login-checklist i,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-hero-actions .btn {
+    color: #ffffff !important;
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar .landing-sidebar-link,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-briefing-stat,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-hero-actions .btn,
+body[data-page='login-dashboard'] .dashboard-sidebar .login-checklist li {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar .landing-sidebar-link:hover,
+body[data-page='landing-dashboard'] .dashboard-sidebar .landing-sidebar-link:focus,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-hero-actions .btn:hover,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-hero-actions .btn:focus {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff !important;
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar .ui-soft-note,
+body[data-page='login-dashboard'] .dashboard-sidebar .ui-soft-note {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: none;
+}
+
+body[data-page='login-dashboard'] .login-command-grid {
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+    align-items: start;
+}
+
+body[data-page='login-dashboard'] .login-clean-wrap {
+    width: 100%;
+}
+
+body[data-page='login-dashboard'] .login-command-aside {
+    gap: 18px;
+    padding: 28px 22px;
+    border-radius: 24px;
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky {
+    color: var(--ui-primary-deep);
+    background: linear-gradient(180deg, rgba(255, 248, 238, 0.98), rgba(255, 238, 217, 0.95));
+    border: 1px solid rgba(213, 222, 236, 0.96);
+    box-shadow: 0 16px 30px rgba(31, 42, 68, 0.08);
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .landing-sidebar-title,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .landing-sidebar-link,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .fw-semibold,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .small,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky span,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky a,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-muted,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-soft-note,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-soft-note .small,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-soft-note .fw-semibold,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-eyebrow,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .login-command-title,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .login-command-copy,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-briefing-value,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-muted,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .login-checklist span,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .login-checklist i,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-hero-actions .btn {
+    color: var(--ui-primary-deep) !important;
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .landing-sidebar-link,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-briefing-stat,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-hero-actions .btn,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .login-checklist li {
+    background: #ffffff;
+    border: 1px solid rgba(213, 222, 236, 0.96);
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .landing-sidebar-link:hover,
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .landing-sidebar-link:focus,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-hero-actions .btn:hover,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-hero-actions .btn:focus {
+    background: linear-gradient(180deg, var(--ui-button-hover-start) 0%, var(--ui-button-hover-end) 100%);
+    border-color: rgba(245, 124, 0, 0.18);
+    color: var(--ui-primary-deep) !important;
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-soft-note,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-soft-note {
+    background: rgba(245, 165, 36, 0.08);
+    border: 1px solid rgba(245, 124, 0, 0.08);
+    box-shadow: none;
+}
+
+@media (max-width: 1200px) {
+    body[data-page='role-dashboard'] .ui-hero-matrix,
+    body[data-page='operations-dashboard'] .ui-hero-matrix,
+    body[data-page='control-room'] .ui-hero-matrix,
+    body[data-page='role-dashboard'] .ui-dual-grid,
+    body[data-page='operations-dashboard'] .ui-dual-grid,
+    body[data-page='control-room'] .ui-dual-grid,
+    body[data-page='role-dashboard'] .ui-command-center,
+    body[data-page='operations-dashboard'] .ui-command-center,
+    body[data-page='control-room'] .ui-command-center {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page='role-dashboard'] .ui-hero-side,
+    body[data-page='operations-dashboard'] .ui-hero-side,
+    body[data-page='control-room'] .ui-hero-side {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    body[data-page='role-dashboard'] .ui-command-grid,
+    body[data-page='operations-dashboard'] .ui-command-grid,
+    body[data-page='control-room'] .ui-command-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991px) {
+    body[data-page='role-dashboard'] .dashboard-workbench,
+    body[data-page='operations-dashboard'] .dashboard-workbench,
+    body[data-page='control-room'] .dashboard-workbench {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar,
+    body[data-page='operations-dashboard'] .dashboard-sidebar,
+    body[data-page='control-room'] .dashboard-sidebar {
+        position: relative;
+        top: 0;
+        min-height: auto;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar-brand,
+    body[data-page='operations-dashboard'] .dashboard-sidebar-brand,
+    body[data-page='control-room'] .dashboard-sidebar-brand {
+        margin: 0 0 18px;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    body[data-page='role-dashboard'] .ui-shell,
+    body[data-page='operations-dashboard'] .ui-shell,
+    body[data-page='control-room'] .ui-shell {
+        width: min(100% - 12px, 1480px);
+        padding: 16px 0 30px;
+    }
+
+    body[data-page='role-dashboard'] .ui-role-topbar-inner,
+    body[data-page='operations-dashboard'] .ui-role-topbar-inner,
+    body[data-page='control-room'] .ui-role-topbar-inner {
+        width: min(100% - 12px, 1480px);
+    }
+
+    body[data-page='role-dashboard'] .ui-hero-side,
+    body[data-page='operations-dashboard'] .ui-hero-side,
+    body[data-page='control-room'] .ui-hero-side,
+    body[data-page='role-dashboard'] .ui-command-grid,
+    body[data-page='operations-dashboard'] .ui-command-grid,
+    body[data-page='control-room'] .ui-command-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page='role-dashboard'] .ui-command-card,
+    body[data-page='operations-dashboard'] .ui-command-card,
+    body[data-page='control-room'] .ui-command-card {
+        grid-template-columns: 64px minmax(0, 1fr);
+        min-height: auto;
+    }
+
+    body[data-page='role-dashboard'] .ui-command-icon,
+    body[data-page='operations-dashboard'] .ui-command-icon,
+    body[data-page='control-room'] .ui-command-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 1.2rem;
+    }
+
+    body[data-page='role-dashboard'] .ui-hero,
+    body[data-page='operations-dashboard'] .ui-hero,
+    body[data-page='control-room'] .ui-hero {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 991px) {
+    .ui-briefing-strip,
+    .login-command-grid,
+    .login-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ui-hero-actions .btn,
+    .ui-hero-actions .landing-btn {
+        min-width: 0;
+        flex: 1 1 100%;
+    }
+
+    .login-command-aside {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ui-list-row,
+    .ui-form-section,
+    .ui-briefing-card {
+        padding: 18px;
+    }
+
+    .login-command-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar-brand,
+    body[data-page='operations-dashboard'] .dashboard-sidebar-brand,
+    body[data-page='control-room'] .dashboard-sidebar-brand {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        justify-items: start;
+        text-align: left;
+    }
+
+    body[data-page='role-dashboard'] .dashboard-sidebar-brand-logo,
+    body[data-page='operations-dashboard'] .dashboard-sidebar-brand-logo,
+    body[data-page='control-room'] .dashboard-sidebar-brand-logo {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media print {
+    body.ui-body-print {
+        background: #fff;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .ui-print-page,
+    .ui-report-shell,
+    .ui-shell {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    .ui-panel,
+    .ui-summary-card,
+    .ui-table-shell,
+    .ui-topbar {
+        box-shadow: none;
+        border-color: rgba(124, 60, 0, 0.14);
+        background: #fff;
+    }
+}
+
+body[data-page='landing-dashboard'],
+body[data-page='login-dashboard'] {
+    background:
+        radial-gradient(circle at 12% 12%, rgba(255, 170, 74, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 14%, rgba(199, 37, 0, 0.12), transparent 20%),
+        linear-gradient(180deg, #fffaf2 0%, #fff3e2 56%, #fff8ef 100%);
+}
+
+.landing-topbar-fire,
+body[data-page='role-dashboard'] .ui-role-topbar,
+body[data-page='operations-dashboard'] .ui-role-topbar,
+body[data-page='control-room'] .ui-role-topbar {
+    position: sticky;
+    overflow: hidden;
+    background: linear-gradient(90deg, #ef2507 0%, #ff5a00 48%, #ffab1f 100%);
+    border-bottom: none !important;
+    box-shadow: 0 18px 36px rgba(141, 33, 0, 0.26);
+}
+
+.landing-topbar-fire::before,
+body[data-page='role-dashboard'] .ui-role-topbar::before,
+body[data-page='operations-dashboard'] .ui-role-topbar::before,
+body[data-page='control-room'] .ui-role-topbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 22% 30%, rgba(255, 228, 175, 0.18), transparent 22%),
+        radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.12), transparent 16%),
+        linear-gradient(90deg, rgba(120, 18, 0, 0.18), rgba(255, 140, 0, 0.08)),
+        url("/images/landing-topbar-fire.png") center center / cover no-repeat;
+    opacity: 0.34;
+    pointer-events: none;
+}
+
+.landing-topbar-fire::after,
+body[data-page='role-dashboard'] .ui-role-topbar::after,
+body[data-page='operations-dashboard'] .ui-role-topbar::after,
+body[data-page='control-room'] .ui-role-topbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #9f1400 0%, #ff3c00 42%, #ff9800 100%);
+    box-shadow: 0 -6px 18px rgba(255, 94, 0, 0.22);
+    pointer-events: none;
+}
+
+.landing-topbar-fire .ui-site-topbar-inner,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-site-topbar-inner,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-site-topbar-inner,
+body[data-page='control-room'] .ui-role-topbar .ui-site-topbar-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.landing-topbar-fire .ui-topbar-brand,
+.landing-topbar-fire .ui-topbar-brand span,
+.landing-topbar-fire .ui-topbar-brand strong,
+.landing-topbar-fire .ui-topbar-links a,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand span,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand strong,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-links a,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand span,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand strong,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-links a,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand span,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand strong,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-links a {
+    color: #ffffff !important;
+}
+
+.landing-topbar-fire .ui-topbar-brand .small,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-topbar-brand .small,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-topbar-brand .small,
+body[data-page='control-room'] .ui-role-topbar .ui-topbar-brand .small {
+    color: rgba(255, 247, 235, 0.84) !important;
+}
+
+.landing-topbar-fire .ui-btn-outline,
+.landing-topbar-fire .ui-language-select,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-btn-outline,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-profile-toggle,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-language-select,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-btn-outline,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-profile-toggle,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-language-select,
+body[data-page='control-room'] .ui-role-topbar .ui-btn-outline,
+body[data-page='control-room'] .ui-role-topbar .ui-profile-toggle,
+body[data-page='control-room'] .ui-role-topbar .ui-language-select {
+    background: linear-gradient(180deg, rgba(255, 234, 204, 0.28), rgba(255, 196, 122, 0.2));
+    border: 1px solid rgba(255, 238, 214, 0.38);
+    color: #fffaf4 !important;
+}
+
+.landing-topbar-fire .ui-btn-outline:hover,
+.landing-topbar-fire .ui-btn-outline:focus,
+.landing-topbar-fire .ui-language-select:hover,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-btn-outline:hover,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-btn-outline:focus,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-profile-toggle:hover,
+body[data-page='role-dashboard'] .ui-role-topbar .ui-profile-toggle:focus,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-btn-outline:hover,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-btn-outline:focus,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-profile-toggle:hover,
+body[data-page='operations-dashboard'] .ui-role-topbar .ui-profile-toggle:focus,
+body[data-page='control-room'] .ui-role-topbar .ui-btn-outline:hover,
+body[data-page='control-room'] .ui-role-topbar .ui-btn-outline:focus,
+body[data-page='control-room'] .ui-role-topbar .ui-profile-toggle:hover,
+body[data-page='control-room'] .ui-role-topbar .ui-profile-toggle:focus {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff !important;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar.dashboard-sidebar-fire,
+body[data-page='operations-dashboard'] .dashboard-sidebar.dashboard-sidebar-fire,
+body[data-page='control-room'] .dashboard-sidebar.dashboard-sidebar-fire {
+    background:
+        linear-gradient(180deg, rgba(239, 37, 7, 0.99) 0%, rgba(255, 92, 0, 0.97) 58%, rgba(255, 163, 24, 0.94) 100%);
+    border: 1px solid rgba(255, 184, 123, 0.18);
+    box-shadow: 0 24px 44px rgba(101, 21, 0, 0.22);
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar.dashboard-sidebar-fire::before,
+body[data-page='operations-dashboard'] .dashboard-sidebar.dashboard-sidebar-fire::before,
+body[data-page='control-room'] .dashboard-sidebar.dashboard-sidebar-fire::before {
+    opacity: 0.3;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(255, 225, 171, 0.22), transparent 20%),
+        linear-gradient(180deg, rgba(255, 192, 101, 0.2), rgba(111, 14, 0, 0.08)),
+        url("/images/landing-topbar-fire.png") center 56% / cover no-repeat;
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky {
+    background:
+        linear-gradient(180deg, rgba(255, 248, 241, 0.98), rgba(255, 236, 212, 0.97));
+    border: 1px solid rgba(255, 186, 116, 0.38);
+    box-shadow: 0 22px 38px rgba(177, 66, 0, 0.1);
+}
+
+body[data-page='landing-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .landing-sidebar-link,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-briefing-stat,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .ui-hero-actions .btn,
+body[data-page='login-dashboard'] .dashboard-sidebar.dashboard-sidebar-milky .login-checklist li {
+    border: 1px solid rgba(255, 187, 116, 0.3);
+    box-shadow: 0 10px 22px rgba(255, 145, 0, 0.08);
+}
+
+.fire-command-banner,
+.login-presentation-card-head {
+    background:
+        linear-gradient(110deg, rgba(183, 22, 0, 0.98), rgba(245, 92, 0, 0.95) 48%, rgba(255, 157, 0, 0.92)),
+        url("/images/landing-topbar-fire.png") center center / cover no-repeat;
+    background-blend-mode: multiply;
+}
+
+.login-presentation-card,
+.ui-card.ui-hide-center {
+    box-shadow: 0 24px 46px rgba(118, 40, 0, 0.1);
+}
+
+.ui-alarm-modal {
+    overflow: hidden;
+    border: 1px solid rgba(255, 175, 117, 0.34);
+    background:
+        linear-gradient(145deg, rgba(121, 12, 0, 0.98), rgba(214, 54, 0, 0.96) 50%, rgba(255, 138, 0, 0.95));
+    color: #ffffff;
+    box-shadow: 0 32px 62px rgba(111, 20, 0, 0.34);
+}
+
+.ui-alarm-modal .modal-header,
+.ui-alarm-modal .modal-footer {
+    border-color: rgba(255, 238, 214, 0.16);
+}
+
+.ui-alarm-modal .btn-close {
+    filter: invert(1);
+}
+
+.ui-alarm-modal #dashboardAlarmMessage {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.ui-alarm-modal #dashboardAlarmMeta {
+    color: rgba(255, 247, 236, 0.84) !important;
+}
+
+#alarmVideoModal .modal-content {
+    overflow: hidden;
+    border: 1px solid rgba(255, 185, 120, 0.22);
+    box-shadow: 0 32px 64px rgba(111, 20, 0, 0.22);
+}
+
+#alarmVideoModal .modal-header {
+    background: linear-gradient(90deg, #9f1400 0%, #ef5500 52%, #ff9800 100%);
+    color: #ffffff;
+}
+
+#alarmVideoModal .modal-header .btn-close {
+    filter: invert(1);
+}
+
+#alarmVideoModal .ui-live-screen {
+    border: 1px solid rgba(255, 165, 101, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(255, 234, 206, 0.06);
+}
+

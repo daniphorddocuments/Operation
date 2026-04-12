@@ -1,3 +1,4 @@
 @echo off
 setlocal
-start "mahanga-app" /b cmd /c "call C:\PROJECT\mahanga\scripts\run-app.cmd > C:\PROJECT\mahanga\app.log 2>&1"
+cd /d "%~dp0.."
+start "froms-app" /b cmd /c "call scripts\run-app.cmd > app.log 2>&1"

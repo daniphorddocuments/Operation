@@ -234,6 +234,25 @@ sudo systemctl start certbot.timer
 
 ---
 
+## Cloud Deployment Profiles
+
+### AWS
+- Run the application on AWS ECS, Elastic Beanstalk, or EC2 behind an Application Load Balancer.
+- Use Amazon RDS for PostgreSQL and store uploaded evidence in S3 for shared artifact access.
+- Publish `/actuator/health`, `/actuator/metrics`, and `/actuator/prometheus` through a secured internal network path.
+
+### Azure
+- Deploy the application on Azure App Service or AKS with Azure Database for PostgreSQL.
+- Use Azure Blob Storage for `videos` and `investigations` artifacts when moving beyond single-server storage.
+- Feed metrics into Azure Monitor / Application Insights from the Prometheus and Actuator endpoints.
+
+### GCP
+- Deploy on GCP Cloud Run, GKE, or Compute Engine with Cloud SQL for PostgreSQL.
+- Use Cloud Storage for recordings and investigation attachments in multi-instance environments.
+- Export Prometheus-compatible metrics to Google Cloud Monitoring for runtime dashboards and alerting.
+
+---
+
 ## Monitoring & Logging
 
 ### Log Management

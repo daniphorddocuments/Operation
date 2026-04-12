@@ -85,7 +85,21 @@ public class InputValidator {
      * Validate role is one of allowed values
      */
     public static boolean isValidRole(String role) {
-        return role != null && (role.equals("MANAGER") || role.equals("ACCOUNTANT") || role.equals("SUPER_ADMIN"));
+        return role != null && java.util.Set.of(
+                "CGF",
+                "COMMISSIONER_OPERATIONS",
+                "HEAD_FIRE_FIGHTING_OPERATIONS",
+                "HEAD_RESCUE_OPERATIONS",
+                "REGIONAL_FIRE_OFFICER",
+                "REGIONAL_OPERATION_OFFICER",
+                "DISTRICT_FIRE_OFFICER",
+                "DISTRICT_OPERATION_OFFICER",
+                "STATION_FIRE_OFFICER",
+                "STATION_OPERATION_OFFICER",
+                "OPERATION_OFFICER",
+                "DEPARTMENT_OFFICER",
+                "CONTROL_ROOM_ATTENDANT"
+        ).contains(role);
     }
 }
 

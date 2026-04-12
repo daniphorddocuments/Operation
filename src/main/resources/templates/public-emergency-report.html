@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/ui :: head('FROMS | Public Emergency Access', false)}"></th:block>
+<body class="ui-body" th:attr="data-lang=${currentLang},data-page='public-emergency-report'">
+<th:block th:replace="~{fragments/header :: publicHeader}"></th:block>
+
+<div class="ui-shell">
+    <nav class="ui-breadcrumbs mb-3" aria-label="Breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span>/</span>
+        <span aria-current="page">Public Emergency Access</span>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <section class="ui-hero mb-4">
+                <div class="ui-hero-matrix">
+                    <div>
+                        <div class="ui-hero-chip-row">
+                            <span class="ui-hero-chip"><i class="fas fa-phone-volume"></i><span>Rapid public intake</span></span>
+                            <span class="ui-hero-chip"><i class="fas fa-comments"></i><span>Live case updates</span></span>
+                            <span class="ui-hero-chip"><i class="fas fa-video"></i><span>Scene video support</span></span>
+                        </div>
+                        <div class="ui-eyebrow mb-2">Emergency Access</div>
+                        <h1 class="h2 fw-bold mb-3">Reach the control room with a clearer and faster reporting flow.</h1>
+                        <p class="mb-0 text-white-50">Citizens, witnesses, and field responders can send a verified report, receive updates, and if needed show the scene live to the assigned station.</p>
+                    </div>
+                    <div class="ui-hero-side">
+                        <div class="ui-hero-panel">
+                            <div class="ui-eyebrow mb-2 text-white-50">Safety Line</div>
+                            <div class="fw-semibold">Call 114 for immediate danger</div>
+                        </div>
+                        <div class="ui-hero-panel">
+                            <div class="ui-eyebrow mb-2 text-white-50">Guided Flow</div>
+                            <div class="fw-semibold">Report, track, chat, and video in one place</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ui-briefing-strip mb-4" aria-label="Public reporting steps">
+                <article class="ui-briefing-card">
+                    <div class="ui-briefing-kicker">Step 1</div>
+                    <h2 class="ui-briefing-title">Identify the caller and the incident quickly.</h2>
+                    <p class="ui-briefing-copy">Start with who is reporting, what is happening, and which type of emergency best matches the scene.</p>
+                </article>
+                <article class="ui-briefing-card">
+                    <div class="ui-briefing-kicker">Step 2</div>
+                    <h2 class="ui-briefing-title">Route the location accurately.</h2>
+                    <p class="ui-briefing-copy">Select the correct region, district, station, ward, and nearest landmark so the control room can act faster.</p>
+                </article>
+                <article class="ui-briefing-card">
+                    <div class="ui-briefing-kicker">Step 3</div>
+                    <h2 class="ui-briefing-title">Keep the case room open after submission.</h2>
+                    <p class="ui-briefing-copy">Use the case page for chat updates and live scene video if the control room needs visual confirmation.</p>
+                </article>
+            </section>
+
+            <section class="ui-card mb-4" th:if="${publicReport != null}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <div class="ui-eyebrow mb-2">Report Tracking</div>
+                        <h1 class="h3 fw-bold mb-2">Your report has been received</h1>
+                        <p class="ui-muted mb-0">Use this case room to chat with the assigned control room and, if needed, start a live video view from the scene.</p>
+                    </div>
+                    <div class="ui-status-badge">
+                        <span class="ui-status-dot"></span>
+                        <span th:text="${publicReport.status}">REPORTED</span>
+                    </div>
+                </div>
+                <div class="ui-mini-grid mb-3">
+                    <div class="ui-kpi"><span>Report Number</span><strong th:text="${publicReport.reportNumber}">REP-1</strong></div>
+                    <div class="ui-kpi"><span>Assigned Station</span><strong th:text="${publicReport.routedStation != null ? publicReport.routedStation.name : 'Pending'}">Station</strong></div>
+                </div>
+                <div class="ui-card ui-card-soft mb-3" th:if="${publicRouteRecommendation != null}">
+                    <div class="ui-section-head mb-2">
+                        <div>
+                            <h2 class="h6 mb-0">AI Route Guidance</h2>
+                            <span class="small ui-muted">Estimated dispatch route, distance, and travel time to your reported location</span>
+                        </div>
+                    </div>
+                    <div class="ui-mini-grid mb-3">
+                        <div class="ui-kpi"><span>Road Distance</span><strong th:text="${publicRouteRecommendation.roadDistanceKm} + ' km'">0 km</strong></div>
+                        <div class="ui-kpi"><span>ETA</span><strong th:text="${publicRouteRecommendation.etaMinutes} + ' min'">0 min</strong></div>
+                    </div>
+                    <div class="ui-map-placeholder ui-map-shell">
+                        <iframe
+                                class="ui-map-frame"
+                                title="Public report route map"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                th:src="${publicRouteRecommendation.embedUrl}"></iframe>
+                    </div>
+                </div>
+                <div class="ui-grid ui-grid-2">
+                    <div class="ui-card ui-card-soft">
+                        <div class="ui-section-head mb-2">
+                            <h2 class="h6 mb-0">Chat with Control Room</h2>
+                            <span class="small ui-muted">Reporter vs station control room</span>
+                        </div>
+                        <div class="ui-list-grid public-chat-feed" id="publicChatFeed">
+                            <div class="ui-list-row" th:each="message : ${publicMessages}">
+                                <div>
+                                    <div class="fw-semibold" th:text="${message.senderType}">PUBLIC</div>
+                                    <div class="small ui-muted" th:text="${message.message}">Message</div>
+                                </div>
+                                <strong th:text="${message.createdAt}">Time</strong>
+                            </div>
+                            <div class="small ui-muted" th:if="${#lists.isEmpty(publicMessages)}">No messages yet.</div>
+                        </div>
+                        <form id="publicChatForm" class="ui-action-strip mt-3">
+                            <input id="publicChatMessage" class="form-control" type="text" placeholder="Type your message" required>
+                            <button class="btn ui-btn-primary" type="submit">Send</button>
+                        </form>
+                    </div>
+                    <div class="ui-card ui-card-soft">
+                        <div class="ui-section-head mb-2">
+                            <h2 class="h6 mb-0">Live Video to Control Room</h2>
+                            <span class="small ui-muted">Show the control room what is happening on scene</span>
+                        </div>
+                        <div class="ui-live-screen ui-live-screen-sm ui-live-screen-preview">
+                            <div class="ui-live-badge">LIVE</div>
+                            <video id="publicLocalVideo" autoplay playsinline muted class="ui-video-frame ui-video-frame-preview"></video>
+                            <div class="ui-live-overlay">
+                                <div>
+                                    <div class="fw-semibold">Public scene camera</div>
+                                    <div class="small text-white-50">Assigned station control room can watch in real time</div>
+                                </div>
+                                <div class="small text-white-50" id="publicVideoStatus">Camera idle</div>
+                            </div>
+                        </div>
+                        <div class="ui-action-strip mt-3">
+                            <select id="publicAudioMode" class="form-select ui-audio-select">
+                                <option value="true">Allow voice</option>
+                                <option value="false">Mute microphone</option>
+                            </select>
+                            <button type="button" class="btn ui-btn-primary" id="publicStartVideo">Start Video Call</button>
+                            <button type="button" class="btn ui-btn-outline" id="publicToggleAudio">Mute Voice</button>
+                            <button type="button" class="btn ui-btn-outline" id="publicEndVideo">End Video</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="ui-card">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <div class="ui-eyebrow mb-2">Emergency Report</div>
+                        <h1 class="h3 fw-bold mb-2">Report a fire, rescue need, or accident</h1>
+                        <p class="ui-muted mb-0">Public reporting channel for citizens, villages, and field witnesses. Every request is validated before it reaches the control room.</p>
+                    </div>
+                    <div class="ui-mini-grid" style="min-width:260px;">
+                        <div class="ui-soft-note">
+                            <div class="ui-eyebrow mb-1">Protection</div>
+                            <div class="small">CAPTCHA enabled</div>
+                        </div>
+                        <div class="ui-soft-note">
+                            <div class="ui-eyebrow mb-1">Control</div>
+                            <div class="small">Rate-limited intake</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${success}" class="alert alert-success ui-alert" role="alert" data-alert-kind="success" th:text="${success}"></div>
+                <div th:if="${error}" class="alert alert-danger ui-alert" role="alert" data-alert-kind="error" th:text="${error}"></div>
+
+                <form th:action="@{/public/emergency/report}" method="post" class="ui-stack mt-3" id="publicEmergencyForm">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <div class="ui-form-section">
+                        <div class="ui-form-section-head">
+                            <div>
+                                <div class="ui-eyebrow mb-1">Reporter Details</div>
+                                <div class="fw-semibold">Who is reporting and what type of incident is this?</div>
+                            </div>
+                            <span class="ui-status-badge"><span class="ui-status-dot"></span><span>Required</span></span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="callerName">Caller name</label>
+                                <input class="form-control" id="callerName" name="callerName" type="text" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="callerNumber">Caller number</label>
+                                <input class="form-control" id="callerNumber" name="callerNumber" type="text" inputmode="tel" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="incidentType">Incident type</label>
+                                <select class="form-select" id="incidentType" name="incidentType" required>
+                                    <option value="">Select</option>
+                                    <option value="FIRE">Fire</option>
+                                    <option value="RESCUE">Rescue</option>
+                                    <option value="ACCIDENT">Accident</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-form-section">
+                        <div class="ui-form-section-head">
+                            <div>
+                                <div class="ui-eyebrow mb-1">Location Routing</div>
+                                <div class="fw-semibold">Help the control room send the right station quickly.</div>
+                            </div>
+                            <span class="small ui-muted">Choose the closest operational path first.</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label" for="publicRegionId">Region</label>
+                                <select class="form-select" name="regionId" id="publicRegionId" required>
+                                    <option value="">Select region</option>
+                                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.name}">Region</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="publicDistrictId">District</label>
+                                <select class="form-select" name="districtId" id="publicDistrictId" required disabled>
+                                    <option value="">Select district</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="publicStationId">Nearby fire station</label>
+                                <select class="form-select" name="stationId" id="publicStationId" required disabled>
+                                    <option value="">Select station</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="ward">Ward</label>
+                                <select class="form-select" id="ward" name="wardId" required disabled>
+                                    <option value="">Select ward</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="village">Village / street</label>
+                                <select class="form-select" id="village" name="villageStreetId" disabled>
+                                    <option value="">Select village or street</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="locationText">Nearest landmark</label>
+                                <select class="form-select" id="locationText" name="roadLandmarkId" required disabled>
+                                    <option value="">Select road landmark</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-form-section">
+                        <div class="ui-form-section-head">
+                            <div>
+                                <div class="ui-eyebrow mb-1">Final Check</div>
+                                <div class="fw-semibold">Describe the scene clearly and complete verification.</div>
+                            </div>
+                            <span class="small ui-muted">Short, direct details help dispatch teams move faster.</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label" for="details">Incident details</label>
+                                <textarea class="form-control" id="details" name="details" rows="4" placeholder="Explain what is happening now" required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="captchaAnswer">CAPTCHA</label>
+                                <div class="ui-soft-note mb-2" th:text="${captchaQuestion}">What is 2 + 2?</div>
+                                <input class="form-control" id="captchaAnswer" name="captchaAnswer" type="text" required>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <button class="btn ui-btn-primary w-100" id="publicEmergencySubmit" type="submit">
+                                    <span class="ui-button-text">Send Emergency Report</span>
+                                    <span class="ui-button-loader">
+                                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                        Sending...
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    window.FROMS_PUBLIC_GEO = {
+        geographyApiUrl: [[@{/api/geography}]]
+    };
+    window.FROMS_PUBLIC_REPORT = {
+        callId: [[${publicReport != null ? publicReport.id : null}]],
+        reportNumber: [[${publicReport != null ? publicReport.reportNumber : null}]],
+        token: [[${publicReport != null ? publicReport.publicAccessToken : param.token}]],
+        stationId: [[${publicReport != null && publicReport.routedStation != null ? publicReport.routedStation.id : null}]],
+        reportMessagesUrl: [[${publicReport != null ? '/api/public/reports/' + publicReport.reportNumber + '/messages?token=' + publicReport.publicAccessToken : ''}]],
+        reportVideoStartUrl: [[${publicReport != null ? '/api/video/public/reports/' + publicReport.reportNumber + '/sessions/start?token=' + publicReport.publicAccessToken : ''}]],
+        reportVideoEndUrl: [[${publicReport != null ? '/api/video/public/reports/' + publicReport.reportNumber + '/sessions/__id__/end?token=' + publicReport.publicAccessToken : ''}]],
+        signalUrl: [[@{/signal}]]
+    };
+</script>
+<script th:src="@{/ui/public-report.js}" defer></script>
+<th:block th:replace="~{fragments/footer :: siteFooter}"></th:block>
+</body>
+</html>

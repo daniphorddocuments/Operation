@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="landingHeader">
+    <div class="ui-site-topbar landing-topbar-fire">
+        <div class="ui-site-topbar-inner">
+            <a th:href="@{/}" class="ui-topbar-brand">
+                <img class="ui-topbar-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo" decoding="async">
+                <span>
+                    <strong>FROMS</strong><br>
+                    <span class="small text-white-50">Fire and Rescue Force Operation Management System</span>
+                </span>
+            </a>
+            <div class="ui-topbar-right">
+                <button type="button" class="btn ui-btn-outline ui-topbar-icon" data-history-back aria-label="Go back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <nav class="ui-topbar-links" aria-label="Landing navigation">
+                    <a href="#overview">Overview</a>
+                    <a href="#mission">Mission</a>
+                    <a href="#command">Command</a>
+                    <a href="#features">Features</a>
+                    <a href="#public-manual">User Manual</a>
+                    <a href="#faq">FAQ</a>
+                    <a th:href="@{/public/emergency/report}">Public Emergency Access</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+                <form th:action="@{/change-language}" method="post" class="ui-language-form">
+                    <select name="lang" class="form-select ui-language-select" onchange="this.form.submit()">
+                        <option value="sw" th:selected="${currentLang == 'sw'}">Swahili</option>
+                        <option value="en" th:selected="${currentLang == 'en'}">English</option>
+                    </select>
+                </form>
+                <a th:href="@{/login}" class="landing-btn landing-login-corner">Login</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="loginHeader">
+    <div class="ui-site-topbar landing-topbar-fire">
+        <div class="ui-site-topbar-inner">
+            <a th:href="@{/}" class="ui-topbar-brand">
+                <img class="ui-topbar-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo" decoding="async">
+                <span>
+                    <strong>FROMS</strong><br>
+                    <span class="small text-white-50">Fire and Rescue Force Command Access</span>
+                </span>
+            </a>
+            <div class="ui-topbar-right">
+                <button type="button" class="btn ui-btn-outline ui-topbar-icon" data-history-back aria-label="Go back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <nav class="ui-topbar-links" aria-label="Login support navigation">
+                    <a th:href="@{/}">Home</a>
+                    <a th:href="'tel:' + ${supportPhone}">Operations Line</a>
+                    <a th:href="'mailto:' + ${supportEmail}">Email</a>
+                </nav>
+                <form th:action="@{/change-language}" method="post" class="ui-language-form">
+                    <select name="lang" class="form-select ui-language-select" onchange="this.form.submit()">
+                        <option value="sw" th:selected="${currentLang == 'sw'}">Swahili</option>
+                        <option value="en" th:selected="${currentLang == 'en'}">English</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="publicHeader">
+    <div class="ui-site-topbar landing-topbar-fire">
+        <div class="ui-site-topbar-inner">
+            <a th:href="@{/}" class="ui-topbar-brand">
+                <img class="ui-topbar-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo" decoding="async">
+                <span>
+                    <strong>FROMS</strong><br>
+                    <span class="small text-white-50">Public Emergency Access</span>
+                </span>
+            </a>
+            <div class="ui-topbar-right">
+                <button type="button" class="btn ui-btn-outline ui-topbar-icon" data-history-back aria-label="Go back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <nav class="ui-topbar-links" aria-label="Public access navigation">
+                    <a th:href="@{/}">Home</a>
+                    <a th:href="@{/login}">Staff Login</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="dashboardHeader(homeUrl, subtitle, crossLinkUrl, crossLinkLabel, crossLinkVisible, secondaryLinkUrl, secondaryLinkLabel, secondaryLinkVisible)">
+    <div class="ui-site-topbar ui-role-topbar">
+        <div class="ui-site-topbar-inner ui-role-topbar-inner">
+            <a th:href="${homeUrl}" class="ui-topbar-brand ui-role-topbar-brand">
+                <img class="ui-topbar-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo" decoding="async">
+                <span class="ui-role-topbar-brand-copy">
+                    <strong>FROMS</strong><br>
+                    <span class="small text-white-50" th:text="${subtitle}">Dashboard</span>
+                </span>
+            </a>
+            <div class="ui-topbar-right">
+                <button type="button" class="btn ui-btn-outline ui-topbar-icon" data-history-back aria-label="Go back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button type="button" class="btn ui-btn-outline ui-topbar-icon sidebar-toggle" data-sidebar-toggle aria-label="Toggle dashboard sidebar">
+                    <i class="fas fa-bars"></i>
+                    <span class="visually-hidden">Toggle dashboard sidebar</span>
+                </button>
+                <nav class="ui-topbar-links" aria-label="Dashboard navigation">
+                    <a th:if="${crossLinkVisible}" th:href="${crossLinkUrl}" th:text="${crossLinkLabel}">Cross Link</a>
+                    <a th:if="${secondaryLinkVisible}" th:href="${secondaryLinkUrl}" th:text="${secondaryLinkLabel}">Secondary Link</a>
+                    <a th:href="@{/public/emergency/report}">Public Access</a>
+                    <a href="#" data-dark-mode-toggle>Dark Mode</a>
+                </nav>
+                <a href="#notification-center" class="btn ui-btn-outline ui-topbar-icon position-relative" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-light" th:text="${notificationUnreadCount}">0</span>
+                </a>
+                <form th:action="@{/change-language}" method="post" class="ui-language-form">
+                    <select name="lang" class="form-select ui-language-select" onchange="this.form.submit()">
+                        <option value="sw" th:selected="${currentLang == 'sw'}">Swahili</option>
+                        <option value="en" th:selected="${currentLang == 'en'}">English</option>
+                    </select>
+                </form>
+                <div class="dropdown">
+                    <button class="btn ui-profile-toggle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="ui-profile-avatar" th:text="${#strings.substring(loggedInUsername ?: 'U', 0, 1)}">U</span>
+                        <span>Profile</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end ui-dropdown-menu">
+                        <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</button></li>
+                        <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                    </ul>
+                </div>
+                <a class="btn ui-btn-outline" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<aside th:fragment="landingSidebar" class="landing-clean-sidebar dashboard-sidebar dashboard-sidebar-milky">
+    <div class="landing-sidebar-title">Quick Access</div>
+    <div class="landing-sidebar-links flex-column">
+        <a href="#overview" class="landing-sidebar-link">Platform Overview</a>
+        <a href="#mission" class="landing-sidebar-link">Mission Overview</a>
+        <a href="#command" class="landing-sidebar-link">Command Structure</a>
+        <a href="#features" class="landing-sidebar-link">Core Features</a>
+        <a href="#public-manual" class="landing-sidebar-link">Public User Manual</a>
+        <a href="#faq" class="landing-sidebar-link">Frequently Asked Questions</a>
+        <a th:href="@{/public/emergency/report}" class="landing-sidebar-link">Public Emergency Access</a>
+        <a href="#contact" class="landing-sidebar-link">Get Started</a>
+    </div>
+
+    <div class="landing-sidebar-title mt-4">Actions</div>
+    <div class="ui-stack" style="gap:10px;">
+        <a th:href="@{/login}" class="landing-btn landing-btn-primary w-100 justify-content-center">Open Login</a>
+        <a th:href="@{/public/emergency/report}" class="landing-btn landing-btn-secondary w-100 justify-content-center">Report Emergency</a>
+    </div>
+
+    <div class="landing-sidebar-title mt-4">Support</div>
+    <div class="ui-soft-note">
+        <div class="fw-semibold mb-1">Need command center access?</div>
+        <div class="small ui-muted">Operations line: <span th:text="${supportPhone}">114</span></div>
+        <div class="small ui-muted">Admin email: <span th:text="${supportEmail}">operations@fire.go.tz</span></div>
+    </div>
+</aside>
+
+<aside th:fragment="controlRoomSidebar" class="dashboard-sidebar dashboard-sidebar-fire" sec:authorize="isAuthenticated()">
+    <th:block th:replace="~{fragments/sidebar :: workspaceSidebar}"></th:block>
+</aside>
+
+<aside th:fragment="operationsSidebar" class="dashboard-sidebar dashboard-sidebar-fire" sec:authorize="isAuthenticated()">
+    <th:block th:replace="~{fragments/sidebar :: workspaceSidebar}"></th:block>
+</aside>
+
+<aside th:fragment="roleSidebar" class="dashboard-sidebar dashboard-sidebar-fire" sec:authorize="isAuthenticated()">
+    <th:block th:replace="~{fragments/sidebar :: workspaceSidebar}"></th:block>
+</aside>
+
+<th:block th:fragment="workspaceSidebar">
+    <div class="dashboard-sidebar-brand">
+        <img class="dashboard-sidebar-brand-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo">
+        <div class="dashboard-sidebar-brand-copy">
+            <div class="dashboard-sidebar-brand-kicker" th:text="${workspaceSidebar.brandKicker}">FROMS Workspace</div>
+            <div class="dashboard-sidebar-brand-name" th:text="${workspaceSidebar.brandName}">Fire and Rescue Operations Management System</div>
+            <div class="dashboard-sidebar-brand-meta" th:text="${workspaceSidebar.brandMeta}">Operational scope</div>
+        </div>
+    </div>
+    <th:block th:each="section, sectionStat : ${workspaceSidebar.sections}">
+        <div class="landing-sidebar-title" th:classappend="${sectionStat.index > 0} ? ' mt-4' : ''" th:text="${section.title}">Workspace</div>
+        <div class="landing-sidebar-links flex-column">
+            <a th:each="item : ${section.items}" th:href="${item.href}" class="landing-sidebar-link" th:text="${item.label}">Overview</a>
+        </div>
+    </th:block>
+    <div class="landing-sidebar-title mt-4" th:text="${workspaceSidebar.accessTitle}">Role Access</div>
+    <div class="ui-soft-note">
+        <div class="fw-semibold mb-1" th:text="${isAdminWorkbench} ? 'Administrative workspace' : workspaceSidebar.brandName">Role workspace</div>
+        <div class="small ui-muted" th:text="${workspaceSidebar.accessNote}">Only modules assigned to your role are available in this dashboard.</div>
+    </div>
+</th:block>
+</body>
+</html>

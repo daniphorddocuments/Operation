@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/ui :: head('FROMS | Operations Dashboard', true)}"></th:block>
+<body class="ui-body" th:attr="data-role=${loggedInRole},data-username=${loggedInUsername},data-page='operations-dashboard',data-lang=${currentLang}">
+<th:block th:replace="~{fragments/header :: dashboardHeader(
+    @{/dashboard},
+    'Operations Command Dashboard',
+    @{/control-room/dashboard},
+    'Control Room',
+    ${canAccessControlRoomDashboard},
+    @{/dashboard},
+    'Role Dashboard',
+    ${true}
+)}"></th:block>
+
+<div class="ui-shell">
+    <div class="dashboard-workbench">
+        <aside th:replace="~{fragments/sidebar :: operationsSidebar}"></aside>
+        <main class="dashboard-main ui-stack">
+    <nav class="ui-breadcrumbs ui-hide-center" aria-label="Breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span>/</span>
+        <a th:href="@{/dashboard}">Role Dashboard</a>
+        <span>/</span>
+        <span aria-current="page">Operations Command</span>
+    </nav>
+    <div th:if="${success}" class="alert alert-success ui-alert ui-hide-center" role="alert" data-alert-kind="success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger ui-alert ui-hide-center" role="alert" data-alert-kind="error" th:text="${error}"></div>
+    <section class="ui-hero ui-hide-center" id="operations-overview">
+        <div class="ui-hero-matrix">
+            <div>
+                <div class="ui-eyebrow mb-2">National Command View</div>
+                <div class="ui-hero-chip-row">
+                    <span class="ui-chip"><i class="fas fa-chart-column"></i><span>Leadership summary</span></span>
+                    <span class="ui-chip"><i class="fas fa-satellite-dish"></i><span>Live operational awareness</span></span>
+                    <span class="ui-chip"><i class="fas fa-brain"></i><span>Decision support ready</span></span>
+                </div>
+                <h1 class="h3 fw-bold mb-3">Operational picture for fire and rescue leadership</h1>
+                <p class="mb-0 text-white-50">Monitor incidents, field activity, equipment posture, and command recommendations through one government-grade dashboard.</p>
+                <div class="ui-hero-actions">
+                    <a href="#operations-incident-feed" class="btn ui-btn-primary">Incident Feed</a>
+                    <a href="#operations-ai-panel" class="btn ui-btn-outline" th:if="${canSeeAiRecommendations}">AI Recommendations</a>
+                    <a href="#notification-center" class="btn ui-btn-outline">Notifications</a>
+                </div>
+            </div>
+            <div class="ui-hero-side">
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Signed In User</div>
+                    <div class="fw-semibold" th:text="${loggedInUsername} ?: 'Command User'">Command User</div>
+                </div>
+                <div class="ui-hero-panel">
+                    <div class="ui-eyebrow mb-2 text-white-50">Assigned Role</div>
+                    <div class="fw-semibold" th:text="${loggedInRole} ?: 'Operational Command'">Operational Command</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ui-command-grid ui-hide-center">
+        <article class="ui-command-card ui-command-card-metric ui-command-card-incidents">
+            <div class="ui-command-icon"><i class="fas fa-fire"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Total Incidents</div>
+                <div class="ui-command-value" th:text="${metrics.totalIncidents}">0</div>
+                <div class="ui-command-note">All recorded operational events.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-emergency">
+            <div class="ui-command-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Active Emergencies</div>
+                <div class="ui-command-value" th:text="${metrics.activeEmergencies}">0</div>
+                <div class="ui-command-note">Incidents requiring immediate command attention.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-response">
+            <div class="ui-command-icon"><i class="fas fa-stopwatch"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Average Response Time</div>
+                <div class="ui-command-value" th:text="${#numbers.formatDecimal(metrics.averageResponseTime, 1, 1)} + 'm'">0.0m</div>
+                <div class="ui-command-note">Current measured response performance.</div>
+            </div>
+        </article>
+        <article class="ui-command-card ui-command-card-metric ui-command-card-maintenance">
+            <div class="ui-command-icon"><i class="fas fa-tools"></i></div>
+            <div class="ui-command-card-copy">
+                <div class="ui-command-label">Maintenance Alerts</div>
+                <div class="ui-command-value" th:text="${equipmentMetrics.maintenanceAlerts}">0</div>
+                <div class="ui-command-note">Equipment items needing command review.</div>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-briefing-strip ui-hide-center">
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Executive Snapshot</div>
+            <div class="ui-briefing-stat">
+                <span>Total incidents</span>
+                <strong class="ui-briefing-value" th:text="${metrics.totalIncidents}">0</strong>
+            </div>
+            <p class="ui-briefing-copy">The page now surfaces command-wide load first so senior reviewers can understand volume immediately.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Operational Urgency</div>
+            <div class="ui-briefing-stat">
+                <span>Active emergencies</span>
+                <strong class="ui-briefing-value" th:text="${metrics.activeEmergencies}">0</strong>
+            </div>
+            <p class="ui-briefing-copy">Active workload, performance, and resource pressure are grouped to support faster presentation and action.</p>
+        </article>
+        <article class="ui-briefing-card">
+            <div class="ui-briefing-kicker">Next Action</div>
+            <div class="ui-briefing-actions">
+                <a href="#operations-incident-feed" class="ui-link-arrow"><span>Review incidents</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#operations-report-panel" class="ui-link-arrow" th:if="${!#lists.isEmpty(availableReports)}"><span>Open reports</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#profile-actions" class="ui-link-arrow"><span>Profile actions</span><i class="fas fa-arrow-right"></i></a>
+            </div>
+        </article>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="operations-route-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-0">AI Route Intelligence</h2>
+                <div class="small ui-muted">Best-station preview for the highest-priority geolocated case currently visible to this command level</div>
+            </div>
+            <div class="ui-action-strip" th:if="${priorityRoute != null}">
+                <a class="btn ui-btn-primary"
+                   th:href="${priorityRoute.sourceType == 'INCIDENT' ? '/routes/print/incidents/' + priorityRoute.sourceId : '/routes/print/calls/' + priorityRoute.sourceId}"
+                   target="_blank">Print Map</a>
+                <a class="btn ui-btn-outline" th:href="${priorityRoute.directionsUrl}" target="_blank" rel="noopener">Live Directions</a>
+            </div>
+        </div>
+        <div th:if="${priorityRoute != null}" class="ui-stack">
+            <div class="ui-mini-grid">
+                <div class="ui-kpi"><span>Recommended Station</span><strong th:text="${priorityRoute.stationName}">Station</strong></div>
+                <div class="ui-kpi"><span>Straight Distance</span><strong th:text="${priorityRoute.straightDistanceKm} + ' km'">0 km</strong></div>
+                <div class="ui-kpi"><span>Road Distance</span><strong th:text="${priorityRoute.roadDistanceKm} + ' km'">0 km</strong></div>
+                <div class="ui-kpi"><span>ETA</span><strong th:text="${priorityRoute.etaMinutes} + ' min'">0 min</strong></div>
+            </div>
+            <div class="ui-map-placeholder ui-map-shell">
+                <iframe
+                        class="ui-map-frame"
+                        title="Operations route map"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        th:src="${priorityRoute.embedUrl}"></iframe>
+                <div class="ui-map-meta">
+                    <div class="fw-semibold">Route focus: <span th:text="${priorityRoute.stationName}">Station</span></div>
+                    <div class="small ui-muted">This command view uses live coordinates plus historical response behavior to recommend the most practical station deployment.</div>
+                </div>
+            </div>
+            <ol class="ui-manual-list mb-0">
+                <li th:each="direction : ${priorityRoute.directions}" th:text="${direction}">Direction</li>
+            </ol>
+        </div>
+        <div th:if="${priorityRoute == null}" class="ui-soft-note">
+            <div class="fw-semibold mb-1" th:text="${scopeMap.title}">Route intelligence awaiting GPS source</div>
+            <div class="small ui-muted" th:text="${scopeMap.summary}">No visible active call or incident currently includes GPS coordinates, so an AI route cannot be generated for this view yet.</div>
+            <div class="ui-map-placeholder ui-map-shell mt-3">
+                <iframe
+                        class="ui-map-frame"
+                        th:title="${scopeMap.title}"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        th:src="${scopeMap.embedUrl}"></iframe>
+            </div>
+            <div class="ui-action-strip mt-3">
+                <a class="btn ui-btn-outline" th:href="${scopeMap.openUrl}" target="_blank" rel="noopener">Open Full Map</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="operations-manual-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1" th:text="${operationsUserManual.title}">Operations User Manual</h2>
+                <div class="small ui-muted" th:text="${operationsUserManual.audience}">Operations dashboard guidance</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span>Operations Guidance</span></span>
+        </div>
+        <p class="ui-muted mb-3" th:text="${operationsUserManual.summary}">Use this dashboard to monitor the live operational picture.</p>
+        <div class="ui-manual-grid">
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Quick Start</div>
+                <ol class="ui-manual-list">
+                    <li th:each="item : ${operationsUserManual.quickStart}" th:text="${item}">Review incident, response-time, and maintenance KPIs first.</li>
+                </ol>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Main Tasks</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${operationsUserManual.keyTasks}" th:text="${item}">Monitor national or command-scope incidents.</li>
+                </ul>
+            </article>
+            <article class="ui-highlight-card ui-manual-card">
+                <div class="fw-semibold mb-2">Access Boundaries</div>
+                <ul class="ui-manual-list">
+                    <li th:each="item : ${operationsUserManual.accessBoundaries}" th:text="${item}">Recommendations support command judgment.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="ui-soft-note mt-3">
+            <div class="fw-semibold mb-1">Operator Note</div>
+            <div class="small ui-muted" th:text="${operationsUserManual.helpNote}">Use the role dashboard when you need investigation, user, or role-specific modules.</div>
+        </div>
+    </section>
+
+<section class="ui-dual-grid" id="operations-analytics-panel">
+        <div class="ui-section-shell">
+            <div class="ui-card ui-hide-center">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Operational Overview</h2>
+                    <span class="small ui-muted">Leadership trend summary</span>
+                </div>
+                <div class="ui-analytics-grid">
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Incident Trend Split</h3>
+                            <span class="small ui-muted">Active versus stabilized cases</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="operationsIncidentChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Useful for executive briefings where active load must be visible in one glance.</div>
+                    </article>
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">High-Risk Areas</h3>
+                            <span class="small ui-muted">Concentration by area</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="operationsRiskChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Shows where command attention is accumulating based on the current dashboard data.</div>
+                    </article>
+                </div>
+            </div>
+
+            <div class="ui-card ui-hide-center" id="operations-incident-feed">
+                <div class="ui-section-head mb-1">
+                    <h2 class="h5 mb-0">Incident Feed</h2>
+                    <span class="small ui-muted">Live operational registry</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ui-table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Incident</th>
+                            <th>Type</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="incident : ${incidents}">
+                            <td th:text="${incident.incidentNumber}">INC-1</td>
+                            <td th:text="${incident.incidentType}">FIRE</td>
+                            <td th:text="${incident.severity}">HIGH</td>
+                            <td th:text="${incident.status}">ACTIVE</td>
+                            <td th:text="${incident.district != null ? incident.district.name : incident.village}">Location</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(incidents)}">
+                            <td colspan="5" class="ui-muted">No incidents recorded yet.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="ui-section-shell">
+            <div class="ui-card ui-hide-center">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Performance Overview</h2>
+                    <span class="small ui-muted">Readiness and response posture</span>
+                </div>
+                <div class="ui-analytics-grid">
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Resource Snapshot</h3>
+                            <span class="small ui-muted">Available, deployed, and maintenance</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="operationsResourceChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Pairs equipment readiness with active workload for stronger operational storytelling.</div>
+                    </article>
+                    <article class="ui-card ui-card-soft ui-chart-card">
+                        <div class="ui-section-head mb-2">
+                            <h3 class="h6 mb-0">Response Performance</h3>
+                            <span class="small ui-muted">Key command indicators</span>
+                        </div>
+                        <div class="ui-chart-shell">
+                            <canvas id="operationsPerformanceChart"></canvas>
+                        </div>
+                        <div class="ui-chart-caption">Combines emergencies, response time, station scope, and recommendations for command review.</div>
+                    </article>
+                </div>
+            </div>
+            <div class="ui-card ui-hide-center" id="operations-ai-panel" th:if="${canSeeAiRecommendations}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">AI Recommendations</h2>
+                    <span class="small ui-muted">Decision support generated from field patterns</span>
+                </div>
+                <div class="ui-stack">
+                    <article class="ui-highlight-card" th:each="recommendation : ${recommendations}">
+                        <div class="ui-status-badge mb-2"><span class="ui-status-dot"></span><span th:text="${recommendation.riskLevel}">HIGH</span></div>
+                        <div class="fw-semibold mb-1" th:text="${recommendation.title}">Recommendation title</div>
+                        <div class="small ui-muted" th:text="${recommendation.summary}">Recommendation summary</div>
+                    </article>
+                    <div th:if="${#lists.isEmpty(recommendations)}" class="small ui-muted">No recommendations generated yet.</div>
+                </div>
+            </div>
+            <div class="ui-card ui-hide-center" id="operations-report-panel" th:if="${!#lists.isEmpty(availableReports)}">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Reports</h2>
+                    <span class="small ui-muted">Role-scoped downloadable reports</span>
+                </div>
+                <div class="ui-list-grid">
+                    <div class="ui-list-row" th:each="reportItem : ${availableReports}">
+                        <div class="ui-report-row-copy">
+                            <div class="fw-semibold" th:text="${reportItem.title}">Report</div>
+                            <div class="small ui-muted" th:text="${reportItem.description}">Description</div>
+                        </div>
+                        <form class="ui-report-download-form" th:action="@{'/api/reports/' + ${reportItem.key} + '/pdf'}" method="get" target="_blank">
+                            <div class="ui-report-range" th:if="${reportItem.supportsDateRange}">
+                                <div>
+                                    <label class="ui-label form-label" th:for="${'operationsReportFrom-' + reportItem.key}">From</label>
+                                    <input class="form-control" type="date" name="from" th:id="${'operationsReportFrom-' + reportItem.key}">
+                                </div>
+                                <div>
+                                    <label class="ui-label form-label" th:for="${'operationsReportTo-' + reportItem.key}">To</label>
+                                    <input class="form-control" type="date" name="to" th:id="${'operationsReportTo-' + reportItem.key}">
+                                </div>
+                            </div>
+                            <div class="ui-action-strip">
+                                <button class="btn ui-btn-outline" type="submit" name="lang" value="en">EN PDF</button>
+                                <button class="btn ui-btn-outline" type="submit" name="lang" value="sw">SW PDF</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-card ui-hide-center" id="notification-center">
+                <div class="ui-section-head mb-2">
+                    <h2 class="h5 mb-0">Notification Brief</h2>
+                    <span class="ui-status-badge"><span class="ui-status-dot"></span><span th:text="${notificationUnreadCount} + ' unread'">0 unread</span></span>
+                </div>
+                <div class="ui-list-grid">
+                    <div class="ui-list-row" th:each="notification : ${notifications}">
+                        <div>
+                            <div class="fw-semibold" th:text="${notification.title}">Notification</div>
+                            <div class="small ui-muted" th:text="${notification.message}">Message</div>
+                        </div>
+                        <strong th:text="${notification.createdAt}">Time</strong>
+                    </div>
+                    <div class="small ui-muted" th:if="${#lists.isEmpty(notifications)}">No notifications available yet.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+        </main>
+    </div>
+</div>
+<th:block th:replace="~{fragments/footer :: siteFooter}"></th:block>
+<div id="profile-actions"></div>
+<script th:inline="javascript">
+    window.FROMS_CONTEXT = {
+        role: [[${loggedInRole}]],
+        username: [[${loggedInUsername}]],
+        changePasswordUrl: [[@{/api/me/change-password}]]
+    };
+    window.FROMS_OPERATIONS_CHARTS = {
+        incidentValues: [
+            [[${metrics.activeEmergencies}]],
+            [[${metrics.totalIncidents > metrics.activeEmergencies ? metrics.totalIncidents - metrics.activeEmergencies : 0}]]
+        ],
+        riskLabels: [[${metrics.highRiskAreas != null ? metrics.highRiskAreas.keySet() : T(java.util.Collections).emptyList()}]],
+        riskValues: [[${metrics.highRiskAreas != null ? metrics.highRiskAreas.values() : T(java.util.Collections).emptyList()}]],
+        resourceValues: [
+            [[${equipmentMetrics.availableUnits}]],
+            [[${equipmentMetrics.inUseUnits}]],
+            [[${equipmentMetrics.maintenanceAlerts}]]
+        ],
+        performanceValues: [
+            [[${metrics.activeEmergencies}]],
+            [[${T(java.lang.Math).round(metrics.averageResponseTime)}]],
+            [[${#lists.size(stations)}]],
+            [[${#lists.size(recommendations)}]]
+        ]
+    };
+</script>
+
+<div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5">Profile</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ui-stack">
+                <div class="ui-kpi"><span>Username</span><strong th:text="${loggedInUsername}">username</strong></div>
+                <div class="ui-kpi"><span>Role</span><strong th:text="${loggedInRole}">role</strong></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ui-modal-content">
+            <form id="changePasswordForm">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Change Password</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ui-stack">
+                    <div>
+                        <label class="ui-label form-label" for="currentPassword">Current Password</label>
+                        <input id="currentPassword" name="currentPassword" type="password" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="newPassword">New Password</label>
+                        <input id="newPassword" name="newPassword" type="password" class="form-control" minlength="8" required>
+                    </div>
+                    <div>
+                        <label class="ui-label form-label" for="confirmPassword">Confirm Password</label>
+                        <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" minlength="8" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn ui-btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

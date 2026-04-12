@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/ui :: head(${pageTitle}, false)}"></th:block>
+<body class="ui-body">
+<div class="ui-shell">
+    <section class="ui-card route-print-sheet">
+        <div class="ui-section-head mb-3">
+            <div>
+                <div class="ui-eyebrow mb-2">Printable Route</div>
+                <h1 class="h4 fw-bold mb-1" th:text="${pageTitle}">Printable Route</h1>
+                <div class="small ui-muted">
+                    Source:
+                    <span th:text="${routeRecommendation.sourceType + ' / ' + routeRecommendation.sourceReference}">CALL / REP-1</span>
+                </div>
+            </div>
+            <button type="button" class="btn ui-btn-primary" onclick="window.print()">Print Map</button>
+        </div>
+
+        <div class="ui-mini-grid mb-3">
+            <div class="ui-kpi"><span>Station</span><strong th:text="${routeRecommendation.stationName}">Station</strong></div>
+            <div class="ui-kpi"><span>Straight Distance</span><strong th:text="${routeRecommendation.straightDistanceKm} + ' km'">0 km</strong></div>
+            <div class="ui-kpi"><span>Road Distance</span><strong th:text="${routeRecommendation.roadDistanceKm} + ' km'">0 km</strong></div>
+            <div class="ui-kpi"><span>ETA</span><strong th:text="${routeRecommendation.etaMinutes} + ' min'">0 min</strong></div>
+        </div>
+
+        <div class="ui-map-placeholder ui-map-shell mb-3">
+            <iframe
+                    class="ui-map-frame"
+                    title="Printable route map"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    th:src="${routeRecommendation.embedUrl}"></iframe>
+            <div class="ui-map-meta">
+                <div class="fw-semibold">AI route plan for <span th:text="${routeRecommendation.stationName}">Station</span></div>
+                <div class="small ui-muted">Use this map with the generated directions and ETA for field dispatch and command briefing.</div>
+            </div>
+        </div>
+
+        <div class="ui-card ui-card-soft">
+            <div class="ui-section-head mb-2">
+                <h2 class="h5 mb-0">Directions</h2>
+                <a class="btn ui-btn-outline" th:href="${routeRecommendation.directionsUrl}" target="_blank" rel="noopener">Open Live Directions</a>
+            </div>
+            <ol class="ui-manual-list">
+                <li th:each="direction : ${routeRecommendation.directions}" th:text="${direction}">Direction</li>
+            </ol>
+        </div>
+    </section>
+</div>
+<th:block th:replace="~{fragments/footer :: siteFooter}"></th:block>
+</body>
+</html>

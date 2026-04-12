@@ -11,6 +11,9 @@ public class RequestUtil {
      * Get client's real IP address, handling proxies
      */
     public static String getClientIpAddress(HttpServletRequest request) {
+        if (request == null) {
+            return "UNKNOWN";
+        }
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
@@ -55,9 +58,19 @@ public class RequestUtil {
     }
 
     /**
+     * Alias for getClientIpAddress - returns client IP
+     */
+    public static String getClientIp(HttpServletRequest request) {
+        return getClientIpAddress(request);
+    }
+
+    /**
      * Get user agent
      */
     public static String getUserAgent(HttpServletRequest request) {
+        if (request == null) {
+            return "UNKNOWN";
+        }
         return request.getHeader("User-Agent");
     }
 
@@ -65,6 +78,9 @@ public class RequestUtil {
      * Get referrer
      */
     public static String getReferrer(HttpServletRequest request) {
+        if (request == null) {
+            return "UNKNOWN";
+        }
         return request.getHeader("Referer");
     }
 }

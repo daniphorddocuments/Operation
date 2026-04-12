@@ -1,29 +1,30 @@
 [INFO] Scanning for projects...
 [INFO] 
-[INFO] -----------------------< com.daniphord:mahanga >------------------------
-[INFO] Building  0.0.1-SNAPSHOT
+[INFO] -------------< com.daniphord.mahanga:pdf-dashboard-system >-------------
+[INFO] Building PDF Dashboard System 1.0.0
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
-[INFO] >>> spring-boot:4.0.3:run (default-cli) > test-compile @ mahanga >>>
+[INFO] >>> spring-boot:3.2.5:run (default-cli) > test-compile @ pdf-dashboard-system >>>
+[WARNING] The artifact com.itextpdf:itext7-core:pom:8.0.2 has been relocated to com.itextpdf:itext-core:pom:8.0.2
 [INFO] 
-[INFO] --- resources:3.3.1:resources (default-resources) @ mahanga ---
-[INFO] Copying 1 resource from src\main\resources to target\classes
-[INFO] Copying 15 resources from src\main\resources to target\classes
+[INFO] --- resources:3.3.1:resources (default-resources) @ pdf-dashboard-system ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 20 resources from src\main\resources to target\classes
 [INFO] 
-[INFO] --- compiler:3.14.1:compile (default-compile) @ mahanga ---
-[INFO] Nothing to compile - all classes are up to date.
+[INFO] --- compiler:3.10.1:compile (default-compile) @ pdf-dashboard-system ---
+[INFO] Nothing to compile - all classes are up to date
 [INFO] 
-[INFO] --- resources:3.3.1:testResources (default-testResources) @ mahanga ---
-[INFO] skip non existing resourceDirectory C:\PROJECT\mahanga\src\test\resources
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ pdf-dashboard-system ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
 [INFO] 
-[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ mahanga ---
-[INFO] Nothing to compile - all classes are up to date.
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ pdf-dashboard-system ---
+[INFO] Nothing to compile - all classes are up to date
 [INFO] 
-[INFO] <<< spring-boot:4.0.3:run (default-cli) < test-compile @ mahanga <<<
+[INFO] <<< spring-boot:3.2.5:run (default-cli) < test-compile @ pdf-dashboard-system <<<
 [INFO] 
 [INFO] 
-[INFO] --- spring-boot:4.0.3:run (default-cli) @ mahanga ---
+[INFO] --- spring-boot:3.2.5:run (default-cli) @ pdf-dashboard-system ---
 [INFO] Attaching agents: []
 
   .   ____          _            __ _ _
@@ -32,4431 +33,522 @@
  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
 
- :: Spring Boot ::                (v4.0.3)
+2026-04-11 03:31:37 - com.daniphord.mahanga.Application - Starting Application using Java 25.0.2 with PID 5124 (C:\PROJECT\operation\target\classes started by KINJEKITILE NGWALE in C:\PROJECT\operation)
+2026-04-11 03:31:37 - com.daniphord.mahanga.Application - Running with Spring Boot v3.2.5, Spring v6.1.6
+2026-04-11 03:31:37 - com.daniphord.mahanga.Application - No active profile set, falling back to 1 default profile: "default"
+2026-04-11 03:31:39 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-11 03:31:39 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 203 ms. Found 24 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (file:/C:/Users/KINJEKITILE%20NGWALE/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.20/tomcat-embed-core-10.1.20.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
 
-2026-03-31T10:42:04.910-07:00  INFO 10260 --- [mahanga] [           main] com.daniphord.mahanga.Application        : Starting Application using Java 25.0.2 with PID 10260 (C:\PROJECT\mahanga\target\classes started by KINJEKITILE NGWALE in C:\PROJECT\mahanga)
-2026-03-31T10:42:04.916-07:00  INFO 10260 --- [mahanga] [           main] com.daniphord.mahanga.Application        : No active profile set, falling back to 1 default profile: "default"
-2026-03-31T10:42:06.404-07:00  INFO 10260 --- [mahanga] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-31T10:42:06.508-07:00  INFO 10260 --- [mahanga] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 89 ms. Found 4 JPA repository interfaces.
-2026-03-31T10:42:07.685-07:00  INFO 10260 --- [mahanga] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 51617 (http)
-2026-03-31T10:42:07.710-07:00  INFO 10260 --- [mahanga] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-31T10:42:07.710-07:00  INFO 10260 --- [mahanga] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
-2026-03-31T10:42:07.796-07:00  INFO 10260 --- [mahanga] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2732 ms
-2026-03-31T10:42:08.111-07:00  INFO 10260 --- [mahanga] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-31T10:42:08.208-07:00  INFO 10260 --- [mahanga] [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.4.Final
-2026-03-31T10:42:09.211-07:00  INFO 10260 --- [mahanga] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-31T10:42:09.260-07:00  INFO 10260 --- [mahanga] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-31T10:42:09.566-07:00  INFO 10260 --- [mahanga] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@41d877bb
-2026-03-31T10:42:09.570-07:00  INFO 10260 --- [mahanga] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-31T10:42:09.683-07:00  INFO 10260 --- [mahanga] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:postgresql://localhost:5432/shop]
-	Database driver: PostgreSQL JDBC Driver
-	Database dialect: PostgreSQLDialect
-	Database version: 18.3
-	Default catalog/schema: shop/public
-	Autocommit mode: undefined/unknown
-	Isolation level: READ_COMMITTED [default READ_COMMITTED]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-31T10:42:12.184-07:00  INFO 10260 --- [mahanga] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-31T10:42:12.384-07:00  INFO 10260 --- [mahanga] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-31T10:42:12.579-07:00  INFO 10260 --- [mahanga] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-31T10:42:13.925-07:00  WARN 10260 --- [mahanga] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-31T10:42:14.061-07:00  WARN 10260 --- [mahanga] [           main] .s.a.UserDetailsServiceAutoConfiguration : 
+2026-04-11 03:31:41 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 1112 (http)
+2026-04-11 03:31:41 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-11 03:31:41 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-04-11 03:31:41 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-11 03:31:41 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4086 ms
+2026-04-11 03:31:41 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-11 03:31:42 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./data/froms user=SA
+2026-04-11 03:31:42 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-11 03:31:42 - o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./data/froms'
+2026-04-11 03:31:42 - c.d.mahanga.Config.SecurityConfig$1 - Filter 'sessionAuthenticationFilter' configured for use
+2026-04-11 03:31:43 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-11 03:31:43 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-04-11 03:31:43 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-11 03:31:43 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-11 03:31:46 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-11 03:31:46 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-11 03:31:48 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-11 03:31:48 - o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
 
-Using generated security password: 4951894c-0bc7-40b7-8798-652044b2168e
+Using generated security password: b41cc939-feb0-4da0-841e-ec2741ada46a
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-03-31T10:42:14.073-07:00  INFO 10260 --- [mahanga] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-03-31T10:42:14.870-07:00  INFO 10260 --- [mahanga] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 51617 (http) with context path '/'
-2026-03-31T10:42:14.876-07:00  INFO 10260 --- [mahanga] [           main] com.daniphord.mahanga.Application        : Started Application in 11.189 seconds (process running for 11.906)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-03-31T10:42:15.121-07:00  INFO 10260 --- [mahanga] [           main] c.d.mahanga.Config.DataBootstrap         : Default super admin account already exists: username=superadmin
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-03-31T10:42:15.125-07:00  INFO 10260 --- [mahanga] [           main] c.d.mahanga.Config.DataBootstrap         : Default super admin account already exists: username=Mahanga
-2026-03-31T10:42:15.126-07:00  INFO 10260 --- [mahanga] [           main] c.d.mahanga.Config.DatabaseStartupCheck  : Database connection OK: url=jdbc:postgresql://localhost:5432/shop, user=postgres
-2026-03-31T10:45:12.183-07:00  INFO 10260 --- [mahanga] [io-51617-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-31T10:45:12.183-07:00  INFO 10260 --- [mahanga] [io-51617-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-03-31T10:45:12.185-07:00  INFO 10260 --- [mahanga] [io-51617-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    update
-        shop 
-    set
-        active=?,
-        created_date=?,
-        location=?,
-        name=?,
-        payment_complete=?,
-        payment_date=?,
-        payment_expiry_date=?,
-        payment_number=? 
-    where
-        id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    insert 
-    into
-        product
-        (cost, name, price, shop_id, stock) 
-    values
-        (?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    update
-        product 
-    set
-        cost=?,
-        name=?,
-        price=?,
-        shop_id=?,
-        stock=? 
-    where
-        id=?
-Hibernate: 
-    insert 
-    into
-        sale
-        (date_time, product_id, profit, quantity, shop_id, total) 
-    values
-        (?, ?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    update
-        product 
-    set
-        cost=?,
-        name=?,
-        price=?,
-        shop_id=?,
-        stock=? 
-    where
-        id=?
-Hibernate: 
-    insert 
-    into
-        sale
-        (date_time, product_id, profit, quantity, shop_id, total) 
-    values
-        (?, ?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    insert 
-    into
-        product
-        (cost, name, price, shop_id, stock) 
-    values
-        (?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    insert 
-    into
-        product
-        (cost, name, price, shop_id, stock) 
-    values
-        (?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    update
-        product 
-    set
-        cost=?,
-        name=?,
-        price=?,
-        shop_id=?,
-        stock=? 
-    where
-        id=?
-Hibernate: 
-    insert 
-    into
-        sale
-        (date_time, product_id, profit, quantity, shop_id, total) 
-    values
-        (?, ?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    update
-        product 
-    set
-        cost=?,
-        name=?,
-        price=?,
-        shop_id=?,
-        stock=? 
-    where
-        id=?
-Hibernate: 
-    insert 
-    into
-        sale
-        (date_time, product_id, profit, quantity, shop_id, total) 
-    values
-        (?, ?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    update
-        shop 
-    set
-        active=?,
-        created_date=?,
-        location=?,
-        name=?,
-        payment_complete=?,
-        payment_date=?,
-        payment_expiry_date=?,
-        payment_number=? 
-    where
-        id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        s1_0.id 
-    from
-        shop s1_0 
-    where
-        s1_0.name=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    insert 
-    into
-        shop
-        (active, created_date, location, name, payment_complete, payment_date, payment_expiry_date, payment_number) 
-    values
-        (?, ?, ?, ?, ?, ?, ?, ?)
-Hibernate: 
-    insert 
-    into
-        users
-        (password, role, shop_id, username) 
-    values
-        (?, ?, ?, ?)
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    insert 
-    into
-        users
-        (password, role, shop_id, username) 
-    values
-        (?, ?, ?, ?)
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        u1_0.shop_id,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number 
-    from
-        shop s1_0 
-    where
-        s1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        u1_0.id,
-        u1_0.password,
-        u1_0.role,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        u1_0.username 
-    from
-        users u1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=u1_0.shop_id 
-    where
-        u1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        p1_0.shop_id,
-        p1_0.stock 
-    from
-        product p1_0 
-    where
-        p1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.shop_id=?
-Hibernate: 
-    select
-        s1_0.id,
-        s1_0.date_time,
-        s1_0.product_id,
-        s1_0.profit,
-        s1_0.quantity,
-        s1_0.shop_id,
-        s1_0.total 
-    from
-        sale s1_0 
-    where
-        s1_0.date_time>=? 
-        and s1_0.date_time<=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
-Hibernate: 
-    select
-        p1_0.id,
-        p1_0.cost,
-        p1_0.name,
-        p1_0.price,
-        s1_0.id,
-        s1_0.active,
-        s1_0.created_date,
-        s1_0.location,
-        s1_0.name,
-        s1_0.payment_complete,
-        s1_0.payment_date,
-        s1_0.payment_expiry_date,
-        s1_0.payment_number,
-        p1_0.stock 
-    from
-        product p1_0 
-    left join
-        shop s1_0 
-            on s1_0.id=p1_0.shop_id 
-    where
-        p1_0.id=?
+2026-04-11 03:31:49 - o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoint(s) beneath base path '/actuator'
+2026-04-11 03:31:50 - o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@56527ff2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@b5a6a82, org.springframework.security.web.context.SecurityContextHolderFilter@22b0fe7e, org.springframework.security.web.header.HeaderWriterFilter@7d0ae3d1, org.springframework.web.filter.CorsFilter@21aa0ec5, org.springframework.security.web.csrf.CsrfFilter@1e6a74fe, org.springframework.security.web.authentication.logout.LogoutFilter@1cf5236d, com.daniphord.mahanga.Config.SecurityConfig$1@1573e8a5, org.springframework.security.web.session.ConcurrentSessionFilter@13b0755e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@71adea8d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@40e28324, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7cf1bf54, org.springframework.security.web.session.SessionManagementFilter@41d0b71d, org.springframework.security.web.access.ExceptionTranslationFilter@5be17e53, org.springframework.security.web.access.intercept.AuthorizationFilter@402ecbc7]
+2026-04-11 03:31:51 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 1112 (http) with context path ''
+2026-04-11 03:31:51 - com.daniphord.mahanga.Application - Started Application in 14.67 seconds (process running for 15.515)
+2026-04-11 03:31:51 - c.d.m.Config.DatabaseStartupCheck - Database connection OK: url=jdbc:h2:file:./data/froms, user=SA
+2026-04-11 03:31:52 - c.d.mahanga.Config.FromsBootstrap - Ensured canonical fire stations for Tanzania Mainland districts
+2026-04-11 03:31:53 - c.d.mahanga.Config.DataBootstrap - Normalized default FROMS command account for presentation access: username=Mahanga, role=SUPER_ADMIN
+2026-04-11 03:31:55 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-11 03:31:55 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-11 03:31:55 - o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-04-11 03:31:55 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:31:55 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:31:55 - o.s.s.w.s.SessionManagementFilter - Request requested invalid session id 593FBC13C2ADDB1AD991BA07656F1274
+2026-04-11 03:31:55 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:03 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:03 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:03 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:04 - o.s.security.web.FilterChainProxy - Securing GET /
+2026-04-11 03:32:04 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:04 - o.s.s.w.s.SessionManagementFilter - Request requested invalid session id 587D160053737CF703B171DF96466C3E
+2026-04-11 03:32:04 - o.s.security.web.FilterChainProxy - Secured GET /
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:32:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:32:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:32:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Securing GET /images/landing-topbar-fire.png
+2026-04-11 03:32:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:05 - o.s.security.web.FilterChainProxy - Secured GET /images/landing-topbar-fire.png
+2026-04-11 03:32:11 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:11 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:11 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:14 - o.s.security.web.FilterChainProxy - Securing GET /login
+2026-04-11 03:32:14 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:14 - o.s.security.web.FilterChainProxy - Secured GET /login
+2026-04-11 03:32:14 - o.s.security.web.FilterChainProxy - Securing POST /login
+2026-04-11 03:32:14 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:14 - o.s.security.web.FilterChainProxy - Secured POST /login
+2026-04-11 03:32:15 - o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2026-04-11 03:32:15 - o.s.s.w.a.s.ChangeSessionIdAuthenticationStrategy - Changed session id from B5DB26EBC92D407D31B3B808B72BD2EA
+2026-04-11 03:32:15 - o.s.s.c.session.SessionRegistryImpl - Registering session 8DCFCF1E521D11ECE9742945A5EFDD30, for principal Mahanga
+2026-04-11 03:32:15 - o.s.s.w.c.CsrfAuthenticationStrategy - Replaced CSRF Token
+2026-04-11 03:32:15 - o.s.s.w.c.HttpSessionSecurityContextRepository - Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]] to HttpSession [org.apache.catalina.session.StandardSessionFacade@74e95a4]
+2026-04-11 03:32:15 - o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2026-04-11 03:32:19 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:19 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:19 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:27 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:27 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:27 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:34 - o.s.security.web.FilterChainProxy - Securing GET /
+2026-04-11 03:32:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:34 - o.s.security.web.FilterChainProxy - Secured GET /
+2026-04-11 03:32:34 - o.s.security.web.FilterChainProxy - Securing GET /login
+2026-04-11 03:32:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:34 - o.s.security.web.FilterChainProxy - Secured GET /login
+2026-04-11 03:32:35 - o.s.security.web.FilterChainProxy - Securing GET /public/emergency/report
+2026-04-11 03:32:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:35 - o.s.security.web.FilterChainProxy - Secured GET /public/emergency/report
+2026-04-11 03:32:35 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:35 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:44 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:44 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:44 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Securing GET /login
+2026-04-11 03:32:45 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Secured GET /login
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:32:45 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:32:45 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:32:45 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Securing GET /images/landing-topbar-fire.png
+2026-04-11 03:32:45 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:45 - o.s.security.web.FilterChainProxy - Secured GET /images/landing-topbar-fire.png
+2026-04-11 03:32:51 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:51 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:51 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:59 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:32:59 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:32:59 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:07 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:07 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:07 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:13 - o.s.security.web.FilterChainProxy - Securing POST /login
+2026-04-11 03:33:13 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:13 - o.s.security.web.FilterChainProxy - Secured POST /login
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2026-04-11 03:33:14 - o.s.s.w.a.s.ChangeSessionIdAuthenticationStrategy - Changed session id from C9A80A05714D144BE3E452E46940198D
+2026-04-11 03:33:14 - o.s.s.c.session.SessionRegistryImpl - Registering session 1A05803A637F94C68CEE556122F22DD9, for principal Mahanga
+2026-04-11 03:33:14 - o.s.s.w.c.CsrfAuthenticationStrategy - Replaced CSRF Token
+2026-04-11 03:33:14 - o.s.s.w.c.HttpSessionSecurityContextRepository - Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]] to HttpSession [org.apache.catalina.session.StandardSessionFacade@3ecbefce]
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:14 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:14 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:33:14 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:14 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:14 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:15 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:15 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:15 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:23 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:23 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:23 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:31 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:31 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:31 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Securing POST /change-language
+2026-04-11 03:33:35 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Secured POST /change-language
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2026-04-11 03:33:35 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:33:35 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:33:35 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:33:35 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:35 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:33:35 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:33:39 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:39 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:39 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:47 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:47 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:47 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:55 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:33:55 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:33:55 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:03 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:03 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:03 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:11 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:11 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:11 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:19 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:19 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:19 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:27 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:27 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:27 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:35 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:35 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:43 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:43 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:43 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:51 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:51 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:51 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:57 - o.s.security.web.FilterChainProxy - Securing GET /api/admin/documents/system-design-document/pdf?lang=en
+2026-04-11 03:34:57 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:34:57 - o.s.security.web.FilterChainProxy - Secured GET /api/admin/documents/system-design-document/pdf?lang=en
+2026-04-11 03:34:59 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:34:59 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:34:59 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:07 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:07 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:07 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:15 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:15 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:15 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:23 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:23 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:23 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:31 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:31 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:31 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:39 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:39 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:39 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:47 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:47 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:47 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:55 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:35:55 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:35:55 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2026-04-11 03:36:01 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:36:01 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:36:01 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:36:01 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:01 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:02 - o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2026-04-11 03:36:02 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:02 - o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:36:03 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:36:03 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:03 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:03 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:03 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:03 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Securing GET /logout
+2026-04-11 03:36:05 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Mahanga, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_SUPER_ADMIN]]]
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Secured GET /logout
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Securing GET /login
+2026-04-11 03:36:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:05 - o.s.s.w.s.SessionManagementFilter - Request requested invalid session id 1A05803A637F94C68CEE556122F22DD9
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Secured GET /login
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:36:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:36:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Securing GET /images/landing-topbar-fire.png
+2026-04-11 03:36:05 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:05 - o.s.security.web.FilterChainProxy - Secured GET /images/landing-topbar-fire.png
+2026-04-11 03:36:11 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:11 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:11 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:19 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:19 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:19 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:27 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:27 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:27 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Securing POST /change-language
+2026-04-11 03:36:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Secured POST /change-language
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Securing GET /login
+2026-04-11 03:36:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Secured GET /login
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:36:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:36:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Securing GET /images/landing-topbar-fire.png
+2026-04-11 03:36:34 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:34 - o.s.security.web.FilterChainProxy - Secured GET /images/landing-topbar-fire.png
+2026-04-11 03:36:35 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:35 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:43 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:43 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:43 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:51 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:51 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:51 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:59 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:36:59 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:36:59 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:07 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:07 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:07 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:15 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:15 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:15 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:23 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:23 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:23 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:31 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:31 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:31 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:39 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:39 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:39 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:46 - o.s.security.web.FilterChainProxy - Securing POST /login
+2026-04-11 03:37:46 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:46 - o.s.security.web.FilterChainProxy - Secured POST /login
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:47 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2026-04-11 03:37:47 - o.s.s.w.a.s.ChangeSessionIdAuthenticationStrategy - Changed session id from 9F6A1D35D773090C2F2FF2DE3411813D
+2026-04-11 03:37:47 - o.s.s.c.session.SessionRegistryImpl - Registering session 78A3A53186622178FB430BD8A1994564, for principal Bibo
+2026-04-11 03:37:47 - o.s.s.w.c.CsrfAuthenticationStrategy - Replaced CSRF Token
+2026-04-11 03:37:47 - o.s.s.w.c.HttpSessionSecurityContextRepository - Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]] to HttpSession [org.apache.catalina.session.StandardSessionFacade@c30b334]
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:37:47 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:37:47 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:37:47 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:37:47 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Securing GET /signal
+2026-04-11 03:37:47 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:37:47 - o.s.security.web.FilterChainProxy - Secured GET /signal
+2026-04-11 03:37:47 - c.d.mahanga.Service.SignalHandler - Signal channel connected: sessionId=56c48bf7-d74d-c34d-2bea-da2f2c35591c
+2026-04-11 03:37:55 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:37:55 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:37:55 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:03 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:03 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:03 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:11 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:11 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:11 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:19 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:19 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:19 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:27 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:27 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:27 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:35 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:35 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:43 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:43 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:43 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:51 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:51 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:51 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:59 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:38:59 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:38:59 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:01 - o.s.security.web.FilterChainProxy - Securing POST /api/equipment/hydrants
+2026-04-11 03:39:01 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:39:01 - o.s.security.web.FilterChainProxy - Secured POST /api/equipment/hydrants
+2026-04-11 03:39:01 - o.s.security.web.FilterChainProxy - Securing GET /operations/dashboard
+2026-04-11 03:39:01 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:39:01 - o.s.security.web.FilterChainProxy - Secured GET /operations/dashboard
+2026-04-11 03:39:07 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:07 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:07 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:15 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:15 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:15 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:23 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:23 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:23 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:31 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:31 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:31 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:39 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:39 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:39 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:47 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:47 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:47 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:55 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:39:55 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:39:55 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:03 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:03 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:03 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:11 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:11 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:11 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:19 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:19 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:19 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:27 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:27 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:27 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:35 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:35 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:43 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:43 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:43 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:52 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:52 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:52 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Securing GET /logout
+2026-04-11 03:40:58 - o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=Bibo, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_STATION_OPERATION_OFFICER]]]
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Secured GET /logout
+2026-04-11 03:40:58 - c.d.mahanga.Service.SignalHandler - Signal channel disconnected: sessionId=56c48bf7-d74d-c34d-2bea-da2f2c35591c, status=CloseStatus[code=1008, reason=This connection was established under an authenticated HTTP session that has ended.]
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Securing GET /login
+2026-04-11 03:40:58 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:58 - o.s.s.w.s.SessionManagementFilter - Request requested invalid session id 78A3A53186622178FB430BD8A1994564
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Secured GET /login
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.css
+2026-04-11 03:40:58 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.css
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Securing GET /ui/app-ui.js
+2026-04-11 03:40:58 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Secured GET /ui/app-ui.js
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Securing GET /images/fire-rescue-force-logo.png
+2026-04-11 03:40:58 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Secured GET /images/fire-rescue-force-logo.png
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Securing GET /images/landing-topbar-fire.png
+2026-04-11 03:40:58 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:58 - o.s.security.web.FilterChainProxy - Secured GET /images/landing-topbar-fire.png
+2026-04-11 03:40:59 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:40:59 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:40:59 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:07 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:07 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:07 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:15 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:15 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:15 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:23 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:23 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:23 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:31 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:31 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:31 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:39 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:39 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:39 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:47 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:47 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:47 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:55 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:41:55 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:41:55 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:03 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:03 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:03 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:11 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:11 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:11 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:19 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:19 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:19 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:27 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:27 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:27 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:35 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:35 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:35 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:43 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:43 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:43 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:51 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:51 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:51 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:59 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:42:59 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:42:59 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:07 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:07 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:43:07 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:15 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:15 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:43:15 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:23 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:23 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:43:23 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:31 - o.s.security.web.FilterChainProxy - Securing GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
+2026-04-11 03:43:31 - o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-04-11 03:43:31 - o.s.security.web.FilterChainProxy - Secured GET /api/public/reports/REP-1775901948677/messages?token=ae921b923276422aa08c92690e471b0b
