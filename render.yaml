@@ -1,18 +1,15 @@
-services:
-  - type: web
-    name: pdf-dashboard-service
-    env: java
-    plan: free
-    buildCommand: "./mvnw clean package -DskipTests"
-    startCommand: "java -jar target/pdf-dashboard-system-1.0.0.jar"
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: pdf-dashboard-db
-          property: connectionString
-      - key: SPRING_PROFILES_ACTIVE
-        value: production
+envVars:
+  - key: SPRING_DATASOURCE_URL
+    fromDatabase:
+      name: pdf-dashboard-db
+      property: connectionString
 
-databases:
-  - name: pdf-dashboard-db
-    plan: free
+  - key: SPRING_DATASOURCE_USERNAME
+    fromDatabase:
+      name: pdf-dashboard-db
+      property: user
+
+  - key: SPRING_DATASOURCE_PASSWORD
+    fromDatabase:
+      name: pdf-dashboard-db
+      property: password
