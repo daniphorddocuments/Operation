@@ -1,24 +1,9 @@
-version: "1"
-services:
-  - type: web
-    name: Operation-11
-    runtime: docker
-    repo: https://github.com/daniphorddocuments/Operation
-    plan: free
-    region: oregon
-    dockerContext: .
-    dockerfilePath: ./Dockerfile
-    autoDeployTrigger: commit
+envVars:
+  - key: SPRING_DATASOURCE_URL
+    value: jdbc:postgresql://dpg-xxxxx.oregon-postgres.render.com:5432/your_db
 
-    envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://dpg-xxxxx.oregon-postgres.render.com:5432/your_db
+  - key: SPRING_DATASOURCE_USERNAME
+    value: your_user
 
-      - key: SPRING_DATASOURCE_USERNAME
-        value: your_user
-
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: your_password
-
-      - key: PORT
-        value: 8080
+  - key: SPRING_DATASOURCE_PASSWORD
+    value: your_password
