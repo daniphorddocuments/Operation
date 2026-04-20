@@ -8,21 +8,21 @@ services:
     startCommand: "java -jar target/pdf-dashboard-system-1.0.0.jar"
 
     envVars:
-      # ✅ DATABASE (IMPORTANT)
-      - key: DATABASE_URL
+      # ✅ HII NDIO FIX HALISI
+      - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: pdf-dashboard-db
           property: connectionString
 
-      # OPTIONAL SETTINGS
-      - key: PORT
-        value: 8080
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: pdf-dashboard-db
+          property: user
 
-      - key: VIDEOS_DIR
-        value: videos
-
-      - key: INVESTIGATIONS_DIR
-        value: investigations
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: pdf-dashboard-db
+          property: password
 
 databases:
   - name: pdf-dashboard-db
