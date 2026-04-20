@@ -2340,6 +2340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let signalReadyPromise = null;
     let peerConnection = null;
     let localStream = null;
+    let responseAudioStream = null;
     let mediaRecorder = null;
     let recordedChunks = [];
     let currentVideoSessionId = null;
@@ -2407,6 +2408,15 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         videoElement.onloadedmetadata = tryPlay;
         tryPlay();
+    }
+
+    function stopStream(stream) {
+        if (!stream) {
+            return;
+        }
+        stream.getTracks().forEach(function (track) {
+            track.stop();
+        });
     }
 
     function participantLabel(payload) {
@@ -2710,6 +2720,23 @@ document.addEventListener('DOMContentLoaded', function () {
         return stream;
     }
 
+    async function getResponseAudioStream() {
+        if (!canPublish || isPublishingLive) {
+            return null;
+        }
+        if (responseAudioStream && responseAudioStream.getTracks().some(function (track) { return track.readyState === 'live'; })) {
+            return responseAudioStream;
+        }
+        responseAudioStream = await navigator.mediaDevices.getUserMedia({
+            audio: mediaConstraints.audio,
+            video: false
+        });
+        responseAudioStream.getAudioTracks().forEach(function (track) {
+            track.enabled = true;
+        });
+        return responseAudioStream;
+    }
+
     function createPeerConnection() {
         if (peerConnection) {
             return peerConnection;
@@ -2720,7 +2747,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         peerConnection.onicecandidate = function (event) {
             if (event.candidate && socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify({ type: 'ice-candidate', payload: event.candidate }));
+                socket.send(JSON.stringify({
+                    type: 'ice-candidate',
+                    payload: event.candidate,
+                    targetSessionId: peerConnection.remoteSessionId || null
+                }));
             }
         };
 
@@ -2833,6 +2864,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (alarmRemoteVideo && !isPublishingLive) {
                     alarmRemoteVideo.srcObject = null;
                 }
+                if (!isPublishingLive) {
+                    stopStream(responseAudioStream);
+                    responseAudioStream = null;
+                    if (peerConnection) {
+                        peerConnection.close();
+                        peerConnection = null;
+                    }
+                }
                 if (pendingTeleSupportIncidentId !== null
                         && message.payload
                         && message.payload.incidentId !== null
@@ -2857,14 +2896,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 const viewerConnection = createPeerConnection();
+                viewerConnection.remoteSessionId = message.senderSessionId || null;
+                const replyAudioStream = await getResponseAudioStream();
+                if (replyAudioStream) {
+                    replyAudioStream.getTracks().forEach(function (track) {
+                        const alreadyAdded = viewerConnection.getSenders().some(function (sender) {
+                            return sender.track && sender.track.id === track.id;
+                        });
+                        if (!alreadyAdded) {
+                            viewerConnection.addTrack(track, replyAudioStream);
+                        }
+                    });
+                }
                 await viewerConnection.setRemoteDescription(new RTCSessionDescription(message.payload));
                 const answer = await viewerConnection.createAnswer();
                 await viewerConnection.setLocalDescription(answer);
-                socket.send(JSON.stringify({ type: 'answer', payload: answer }));
+                socket.send(JSON.stringify({
+                    type: 'answer',
+                    payload: answer,
+                    targetSessionId: message.senderSessionId || null
+                }));
                 return;
             }
 
             if (message.type === 'answer' && isPublishingLive && peerConnection) {
+                peerConnection.remoteSessionId = message.senderSessionId || peerConnection.remoteSessionId || null;
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(message.payload));
                 updateSignalStatus('Viewer connected');
                 return;
@@ -2958,7 +3014,8 @@ document.addEventListener('DOMContentLoaded', function () {
         socket.send(JSON.stringify({
             type: 'offer',
             payload: offer,
-            incidentId: session.incidentId || (selectedIncidentId || null)
+            incidentId: session.incidentId || (selectedIncidentId || null),
+            callId: session.callId || null
         }));
         mediaRecorder = new MediaRecorder(localStream, { mimeType: 'video/webm' });
         recordedChunks = [];
@@ -2997,9 +3054,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (localStream) {
-            localStream.getTracks().forEach(function (track) {
-                track.stop();
-            });
+            stopStream(localStream);
             localStream = null;
             if (localVideo) {
                 localVideo.srcObject = null;
@@ -3013,6 +3068,8 @@ document.addEventListener('DOMContentLoaded', function () {
             peerConnection.close();
             peerConnection = null;
         }
+        stopStream(responseAudioStream);
+        responseAudioStream = null;
 
         if (currentVideoSessionId) {
             const endUrlTemplate = appContext.endVideoUrl || '/api/video/sessions/__id__/end';
@@ -3031,6 +3088,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         recordedChunks = [];
         isPublishingLive = false;
+        currentVideoSessionId = null;
         syncRemoteAudioState();
         updateSignalStatus('Stream ended');
     }

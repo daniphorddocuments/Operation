@@ -63,10 +63,17 @@ class UserManagementIntegrationTest {
     }
 
     @Test
-    void startupCleanupLeavesOnlyAdminSeedAccounts() {
-        assertTrue(userRepository.findByUsername("cgf.command").isEmpty());
-        assertTrue(userRepository.findByUsername("ops.command").isEmpty());
-        assertTrue(userRepository.findByUsername("tele.support").isEmpty());
+    void startupCleanupDoesNotDeleteNamedUsers() {
+        createUserWithRole("cgf.command", OperationRole.ADMIN);
+        createUserWithRole("ops.command", OperationRole.ADMIN);
+        createUserWithRole("tele.support", OperationRole.ADMIN);
+
+        int deletedUsers = userService.deleteLegacyBootstrapUsers(java.util.List.of("cgf.command", "ops.command", "tele.support"));
+
+        assertTrue(deletedUsers == 0);
+        assertTrue(userRepository.findByUsername("cgf.command").isPresent());
+        assertTrue(userRepository.findByUsername("ops.command").isPresent());
+        assertTrue(userRepository.findByUsername("tele.support").isPresent());
     }
 
     @Test

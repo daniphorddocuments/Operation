@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatForm = document.getElementById('publicChatForm');
     const chatMessage = document.getElementById('publicChatMessage');
     const publicLocalVideo = document.getElementById('publicLocalVideo');
+    const publicRemoteAudio = document.getElementById('publicRemoteAudio');
     const publicVideoStatus = document.getElementById('publicVideoStatus');
     const publicStartVideo = document.getElementById('publicStartVideo');
     const publicEndVideo = document.getElementById('publicEndVideo');
@@ -185,6 +186,15 @@ document.addEventListener('DOMContentLoaded', function () {
         tryPlay();
     }
 
+    function stopStream(stream) {
+        if (!stream) {
+            return;
+        }
+        stream.getTracks().forEach(function (track) {
+            track.stop();
+        });
+    }
+
     async function getPreferredMediaStream(audioEnabled) {
         const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
         stream.getVideoTracks().forEach(function (track) {
@@ -209,7 +219,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         peerConnection.onicecandidate = function (event) {
             if (event.candidate && socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify({ type: 'ice-candidate', payload: event.candidate }));
+                socket.send(JSON.stringify({
+                    type: 'ice-candidate',
+                    payload: event.candidate,
+                    targetSessionId: peerConnection.remoteSessionId || null
+                }));
+            }
+        };
+        peerConnection.ontrack = function (event) {
+            if (event.streams && event.streams[0] && publicRemoteAudio) {
+                publicRemoteAudio.srcObject = event.streams[0];
+                publicRemoteAudio.muted = false;
+                const playPromise = publicRemoteAudio.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(function () {});
+                }
+                updateVideoStatus('Two-way voice connected');
             }
         };
         return peerConnection;
@@ -262,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
         socket.addEventListener('message', async function (event) {
             const message = JSON.parse(event.data);
             if (message.type === 'answer' && peerConnection) {
+                peerConnection.remoteSessionId = message.senderSessionId || peerConnection.remoteSessionId || null;
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(message.payload));
                 updateVideoStatus('Control room connected');
             }
@@ -271,6 +297,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 } catch (error) {
                     console.warn(error);
                 }
+            }
+            if (message.type === 'VIDEO_ENDED') {
+                if (publicRemoteAudio) {
+                    publicRemoteAudio.srcObject = null;
+                }
+                if (peerConnection) {
+                    peerConnection.close();
+                    peerConnection = null;
+                }
+                updateVideoStatus('Camera idle');
             }
         });
         return signalReadyPromise;
@@ -316,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function endPublicVideo() {
         if (localStream) {
-            localStream.getTracks().forEach(function (track) { track.stop(); });
+            stopStream(localStream);
             localStream = null;
             if (publicLocalVideo) {
                 publicLocalVideo.srcObject = null;
@@ -336,6 +372,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) {
                 throw new Error(payload.error || 'Unable to end video');
             }
+        }
+        currentVideoSessionId = null;
+        if (publicRemoteAudio) {
+            publicRemoteAudio.srcObject = null;
         }
         updateVideoStatus('Camera idle');
     }

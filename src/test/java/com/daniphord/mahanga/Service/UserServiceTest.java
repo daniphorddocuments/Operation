@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -80,5 +81,13 @@ class UserServiceTest {
 
         User savedUser = org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> userService.createUser(user, null, null, 15L));
         assertEquals(25L, savedUser.getStation().getId());
+    }
+
+    @Test
+    void deleteLegacyBootstrapUsersDoesNotDeletePersistedAccounts() {
+        int deletedUsers = userService.deleteLegacyBootstrapUsers(java.util.List.of("cgf.command", "ops.command", "tele.support"));
+
+        assertEquals(0, deletedUsers);
+        verifyNoMoreInteractions(userRepository);
     }
 }

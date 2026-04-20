@@ -1,6 +1,7 @@
 package com.daniphord.mahanga.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -29,11 +30,31 @@ public class SignalHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        for (WebSocketSession targetSession : sessions.values()) {
-            if (!targetSession.getId().equals(session.getId()) && targetSession.isOpen()) {
-                targetSession.sendMessage(message);
-            }
+        Map<String, Object> payload;
+        try {
+            payload = objectMapper.readValue(message.getPayload(), new TypeReference<>() {});
+        } catch (IOException parseException) {
+            log.debug("Forwarding non-JSON signal message from sessionId={}", session.getId());
+            broadcastToPeers(session.getId(), message);
+            return;
         }
+
+        payload.put("senderSessionId", session.getId());
+        String outgoingMessage = objectMapper.writeValueAsString(payload);
+        TextMessage outbound = new TextMessage(outgoingMessage);
+
+        Object targetSessionId = payload.get("targetSessionId");
+        if (targetSessionId instanceof String targetId && !targetId.isBlank()) {
+            WebSocketSession targetSession = sessions.get(targetId);
+            if (targetSession != null && targetSession.isOpen()) {
+                targetSession.sendMessage(outbound);
+            } else {
+                log.debug("Skipping signal relay because target session is unavailable: targetSessionId={}", targetId);
+            }
+            return;
+        }
+
+        broadcastToPeers(session.getId(), outbound);
     }
 
     @Override
@@ -46,13 +67,17 @@ public class SignalHandler extends TextWebSocketHandler {
         try {
             String body = objectMapper.writeValueAsString(Map.of("type", type, "payload", payload));
             TextMessage message = new TextMessage(body);
-            for (WebSocketSession session : sessions.values()) {
-                if (session.isOpen()) {
-                    session.sendMessage(message);
-                }
-            }
+            broadcastToPeers(null, message);
         } catch (IOException exception) {
             log.warn("Failed to broadcast websocket message type={}", type, exception);
+        }
+    }
+
+    private void broadcastToPeers(String excludedSessionId, TextMessage message) throws IOException {
+        for (WebSocketSession targetSession : sessions.values()) {
+            if (targetSession.isOpen() && (excludedSessionId == null || !targetSession.getId().equals(excludedSessionId))) {
+                targetSession.sendMessage(message);
+            }
         }
     }
 }

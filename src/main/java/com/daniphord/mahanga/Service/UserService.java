@@ -176,27 +176,7 @@ public class UserService {
     }
 
     public int deleteLegacyBootstrapUsers(List<String> usernames) {
-        if (usernames == null || usernames.isEmpty()) {
-            return 0;
-        }
-        List<String> normalizedUsernames = usernames.stream()
-                .filter(java.util.Objects::nonNull)
-                .map(String::trim)
-                .filter(value -> !value.isBlank())
-                .map(String::toLowerCase)
-                .toList();
-        if (normalizedUsernames.isEmpty()) {
-            return 0;
-        }
-        List<User> purgeCandidates = userRepository.findAll().stream()
-                .filter(user -> user.getUsername() != null)
-                .filter(user -> normalizedUsernames.contains(user.getUsername().trim().toLowerCase()))
-                .toList();
-        if (purgeCandidates.isEmpty()) {
-            return 0;
-        }
-        userRepository.deleteAll(purgeCandidates);
-        return purgeCandidates.size();
+        return 0;
     }
 
     private String normalizeRole(String role) {
