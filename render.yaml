@@ -1,9 +1,36 @@
-envVars:
-  - key: SPRING_DATASOURCE_URL
-    value: jdbc:postgresql://dpg-xxxxx.oregon-postgres.render.com:5432/your_db
+version: "1"
 
-  - key: SPRING_DATASOURCE_USERNAME
-    value: your_user
+databases:
+  - name: operation-db
+    plan: free
 
-  - key: SPRING_DATASOURCE_PASSWORD
-    value: your_password
+services:
+  - type: web
+    name: operation-app
+    runtime: docker
+    plan: starter
+    autoDeployTrigger: commit
+    healthCheckPath: /actuator/health
+
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+
+    disk:
+      name: operation-data
+      mountPath: /app/data
+      sizeGB: 1
+
+    envVars:
+      - key: PORT
+        value: 10000
+
+      - key: DATABASE_URL
+        fromDatabase:
+          name: operation-db
+          property: connectionString
+
+      - key: FROMS_STORAGE_VIDEOS_DIR
+        value: /app/data/videos
+
+      - key: FROMS_STORAGE_INVESTIGATIONS_DIR
+        value: /app/data/investigations

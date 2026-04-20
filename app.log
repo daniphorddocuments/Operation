@@ -1,22 +1,4 @@
 [INFO] Scanning for projects...
-Downloading from central: https://repo.maven.apache.org/maven2/io/github/git-commit-id/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/flywaydb/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/jooq/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/maven-metadata.xml
-Progress (1): 234 BProgress (2): 234 B | 255 BProgress (3): 234 B | 255 B | 398 B                                   Downloaded from central: https://repo.maven.apache.org/maven2/org/flywaydb/maven-metadata.xml (234 B at 92 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/maven-metadata.xml
-Downloaded from central: https://repo.maven.apache.org/maven2/io/github/git-commit-id/maven-metadata.xml (255 B at 100 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/liquibase/maven-metadata.xml
-Progress (2): 398 B | 249 B                           Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/maven-metadata.xml (249 B at 96 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/graalvm/buildtools/maven-metadata.xml
-Downloaded from central: https://repo.maven.apache.org/maven2/org/jooq/maven-metadata.xml (398 B at 153 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml
-Progress (1): 375 B                   Downloaded from central: https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/maven-metadata.xml (375 B at 782 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml
-Progress (1): 394 B                   Downloaded from central: https://repo.maven.apache.org/maven2/org/liquibase/maven-metadata.xml (394 B at 715 B/s)
-Progress (1): 242 BProgress (2): 242 B | 4.6 kBProgress (2): 242 B | 10.0 kBProgress (2): 242 B | 14 kB                             Downloaded from central: https://repo.maven.apache.org/maven2/org/graalvm/buildtools/maven-metadata.xml (242 B at 471 B/s)
-Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml (14 kB at 28 kB/s)
-Progress (1): 3.1 kBProgress (1): 7.8 kBProgress (1): 12 kB Progress (1): 17 kBProgress (1): 20 kBProgress (1): 21 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml (21 kB at 22 kB/s)
 [INFO] 
 [INFO] -------------< com.daniphord.mahanga:pdf-dashboard-system >-------------
 [INFO] Building PDF Dashboard System 1.0.0
@@ -27,16 +9,16 @@ Progress (1): 3.1 kBProgress (1): 7.8 kBProgress (1): 12 kB Progress (1): 17 
 [WARNING] The artifact com.itextpdf:itext7-core:pom:8.0.2 has been relocated to com.itextpdf:itext-core:pom:8.0.2
 [INFO] 
 [INFO] --- resources:3.3.1:resources (default-resources) @ pdf-dashboard-system ---
-[INFO] Copying 2 resources from src\main\resources to target\classes
-[INFO] Copying 20 resources from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 21 resources from src\main\resources to target\classes
 [INFO] 
-[INFO] --- compiler:3.10.1:compile (default-compile) @ pdf-dashboard-system ---
+[INFO] --- compiler:3.11.0:compile (default-compile) @ pdf-dashboard-system ---
 [INFO] Nothing to compile - all classes are up to date
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ pdf-dashboard-system ---
 [INFO] Copying 1 resource from src\test\resources to target\test-classes
 [INFO] 
-[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ pdf-dashboard-system ---
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ pdf-dashboard-system ---
 [INFO] Nothing to compile - all classes are up to date
 [INFO] 
 [INFO] <<< spring-boot:3.2.5:run (default-cli) < test-compile @ pdf-dashboard-system <<<
@@ -53,40 +35,94 @@ Progress (1): 3.1 kBProgress (1): 7.8 kBProgress (1): 12 kB Progress (1): 17 
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.5)
 
-2026-04-16T01:03:34.011-07:00  INFO 10656 --- [           main] com.daniphord.mahanga.Application        : Starting Application using Java 21.0.10 with PID 10656 (C:\PROJECT\operation\target\classes started by KINJEKITILE NGWALE in C:\PROJECT\operation)
-2026-04-16T01:03:34.019-07:00  INFO 10656 --- [           main] com.daniphord.mahanga.Application        : No active profile set, falling back to 1 default profile: "default"
-2026-04-16T01:03:37.117-07:00  INFO 10656 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-16T01:03:37.468-07:00  INFO 10656 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 323 ms. Found 27 JPA repository interfaces.
-2026-04-16T01:03:41.284-07:00  INFO 10656 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-04-16T01:03:41.402-07:00  INFO 10656 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-04-16T01:03:41.402-07:00  INFO 10656 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
-2026-04-16T01:03:42.104-07:00  INFO 10656 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-04-16T01:03:42.120-07:00  INFO 10656 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7962 ms
-2026-04-16T01:03:49.799-07:00  INFO 10656 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-04-16T01:03:51.244-07:00  INFO 10656 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./data/froms user=SA
-2026-04-16T01:03:51.246-07:00  INFO 10656 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-04-16T01:03:51.411-07:00  INFO 10656 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-04-16T01:03:51.764-07:00  INFO 10656 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
-2026-04-16T01:03:51.885-07:00  INFO 10656 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-04-16T01:03:52.943-07:00  INFO 10656 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-16T01:03:57.994-07:00  INFO 10656 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-04-16T01:03:58.000-07:00  INFO 10656 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-04-16T01:04:03.019-07:00  WARN 10656 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-04-16T01:04:03.426-07:00  WARN 10656 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+2026-04-20T07:04:30.049-07:00  INFO 5252 --- [froms] [           main] com.daniphord.mahanga.Application        : Starting Application using Java 21.0.10 with PID 5252 (C:\PROJECT\operation\target\classes started by KINJEKITILE NGWALE in C:\PROJECT\operation)
+2026-04-20T07:04:30.054-07:00  INFO 5252 --- [froms] [           main] com.daniphord.mahanga.Application        : No active profile set, falling back to 1 default profile: "default"
+2026-04-20T07:04:33.031-07:00  INFO 5252 --- [froms] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-20T07:04:33.365-07:00  INFO 5252 --- [froms] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 315 ms. Found 27 JPA repository interfaces.
+2026-04-20T07:04:34.903-07:00  INFO 5252 --- [froms] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-20T07:04:34.918-07:00  INFO 5252 --- [froms] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-20T07:04:34.919-07:00  INFO 5252 --- [froms] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-04-20T07:04:35.016-07:00  INFO 5252 --- [froms] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-20T07:04:35.018-07:00  INFO 5252 --- [froms] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4825 ms
+2026-04-20T07:04:35.431-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : Driver class org.h2.Driver found in Thread context class loader jdk.internal.loader.ClassLoaders$AppClassLoader@70dea4e
+2026-04-20T07:04:35.667-07:00  INFO 5252 --- [froms] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-20T07:04:35.754-07:00  INFO 5252 --- [froms] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-04-20T07:04:35.806-07:00  INFO 5252 --- [froms] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-04-20T07:04:36.174-07:00  INFO 5252 --- [froms] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-20T07:04:36.217-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : HikariPool-1 - configuration:
+2026-04-20T07:04:36.223-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : allowPoolSuspension.............false
+2026-04-20T07:04:36.223-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : autoCommit......................true
+2026-04-20T07:04:36.223-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : catalog.........................none
+2026-04-20T07:04:36.224-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : connectionInitSql...............none
+2026-04-20T07:04:36.224-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : connectionTestQuery.............none
+2026-04-20T07:04:36.225-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : connectionTimeout...............30000
+2026-04-20T07:04:36.225-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : dataSource......................none
+2026-04-20T07:04:36.225-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : dataSourceClassName.............none
+2026-04-20T07:04:36.226-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : dataSourceJNDI..................none
+2026-04-20T07:04:36.226-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : dataSourceProperties............{password=<masked>}
+2026-04-20T07:04:36.226-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : driverClassName................."org.h2.Driver"
+2026-04-20T07:04:36.227-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : exceptionOverrideClassName......none
+2026-04-20T07:04:36.227-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : healthCheckProperties...........{}
+2026-04-20T07:04:36.227-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : healthCheckRegistry.............none
+2026-04-20T07:04:36.227-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : idleTimeout.....................600000
+2026-04-20T07:04:36.227-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : initializationFailTimeout.......1
+2026-04-20T07:04:36.227-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : isolateInternalQueries..........false
+2026-04-20T07:04:36.228-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : jdbcUrl.........................jdbc:h2:file:./data/froms;MODE=PostgreSQL;DB_CLOSE_ON_EXIT=FALSE
+2026-04-20T07:04:36.228-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : keepaliveTime...................0
+2026-04-20T07:04:36.228-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : leakDetectionThreshold..........0
+2026-04-20T07:04:36.228-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : maxLifetime.....................1800000
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : maximumPoolSize.................10
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : metricRegistry..................none
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : metricsTrackerFactory...........none
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : minimumIdle.....................10
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : password........................<masked>
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : poolName........................"HikariPool-1"
+2026-04-20T07:04:36.229-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : readOnly........................false
+2026-04-20T07:04:36.230-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : registerMbeans..................false
+2026-04-20T07:04:36.230-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : scheduledExecutor...............none
+2026-04-20T07:04:36.230-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : schema..........................none
+2026-04-20T07:04:36.230-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : threadFactory...................internal
+2026-04-20T07:04:36.231-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : transactionIsolation............default
+2026-04-20T07:04:36.231-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : username........................"sa"
+2026-04-20T07:04:36.231-07:00 DEBUG 5252 --- [froms] [           main] com.zaxxer.hikari.HikariConfig           : validationTimeout...............5000
+2026-04-20T07:04:36.231-07:00  INFO 5252 --- [froms] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-20T07:04:36.678-07:00  INFO 5252 --- [froms] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.680-07:00  INFO 5252 --- [froms] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-20T07:04:36.783-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Pool stats (total=1, active=0, idle=1, waiting=0)
+2026-04-20T07:04:36.784-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn1: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.798-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn2: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.814-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn3: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.830-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn4: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.846-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn5: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.863-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn6: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.877-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn7: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.892-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn8: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.907-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn9: url=jdbc:h2:file:./data/froms user=SA
+2026-04-20T07:04:36.922-07:00 DEBUG 5252 --- [froms] [onnection adder] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)
+2026-04-20T07:04:38.845-07:00  INFO 5252 --- [froms] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-20T07:04:38.982-07:00  INFO 5252 --- [froms] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-20T07:04:40.855-07:00  WARN 5252 --- [froms] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 8757181b-c12a-4d8d-9b69-5df786a1f564
+Using generated security password: 124894d7-2a37-4c36-90d8-f995a2e02e6e
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-04-16T01:04:06.018-07:00  INFO 10656 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
-2026-04-16T01:04:06.344-07:00  INFO 10656 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6b4b6cd6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@11ae5497, org.springframework.security.web.context.SecurityContextHolderFilter@23038621, org.springframework.security.web.header.HeaderWriterFilter@22796ead, org.springframework.web.filter.CorsFilter@ed5cf29, org.springframework.security.web.csrf.CsrfFilter@496a514f, org.springframework.security.web.authentication.logout.LogoutFilter@23195ebe, com.daniphord.mahanga.Config.SecurityConfig$1@3ace6346, org.springframework.security.web.session.ConcurrentSessionFilter@596c6c3e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@15e8e884, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3fe8c952, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4dc24d88, org.springframework.security.web.session.SessionManagementFilter@1b6dab22, org.springframework.security.web.access.ExceptionTranslationFilter@65bf5c38, org.springframework.security.web.access.intercept.AuthorizationFilter@60c95d8]
-2026-04-16T01:04:08.414-07:00  INFO 10656 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
-2026-04-16T01:04:08.476-07:00  INFO 10656 --- [           main] com.daniphord.mahanga.Application        : Started Application in 35.826 seconds (process running for 36.931)
-2026-04-16T01:04:08.577-07:00  INFO 10656 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-04-16T01:04:08.578-07:00  INFO 10656 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-04-16T01:04:08.584-07:00  INFO 10656 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
-2026-04-16T01:04:09.782-07:00 ERROR 10656 --- [nio-8080-exec-3] o.s.w.s.s.s.DefaultHandshakeHandler      : "Handshake failed due to invalid Upgrade header: null"
-2026-04-16T01:04:10.655-07:00  INFO 10656 --- [           main] c.d.mahanga.Config.DatabaseStartupCheck  : Database connection OK: url=jdbc:h2:file:./data/froms, user=SA
-2026-04-16T01:04:13.233-07:00  INFO 10656 --- [           main] c.d.mahanga.Config.FromsBootstrap        : Ensured canonical fire stations for Tanzania Mainland districts
-2026-04-16T01:04:14.232-07:00  INFO 10656 --- [           main] c.d.mahanga.Config.DataBootstrap         : Default FROMS command account already exists: username=Mahanga, role=SUPER_ADMIN
-2026-04-16T01:04:39.874-07:00  INFO 10656 --- [           main] c.d.m.C.GeographyHierarchyBootstrap      : Ensured ward, village/street, landmark hierarchy and fallback coordinates for all districts
+2026-04-20T07:04:41.439-07:00  INFO 5252 --- [froms] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2026-04-20T07:04:41.574-07:00  INFO 5252 --- [froms] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@158566f8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@e7afdd0, org.springframework.security.web.context.SecurityContextHolderFilter@24cf1abf, org.springframework.security.web.header.HeaderWriterFilter@507c795e, org.springframework.web.filter.CorsFilter@3125a827, org.springframework.security.web.csrf.CsrfFilter@7fa9e773, org.springframework.security.web.authentication.logout.LogoutFilter@6d0e242f, com.daniphord.mahanga.Config.SecurityConfig$1@7282af25, org.springframework.security.web.session.ConcurrentSessionFilter@4cee91b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@42e1bfe1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4bdc0fb0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@680c372f, org.springframework.security.web.session.SessionManagementFilter@40ee664c, org.springframework.security.web.access.ExceptionTranslationFilter@36f8c95a, org.springframework.security.web.access.intercept.AuthorizationFilter@6127ae9e]
+2026-04-20T07:04:42.283-07:00  INFO 5252 --- [froms] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-04-20T07:04:42.308-07:00  INFO 5252 --- [froms] [           main] com.daniphord.mahanga.Application        : Started Application in 13.477 seconds (process running for 14.541)
+2026-04-20T07:04:42.410-07:00  INFO 5252 --- [froms] [           main] c.d.mahanga.Config.DatabaseStartupCheck  : Database connection OK: url=jdbc:h2:file:./data/froms, user=SA
+2026-04-20T07:04:43.559-07:00  INFO 5252 --- [froms] [           main] c.d.mahanga.Config.FromsBootstrap        : Ensured canonical fire stations for Tanzania Mainland districts
+2026-04-20T07:04:44.009-07:00  INFO 5252 --- [froms] [           main] c.d.mahanga.Config.DataBootstrap         : Default FROMS command account already exists: username=Mahanga, role=SUPER_ADMIN
+2026-04-20T07:04:53.640-07:00  INFO 5252 --- [froms] [           main] c.d.m.C.GeographyHierarchyBootstrap      : Ensured ward, village/street, landmark hierarchy and fallback coordinates for all districts
+2026-04-20T07:04:53.640-07:00  INFO 5252 --- [froms] [           main] c.d.m.Config.StorageDirectoryConfig      : Storage directory ready: C:\PROJECT\operation\videos
+2026-04-20T07:04:53.640-07:00  INFO 5252 --- [froms] [           main] c.d.m.Config.StorageDirectoryConfig      : Storage directory ready: C:\PROJECT\operation\investigations
+2026-04-20T07:05:05.529-07:00  INFO 5252 --- [froms] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-20T07:05:05.529-07:00  INFO 5252 --- [froms] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-20T07:05:05.544-07:00  INFO 5252 --- [froms] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 15 ms
+2026-04-20T07:05:06.794-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2026-04-20T07:05:06.794-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2026-04-20T07:05:36.801-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2026-04-20T07:05:36.801-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2026-04-20T07:06:06.837-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2026-04-20T07:06:06.841-07:00 DEBUG 5252 --- [froms] [l-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).

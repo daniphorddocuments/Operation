@@ -1,4 +1,52 @@
-# Mahanga - Enterprise Retail Management System
+# Operation
+
+## Run locally
+
+This project can now run locally without PostgreSQL.
+
+Windows:
+
+```bat
+scripts\run-app.cmd
+```
+
+That script resolves JDK 21 automatically and falls back to a local H2 file database at `./data/froms`.
+
+Optional AI sidecar:
+
+```bat
+scripts\run-ai-service.cmd
+```
+
+Start both services:
+
+```bat
+scripts\start-all.cmd
+```
+
+Health check:
+
+```text
+http://127.0.0.1:8080/actuator/health
+```
+
+## Deploy on Render
+
+The repository now includes a `render.yaml` blueprint that provisions:
+
+- one Docker web service
+- one Render Postgres database
+- one persistent disk mounted at `/app/data`
+
+Render provides `DATABASE_URL`; the application converts it to a JDBC datasource automatically at startup. Uploaded/runtime files are written under `/app/data/videos` and `/app/data/investigations`.
+
+Health check path:
+
+```text
+/actuator/health
+```
+
+The Docker image also includes Python 3 and the local AI sidecar source so AI-backed features can run inside the Render container.
 
 ## 🏆 System Standards & Certifications
 
