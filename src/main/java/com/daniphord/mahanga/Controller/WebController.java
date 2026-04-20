@@ -64,7 +64,9 @@ public class WebController {
         if (session.getAttribute("userId") != null) {
             return "redirect:" + dashboardForRole((String) session.getAttribute("role"));
         }
-        return "redirect:/login";
+        model.addAttribute("publicUserManual", userManualService.publicLandingManual());
+        model.addAttribute("landingFaqs", userManualService.publicLandingFaqs());
+        return "landing";
     }
 
     @GetMapping("/login")

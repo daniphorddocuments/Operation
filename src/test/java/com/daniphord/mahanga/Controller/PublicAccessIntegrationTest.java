@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -27,10 +26,11 @@ class PublicAccessIntegrationTest {
     }
 
     @Test
-    void rootRedirectsAnonymousUserToLogin() throws Exception {
+    void rootRendersPublicLandingPage() throws Exception {
         mockMvc.perform(get("/"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Fire and Rescue Force Operation Management System")))
+                .andExpect(content().string(containsString("Public Emergency Access")));
     }
 
     @Test

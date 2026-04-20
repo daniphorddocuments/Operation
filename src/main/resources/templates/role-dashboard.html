@@ -1060,6 +1060,7 @@
             const userUnassignedToggle = document.getElementById('userUnassignedToggle');
             const userEmptyState = document.getElementById('userEmptyState');
             const userRows = Array.from(document.querySelectorAll('[data-user-row]'));
+            const allStations = Array.isArray(ctx.stations) ? ctx.stations.slice() : [];
 
             if (!checkInput || !emailInput || !roleSelect || !regionSelect || !districtSelect || !stationSelect || !phoneInput || !fullNameInput || !designationInput || !passwordInput || !form || !userIdInput || !userFormTitle || !userFormModalElement) {
                 return;
@@ -1132,6 +1133,20 @@
                 stationSelect.innerHTML = '<option value=\"\">Select station</option>';
                 stationSelect.disabled = true;
                 if (!districtId) return;
+                const localMatches = allStations
+                    .filter(station => station && station.id && station.active !== false)
+                    .filter(station => String(station.districtId || '') === String(districtId));
+                if (localMatches.length > 0) {
+                    localMatches.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s.id;
+                        opt.textContent = s.name;
+                        if (selected && String(selected) === String(s.id)) opt.selected = true;
+                        stationSelect.appendChild(opt);
+                    });
+                    stationSelect.disabled = false;
+                    return;
+                }
                 const res = await fetch(`${ctx.geographyApiUrl}/districts/${districtId}/stations`, {
                     credentials: 'same-origin'
                 });

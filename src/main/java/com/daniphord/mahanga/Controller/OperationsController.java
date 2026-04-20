@@ -211,7 +211,15 @@ public class OperationsController {
         model.addAttribute("lockedAccounts", userService.getLockedUsers());
         model.addAttribute("allUsers", roleAccessService.canManageUsers(currentUser) ? userService.getAllUsers() : java.util.List.of());
         model.addAttribute("stationOptions", stationRepository.findAll().stream()
-                .map(station -> Map.of("id", station.getId(), "name", station.getName()))
+                .map(station -> Map.of(
+                        "id", station.getId(),
+                        "name", station.getName(),
+                        "districtId", station.getDistrict() != null ? station.getDistrict().getId() : null,
+                        "regionId", station.getDistrict() != null && station.getDistrict().getRegion() != null
+                                ? station.getDistrict().getRegion().getId()
+                                : null,
+                        "active", Boolean.TRUE.equals(station.getActive())
+                ))
                 .toList());
         model.addAttribute("canManageGeography", canManageSystemSettings);
         model.addAttribute("regionOptions", geographyService.regionViews());
