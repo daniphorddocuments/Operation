@@ -1,29 +1,24 @@
+version: "1"
 services:
   - type: web
-    name: pdf-dashboard-service
-    env: java
+    name: Operation-11
+    runtime: docker
+    repo: https://github.com/daniphorddocuments/Operation
     plan: free
-
-    buildCommand: "./mvnw clean package -DskipTests"
-    startCommand: "java -jar target/pdf-dashboard-system-1.0.0.jar"
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    autoDeployTrigger: commit
 
     envVars:
-      # ✅ HII NDIO FIX HALISI
       - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: pdf-dashboard-db
-          property: connectionString
+        value: jdbc:postgresql://dpg-xxxxx.oregon-postgres.render.com:5432/your_db
 
       - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: pdf-dashboard-db
-          property: user
+        value: your_user
 
       - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: pdf-dashboard-db
-          property: password
+        value: your_password
 
-databases:
-  - name: pdf-dashboard-db
-    plan: free
+      - key: PORT
+        value: 8080
