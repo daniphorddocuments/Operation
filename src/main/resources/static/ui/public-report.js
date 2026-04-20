@@ -1,4 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const originalFetch = window.fetch.bind(window);
+
+    function readCookie(name) {
+        const prefix = name + '=';
+        return document.cookie.split(';').map(function (item) {
+            return item.trim();
+        }).filter(function (item) {
+            return item.startsWith(prefix);
+        }).map(function (item) {
+            return decodeURIComponent(item.substring(prefix.length));
+        })[0] || '';
+    }
+
+    window.fetch = function (resource, options) {
+        const requestOptions = options ? Object.assign({}, options) : {};
+        const method = String(requestOptions.method || 'GET').toUpperCase();
+        const headers = new Headers(requestOptions.headers || {});
+        if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+            const csrfToken = readCookie('XSRF-TOKEN');
+            if (csrfToken && !headers.has('X-XSRF-TOKEN')) {
+                headers.set('X-XSRF-TOKEN', csrfToken);
+            }
+        }
+        requestOptions.headers = headers;
+        return originalFetch(resource, requestOptions);
+    };
+
     const context = window.FROMS_PUBLIC_REPORT || {};
     if (!context.reportNumber || !context.token) {
         return;

@@ -3,6 +3,7 @@ package com.daniphord.mahanga.Config;
 import com.daniphord.mahanga.Util.OperationRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,34 +45,47 @@ import java.util.stream.Collectors;
 @Configuration
 public class SecurityConfig {
 
+    private final List<String> allowedOrigins;
+    private final boolean csrfEnabled;
+
+    public SecurityConfig(
+            @Value("${froms.security.allowed-origins:http://localhost,http://localhost:8080,http://localhost:3000}") String allowedOrigins,
+            @Value("${froms.security.csrf-enabled:true}") boolean csrfEnabled
+    ) {
+        this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(value -> !value.isBlank())
+                .toList();
+        this.csrfEnabled = csrfEnabled;
+    }
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // Enable CSRF protection with secure cookie storage
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/api/**", "/change-language")
-                )
+                        .ignoringRequestMatchers("/change-language")
+                );
+
+        if (!csrfEnabled) {
+            http.csrf(csrf -> csrf.disable());
+        }
+
+        http
                 // Security headers for enhanced protection
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; connect-src 'self' ws: wss:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob: data:; frame-src 'self' https://www.openstreetmap.org https://www.google.com https://maps.google.com;"))
                         .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+                        .contentTypeOptions(Customizer.withDefaults())
                         .frameOptions(frame -> frame.deny())
                         .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
                 // Authorize requests based on role
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/logout", "/change-language", "/error", "/ui/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/public/**").permitAll()
+                        .requestMatchers("/login", "/logout", "/error", "/change-language", "/ui/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/public/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/info").permitAll()
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/geography/regions",
-                                "/api/geography/regions/*/districts",
-                                "/api/geography/districts/*/stations",
-                                "/api/geography/districts/*/wards",
-                                "/api/geography/wards/*/villages-streets",
-                                "/api/geography/villages-streets/*/road-landmarks"
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/geography/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/signal").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/public/reports/*", "/api/public/reports/*/messages").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/public/reports/*/messages", "/api/video/public/reports/*/sessions/start", "/api/video/public/reports/*/sessions/*/end").permitAll()
@@ -158,12 +172,14 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").hasRole("SUPER_ADMIN")
                         .requestMatchers("/api/admin/documents/**").hasAnyRole("SUPER_ADMIN", OperationRole.ADMIN)
                         .requestMatchers("/api/admin/branding/**").hasAnyRole("SUPER_ADMIN", OperationRole.ADMIN)
+                        .requestMatchers("/api/admin/audit/**").hasAnyRole("SUPER_ADMIN", OperationRole.ADMIN)
                         .requestMatchers("/api/reports/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 // Session management
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .invalidSessionUrl("/login?session=expired")
                         .sessionFixation(Customizer.withDefaults())
                         .sessionConcurrency(concurrency -> concurrency
                                 .maximumSessions(1)
@@ -326,7 +342,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost", "http://localhost:8080", "http://localhost:3000"));
+        configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

@@ -373,6 +373,24 @@ public class OperationsController {
         return ResponseEntity.ok(operationsService.dispatchResponse(incidentId, response, currentUser));
     }
 
+    @PostMapping("/api/incidents/{incidentId}/complete")
+    @ResponseBody
+    public ResponseEntity<?> completeIncident(
+            @PathVariable Long incidentId,
+            @RequestBody(required = false) Map<String, Object> payload,
+            HttpSession session
+    ) {
+        User currentUser = currentUser(session);
+        if (!roleAccessService.canCompleteIncidentReport(currentUser)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
+        try {
+            return ResponseEntity.ok(toIncidentRecord(operationsService.completeIncident(incidentId, payload, currentUser), Map.of()));
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
+        }
+    }
+
     @PostMapping("/api/incidents/{incidentId}/tele-support-request")
     @ResponseBody
     public ResponseEntity<?> requestTeleSupport(

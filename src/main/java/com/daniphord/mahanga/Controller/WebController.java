@@ -11,6 +11,7 @@ import com.daniphord.mahanga.Util.InputValidator;
 import com.daniphord.mahanga.Util.RequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,6 @@ import java.util.Optional;
 @Controller
 public class WebController {
 
-    private static final int SESSION_TIMEOUT_SECONDS = 350;
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditService auditService;
@@ -38,6 +37,7 @@ public class WebController {
     private final UserManualService userManualService;
     private final UserService userService;
     private final LoginSecurityService loginSecurityService;
+    private final int sessionTimeoutSeconds;
 
     public WebController(
             UserRepository userRepository,
@@ -46,7 +46,8 @@ public class WebController {
             DashboardDefinitionService dashboardDefinitionService,
             UserManualService userManualService,
             UserService userService,
-            LoginSecurityService loginSecurityService
+            LoginSecurityService loginSecurityService,
+            @Value("${froms.security.session-timeout-seconds:900}") int sessionTimeoutSeconds
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -55,6 +56,7 @@ public class WebController {
         this.userManualService = userManualService;
         this.userService = userService;
         this.loginSecurityService = loginSecurityService;
+        this.sessionTimeoutSeconds = sessionTimeoutSeconds;
     }
 
     @GetMapping("/")
@@ -62,9 +64,7 @@ public class WebController {
         if (session.getAttribute("userId") != null) {
             return "redirect:" + dashboardForRole((String) session.getAttribute("role"));
         }
-        model.addAttribute("publicUserManual", userManualService.publicLandingManual());
-        model.addAttribute("landingFaqs", userManualService.publicLandingFaqs());
-        return "landing";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
@@ -129,7 +129,7 @@ public class WebController {
 
         user = loginSecurityService.registerSuccessfulLogin(user, ipAddress);
 
-        session.setMaxInactiveInterval(SESSION_TIMEOUT_SECONDS);
+        session.setMaxInactiveInterval(sessionTimeoutSeconds);
         session.setAttribute("userId", user.getId());
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", normalizeRole(user.getRole()));
@@ -172,7 +172,7 @@ public class WebController {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body(Map.of("error", "No active session"));
         }
-        session.setMaxInactiveInterval(SESSION_TIMEOUT_SECONDS);
+        session.setMaxInactiveInterval(sessionTimeoutSeconds);
         session.setAttribute("lastKeepAliveAt", LocalDateTime.now().toString());
         return ResponseEntity.ok(Map.of("status", "ok"));
     }

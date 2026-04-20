@@ -124,6 +124,39 @@ public class ControlRoomController {
         }
     }
 
+    @PostMapping("/public/api/incidents")
+    @ResponseBody
+    public ResponseEntity<?> submitPublicEmergencyReportApi(
+            @Valid @RequestBody EmergencyCall call,
+            @RequestParam Long regionId,
+            @RequestParam Long districtId,
+            @RequestParam Long stationId,
+            @RequestParam String captchaAnswer,
+            HttpServletRequest request,
+            HttpSession session
+    ) {
+        String ipAddress = RequestUtil.getClientIpAddress(request);
+        if (PUBLIC_RATE_LIMITER.isRateLimited(ipAddress)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body(Map.of("error", "Too many emergency reports from this source. Please wait and try again."));
+        }
+        if (!captchaService.verify(session, captchaAnswer)) {
+            PUBLIC_RATE_LIMITER.recordAttempt(ipAddress);
+            return ResponseEntity.badRequest().body(Map.of("error", "CAPTCHA verification failed. Please try again."));
+        }
+        try {
+            EmergencyCall saved = controlRoomService.logPublicReport(call, regionId, districtId, stationId);
+            return ResponseEntity.ok(Map.of(
+                    "id", saved.getId(),
+                    "reportNumber", saved.getReportNumber(),
+                    "token", saved.getPublicAccessToken(),
+                    "status", saved.getStatus()
+            ));
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
+        }
+    }
+
     @GetMapping("/public/emergency/report/{reportNumber}")
     public String publicEmergencyCasePage(@PathVariable String reportNumber, @RequestParam String token, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -174,6 +207,12 @@ public class ControlRoomController {
         }
     }
 
+    @GetMapping("/public/api/reports/{reportNumber}")
+    @ResponseBody
+    public ResponseEntity<?> publicReportAlias(@PathVariable String reportNumber, @RequestParam String token) {
+        return publicReport(reportNumber, token);
+    }
+
     @GetMapping("/api/public/reports/{reportNumber}/messages")
     @ResponseBody
     public ResponseEntity<?> publicMessages(@PathVariable String reportNumber, @RequestParam String token) {
@@ -190,6 +229,12 @@ public class ControlRoomController {
         }
     }
 
+    @GetMapping("/public/api/reports/{reportNumber}/messages")
+    @ResponseBody
+    public ResponseEntity<?> publicMessagesAlias(@PathVariable String reportNumber, @RequestParam String token) {
+        return publicMessages(reportNumber, token);
+    }
+
     @PostMapping("/api/public/reports/{reportNumber}/messages")
     @ResponseBody
     public ResponseEntity<?> sendPublicMessage(@PathVariable String reportNumber, @RequestParam String token, @RequestBody Map<String, String> payload) {
@@ -204,6 +249,12 @@ public class ControlRoomController {
         } catch (IllegalArgumentException exception) {
             return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
         }
+    }
+
+    @PostMapping("/public/api/reports/{reportNumber}/messages")
+    @ResponseBody
+    public ResponseEntity<?> sendPublicMessageAlias(@PathVariable String reportNumber, @RequestParam String token, @RequestBody Map<String, String> payload) {
+        return sendPublicMessage(reportNumber, token, payload);
     }
 
     @PostMapping("/api/control-room/calls/{callId}/messages")

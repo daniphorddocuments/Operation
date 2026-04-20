@@ -12,6 +12,7 @@ import com.daniphord.mahanga.Repositories.RecommendationRepository;
 import com.daniphord.mahanga.Repositories.UserRepository;
 import com.daniphord.mahanga.Util.OperationRole;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class OperationsService {
 
     private final IncidentRepository incidentRepository;
@@ -285,6 +287,33 @@ public class OperationsService {
         incidentRepository.save(incident);
         response.setIncident(incident);
         return emergencyResponseRepository.save(response);
+    }
+
+    public Incident completeIncident(Long incidentId, Map<String, Object> payload, User currentUser) {
+        roleAccessService.enforceAction(currentUser, RoleResponsibilityService.ACTION_COMPLETE_INCIDENT_REPORT);
+        Incident incident = incidentRepository.findById(incidentId)
+                .orElseThrow(() -> new IllegalArgumentException("Incident not found"));
+        if (roleAccessService.visibleIncidents(currentUser, List.of(incident)).isEmpty()) {
+            throw new IllegalArgumentException("You cannot complete an incident outside your scope");
+        }
+
+        incident.setStatus("RESOLVED");
+        incident.setResolvedAt(LocalDateTime.now());
+        if (payload != null) {
+            if (payload.get("outcome") != null) {
+                incident.setOutcome(clean(payload.get("outcome").toString()));
+            }
+            if (payload.get("actionTaken") != null) {
+                incident.setActionTaken(clean(payload.get("actionTaken").toString()));
+            }
+            if (payload.get("operationDurationMinutes") instanceof Number number) {
+                incident.setOperationDurationMinutes(number.intValue());
+            }
+        }
+
+        Incident saved = incidentRepository.save(incident);
+        signalHandler.broadcast("INCIDENT_COMPLETED", incidentEventPayload(saved));
+        return saved;
     }
 
     public Map<String, Object> dashboardMetrics() {

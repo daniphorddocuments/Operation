@@ -6,7 +6,7 @@
 
 <div class="ui-shell">
     <nav class="ui-breadcrumbs mb-3" aria-label="Breadcrumb">
-        <a th:href="@{/}">Home</a>
+        <a th:href="@{/login}">Home</a>
         <span>/</span>
         <span aria-current="page">Public Emergency Access</span>
     </nav>
@@ -165,7 +165,7 @@
                 <div th:if="${error}" class="alert alert-danger ui-alert" role="alert" data-alert-kind="error" th:text="${error}"></div>
 
                 <form th:action="@{/public/emergency/report}" method="post" class="ui-stack mt-3" id="publicEmergencyForm">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" name="_csrf" th:value="${_csrf != null ? _csrf.token : ''}">
                     <div class="ui-form-section">
                         <div class="ui-form-section-head">
                             <div>

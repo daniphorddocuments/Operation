@@ -372,7 +372,11 @@ public class OperationalApprovalService {
     }
 
     private String nextRole(String currentRole) {
-        int index = APPROVAL_CHAIN.indexOf(normalizeRole(currentRole));
+        String normalizedRole = normalizeRole(currentRole);
+        if (OperationRole.REGIONAL_OPERATION_OFFICER.equals(normalizedRole)) {
+            return null;
+        }
+        int index = APPROVAL_CHAIN.indexOf(normalizedRole);
         if (index < 0 || index + 1 >= APPROVAL_CHAIN.size()) {
             return null;
         }
