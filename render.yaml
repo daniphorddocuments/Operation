@@ -5,10 +5,11 @@ services:
     plan: free
 
     buildCommand: "./mvnw clean package -DskipTests"
-    startCommand: "java -jar target/pdf-dashboard-system-1.0.0.jar"
+
+    # ✅ FORCE PORT (VERY IMPORTANT)
+    startCommand: "java -Dserver.port=$PORT -jar target/pdf-dashboard-system-1.0.0.jar"
 
     envVars:
-      # DATABASE (IMPORTANT)
       - key: DATABASE_URL
         fromDatabase:
           name: pdf-dashboard-db
@@ -24,11 +25,8 @@ services:
           name: pdf-dashboard-db
           property: password
 
-      # SERVER PORT (Render injects this automatically)
-      - key: PORT
-        value: 8080
+      # ❌ USIWEKE PORT HAPA
 
-      # OPTIONAL SETTINGS
       - key: DB_POOL_MAX_SIZE
         value: 15
 
