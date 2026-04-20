@@ -83,7 +83,7 @@ public class SecurityConfig {
                 )
                 // Authorize requests based on role
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/logout", "/error", "/change-language", "/ui/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/public/**").permitAll()
+                        .requestMatchers("/", "/login", "/logout", "/error", "/change-language", "/ui/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/public/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/info").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/geography/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/signal").permitAll()
