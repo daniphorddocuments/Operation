@@ -17,11 +17,20 @@ class SystemDocumentationServiceTest {
         assertTrue(documents.stream().anyMatch(item -> "system-architecture".equals(item.get("key"))));
         assertTrue(documents.stream().anyMatch(item -> "system-design-document".equals(item.get("key"))));
         assertTrue(documents.stream().anyMatch(item -> "system-requirements-specification".equals(item.get("key"))));
+        assertTrue(documents.stream().anyMatch(item -> "disaster-recovery-plan".equals(item.get("key"))));
+        assertTrue(documents.stream().anyMatch(item -> "disaster-recovery-runbook".equals(item.get("key"))));
     }
 
     @Test
     void systemDesignDocumentPdfCanBeGenerated() {
         byte[] pdf = systemDocumentationService.generatePdf("system-design-document", "en");
+
+        assertFalse(pdf.length == 0);
+    }
+
+    @Test
+    void disasterRecoveryPlanPdfCanBeGenerated() {
+        byte[] pdf = systemDocumentationService.generatePdf("disaster-recovery-plan", "en");
 
         assertFalse(pdf.length == 0);
     }

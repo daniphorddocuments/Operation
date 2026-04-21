@@ -30,6 +30,16 @@ public class SystemDocumentationService {
                         "key", "system-requirements-specification",
                         "title", "FROMS System Requirements Specification",
                         "description", "Formal specification of users, modules, workflows, security controls, performance expectations, and presentation-critical requirements."
+                ),
+                Map.of(
+                        "key", "disaster-recovery-plan",
+                        "title", "FROMS Disaster Recovery Plan",
+                        "description", "Administrative recovery document covering incident classification, backup policy, RTO/RPO targets, system restoration, and command continuity."
+                ),
+                Map.of(
+                        "key", "disaster-recovery-runbook",
+                        "title", "FROMS Disaster Recovery Runbook",
+                        "description", "Step-by-step operational runbook for outage response, database restore validation, service failover, communication, and post-recovery verification."
                 )
         );
     }
@@ -39,6 +49,8 @@ public class SystemDocumentationService {
             case "system-architecture" -> pdfBrandingService.generatePdf(title(key, lang), architectureBody(lang), lang);
             case "system-design-document" -> pdfBrandingService.generatePdf(title(key, lang), designBody(lang), lang);
             case "system-requirements-specification" -> pdfBrandingService.generatePdf(title(key, lang), srsBody(lang), lang);
+            case "disaster-recovery-plan" -> pdfBrandingService.generatePdf(title(key, lang), disasterRecoveryPlanBody(lang), lang);
+            case "disaster-recovery-runbook" -> pdfBrandingService.generatePdf(title(key, lang), disasterRecoveryRunbookBody(lang), lang);
             default -> throw new IllegalArgumentException("Unknown document key");
         };
     }
@@ -376,12 +388,174 @@ public class SystemDocumentationService {
                 """;
     }
 
+    private String disasterRecoveryPlanBody(String lang) {
+        if ("sw".equalsIgnoreCase(lang)) {
+            return """
+                <div class="section-card">
+                    <h2>1. Madhumuni</h2>
+                    <p>Mpango huu wa uokoaji wa majanga unaeleza namna FROMS itakavyorejeshwa baada ya hitilafu kubwa ya mfumo, kupotea kwa hifadhidata, kuharibika kwa seva, au tukio la usalama. Lengo ni kulinda mwendelezo wa operesheni za zimamoto na uokoaji pamoja na ushahidi wa kiutawala.</p>
+                </div>
+                <div class="section-card">
+                    <h2>2. Huduma Muhimu</h2>
+                    <ul>
+                        <li>Uthibitishaji wa watumiaji, dashibodi za wajibu, na control room.</li>
+                        <li>Usajili wa matukio, taarifa za dharura za umma, chat, na live video sessions.</li>
+                        <li>Hifadhidata ya users, incidents, emergency calls, investigations, audit logs, na attachments.</li>
+                        <li>Uzalishaji wa PDF, nyaraka za admin, na ripoti za verification.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>3. Malengo ya Urejeshaji</h2>
+                    <ul>
+                        <li>Recovery Time Objective (RTO): ndani ya saa 4 kwa huduma muhimu.</li>
+                        <li>Recovery Point Objective (RPO): si zaidi ya dakika 15 za data kwa hifadhidata kuu.</li>
+                        <li>Audit evidence, user records, na incident records lazima zihifadhiwe wakati wa recovery.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>4. Mkakati wa Nakala Rudufu</h2>
+                    <p>Nakala za hifadhidata zichukuliwe kwa ratiba ya kawaida, zihifadhiwe nje ya seva kuu, na zithibitishwe kwa majaribio ya kurejesha. Faili za viambatanisho, video, na PDF zihifadhiwe kwenye hifadhi inayoweza kurejeshwa kwa point-in-time au versioned backup.</p>
+                </div>
+                <div class="section-card">
+                    <h2>5. Mlolongo wa Majibu</h2>
+                    <ol class="ui-manual-list">
+                        <li>Tambua aina ya tukio na kiwango cha athari.</li>
+                        <li>Linda ushahidi wa audit na usimamamishe mabadiliko yasiyo ya lazima.</li>
+                        <li>Hamisha huduma kwenye mazingira ya uokoaji au anza urejeshaji wa nodi kuu.</li>
+                        <li>Rejesha hifadhidata, kisha thibitisha users, incidents, reports, na role access.</li>
+                        <li>Wasiliana kwa uongozi, control room, na wasimamizi wa mifumo hadi huduma zirudi kawaida.</li>
+                    </ol>
+                </div>
+                <div class="section-card">
+                    <h2>6. Uthibitishaji Baada ya Urejeshaji</h2>
+                    <p>Baada ya recovery, system tests za login, dashboard access, public reporting, user management, na document generation zifanywe. Ripoti ya tukio, muda wa recovery, na mapungufu ya udhibiti yaandikwe kwenye audit trail.</p>
+                </div>
+                """;
+        }
+        return """
+                <div class="section-card">
+                    <h2>1. Purpose</h2>
+                    <p>This disaster recovery plan defines how FROMS is restored after major application failure, database loss, infrastructure disruption, or a severe security event. The objective is to preserve fire and rescue operational continuity as well as administrative evidence.</p>
+                </div>
+                <div class="section-card">
+                    <h2>2. Critical Services</h2>
+                    <ul>
+                        <li>User authentication, role dashboards, and control room access.</li>
+                        <li>Incident registration, public emergency intake, chat, and live video sessions.</li>
+                        <li>Persistent storage for users, incidents, emergency calls, investigations, audit logs, and attachments.</li>
+                        <li>PDF generation, administrative documents, and verification reporting.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>3. Recovery Objectives</h2>
+                    <ul>
+                        <li>Recovery Time Objective (RTO): restore critical services within 4 hours.</li>
+                        <li>Recovery Point Objective (RPO): no more than 15 minutes of data loss on the primary database.</li>
+                        <li>Audit evidence, user records, and incident records must remain recoverable during restoration.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>4. Backup Strategy</h2>
+                    <p>Database backups must run on schedule, remain stored outside the primary runtime host, and be validated through restore drills. Attachments, video artifacts, and generated PDFs should be stored in recoverable versioned storage or point-in-time backup media.</p>
+                </div>
+                <div class="section-card">
+                    <h2>5. Response Sequence</h2>
+                    <ol class="ui-manual-list">
+                        <li>Classify the outage or breach and determine operational severity.</li>
+                        <li>Preserve audit evidence and freeze non-essential changes.</li>
+                        <li>Fail over to recovery infrastructure or rebuild the primary node.</li>
+                        <li>Restore the database, then validate users, incidents, reports, and role-based access.</li>
+                        <li>Communicate recovery status to command leadership, control room teams, and administrators until service is normalized.</li>
+                    </ol>
+                </div>
+                <div class="section-card">
+                    <h2>6. Post-Recovery Validation</h2>
+                    <p>After restoration, execute login, dashboard access, public reporting, user management, and documentation generation checks. Record the incident timeline, restoration duration, and any failed controls in the audit trail and follow-up review.</p>
+                </div>
+                """;
+    }
+
+    private String disasterRecoveryRunbookBody(String lang) {
+        if ("sw".equalsIgnoreCase(lang)) {
+            return """
+                <div class="section-card">
+                    <h2>1. Madhumuni ya Runbook</h2>
+                    <p>Runbook hii inatoa hatua za moja kwa moja za kiutendaji kwa timu ya admin wakati FROMS inahitaji kurejeshwa kwa haraka baada ya hitilafu au tukio la usalama.</p>
+                </div>
+                <div class="section-card">
+                    <h2>2. Hatua za Awali</h2>
+                    <ul>
+                        <li>Thibitisha alert kutoka monitoring, logs, au taarifa ya mtumiaji.</li>
+                        <li>Amua kama hitilafu ni ya application, database, storage, au network.</li>
+                        <li>Zuia deployment mpya hadi tathmini ya awali ikamilike.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>3. Urejeshaji wa Hifadhidata</h2>
+                    <ol class="ui-manual-list">
+                        <li>Chagua backup ya mwisho iliyo verified.</li>
+                        <li>Rejesha schema na data kwenye mazingira ya recovery.</li>
+                        <li>Kagua users, stations, incidents, emergency calls, na audit logs kabla ya kuruhusu traffic.</li>
+                    </ol>
+                </div>
+                <div class="section-card">
+                    <h2>4. Urejeshaji wa Huduma</h2>
+                    <ul>
+                        <li>Washa Spring Boot application kwa config salama ya environment.</li>
+                        <li>Thibitisha muunganisho wa database, storage directories, na Python AI sidecar.</li>
+                        <li>Jaribu endpoints za `/login`, `/dashboard`, `/api/public/reports`, na `/api/admin/documents`.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>5. Mawasiliano na Kufunga Tukio</h2>
+                    <p>Tuma hali ya urejeshaji kwa viongozi, rekodi hatua zilizochukuliwa, na fanya post-incident review inayopendekeza maboresho ya backup, hardening, na testing cadence.</p>
+                </div>
+                """;
+        }
+        return """
+                <div class="section-card">
+                    <h2>1. Runbook Purpose</h2>
+                    <p>This runbook provides direct operational steps for administrators when FROMS must be restored quickly after a service outage or security incident.</p>
+                </div>
+                <div class="section-card">
+                    <h2>2. Immediate Actions</h2>
+                    <ul>
+                        <li>Confirm the alert from monitoring, logs, or user escalation.</li>
+                        <li>Determine whether the failure is application, database, storage, or network related.</li>
+                        <li>Freeze new deployments until the initial assessment is complete.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>3. Database Recovery</h2>
+                    <ol class="ui-manual-list">
+                        <li>Select the latest verified backup.</li>
+                        <li>Restore schema and data into the recovery environment.</li>
+                        <li>Validate users, stations, incidents, emergency calls, and audit logs before admitting traffic.</li>
+                    </ol>
+                </div>
+                <div class="section-card">
+                    <h2>4. Service Recovery</h2>
+                    <ul>
+                        <li>Start the Spring Boot application with the approved environment configuration.</li>
+                        <li>Verify database connectivity, storage directories, and the Python AI sidecar dependency.</li>
+                        <li>Smoke-test `/login`, `/dashboard`, `/api/public/reports`, and `/api/admin/documents`.</li>
+                    </ul>
+                </div>
+                <div class="section-card">
+                    <h2>5. Communication and Closure</h2>
+                    <p>Issue recovery status updates to leadership, record all actions taken, and complete a post-incident review that proposes backup, hardening, and test cadence improvements.</p>
+                </div>
+                """;
+    }
+
     private String title(String key, String lang) {
         boolean sw = "sw".equalsIgnoreCase(lang);
         return switch (key) {
             case "system-architecture" -> sw ? "RIPOTI YA USANIFU WA MFUMO WA FROMS" : "FROMS SYSTEM ARCHITECTURE DOCUMENT";
             case "system-design-document" -> sw ? "RIPOTI YA MUUNDO WA MFUMO WA FROMS" : "FROMS SYSTEM DESIGN DOCUMENT";
             case "system-requirements-specification" -> sw ? "RIPOTI YA MAHITAJI YA MFUMO WA FROMS" : "FROMS SYSTEM REQUIREMENTS SPECIFICATION";
+            case "disaster-recovery-plan" -> sw ? "MPANGO WA UOKOAJI WA MAJANGA WA FROMS" : "FROMS DISASTER RECOVERY PLAN";
+            case "disaster-recovery-runbook" -> sw ? "MWONGOZO WA UREJESHAJI WA FROMS" : "FROMS DISASTER RECOVERY RUNBOOK";
             default -> sw ? "RIPOTI YA FROMS" : "FROMS REPORT";
         };
     }

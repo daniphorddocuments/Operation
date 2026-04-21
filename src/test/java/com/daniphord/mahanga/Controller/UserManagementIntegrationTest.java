@@ -120,6 +120,8 @@ class UserManagementIntegrationTest {
                         .andExpect(content().string(containsString("FROMS System Architecture Document")))
                         .andExpect(content().string(containsString("FROMS System Design Document")))
                         .andExpect(content().string(containsString("FROMS System Requirements Specification")))
+                        .andExpect(content().string(containsString("FROMS Disaster Recovery Plan")))
+                        .andExpect(content().string(containsString("FROMS Disaster Recovery Runbook")))
                         .andExpect(content().string(containsString("scroll-margin-top: 104px")))
                         .andExpect(content().string(org.hamcrest.Matchers.not(containsString(".ui-hide-center { display: none !important; }"))));
     }
@@ -136,6 +138,8 @@ class UserManagementIntegrationTest {
                 .andExpect(content().string(containsString("FROMS System Architecture Document")))
                 .andExpect(content().string(containsString("FROMS System Design Document")))
                 .andExpect(content().string(containsString("FROMS System Requirements Specification")))
+                .andExpect(content().string(containsString("FROMS Disaster Recovery Plan")))
+                .andExpect(content().string(containsString("FROMS Disaster Recovery Runbook")))
                 .andExpect(content().string(not(containsString("id=\"system-test-module\""))));
     }
 
