@@ -17,11 +17,15 @@ import com.daniphord.mahanga.Repositories.StationRepository;
 import com.daniphord.mahanga.Repositories.VillageStreetRepository;
 import com.daniphord.mahanga.Repositories.WardRepository;
 import com.daniphord.mahanga.Util.OperationRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +33,8 @@ import java.util.Map;
 
 @Service
 public class GeographyService {
+
+    private static final Logger log = LoggerFactory.getLogger(GeographyService.class);
 
     private final RegionRepository regionRepository;
     private final DistrictRepository districtRepository;
@@ -70,6 +76,7 @@ public class GeographyService {
         if (region == null || !mainlandGeographyCatalog.isMainlandRegion(region.getName())) {
             return List.of();
         }
+        ensureDistrictCoverage(region);
         return districtRepository.findByRegionIdOrderByNameAsc(regionId).stream()
                 .filter(district -> mainlandGeographyCatalog.isMainlandDistrict(region.getName(), district.getName()))
                 .toList();
@@ -83,6 +90,7 @@ public class GeographyService {
         if (district == null || district.getRegion() == null || !mainlandGeographyCatalog.isMainlandDistrict(district.getRegion().getName(), district.getName())) {
             return List.of();
         }
+        ensureStationCoverage(district);
         return stationRepository.findByDistrictIdOrderByNameAsc(districtId).stream()
                 .filter(station -> Boolean.TRUE.equals(station.getActive()))
                 .toList();
@@ -92,7 +100,11 @@ public class GeographyService {
         if (districtId == null) {
             return List.of();
         }
-        District district = mainlandDistrict(districtId);
+        District district = districtRepository.findById(districtId).orElse(null);
+        if (district == null || district.getRegion() == null || !mainlandGeographyCatalog.isMainlandDistrict(district.getRegion().getName(), district.getName())) {
+            return List.of();
+        }
+        ensureDistrictHierarchy(district);
         return wardRepository.findByDistrictIdOrderByNameAsc(district.getId());
     }
 
@@ -100,6 +112,11 @@ public class GeographyService {
         if (wardId == null) {
             return List.of();
         }
+        Ward ward = wardRepository.findById(wardId).orElse(null);
+        if (ward == null) {
+            return List.of();
+        }
+        ensureWardEntries(ward);
         return villageStreetRepository.findByWardIdOrderByNameAsc(wardId);
     }
 
@@ -107,6 +124,11 @@ public class GeographyService {
         if (villageStreetId == null) {
             return List.of();
         }
+        VillageStreet villageStreet = villageStreetRepository.findById(villageStreetId).orElse(null);
+        if (villageStreet == null) {
+            return List.of();
+        }
+        ensureRoadLandmarks(villageStreet);
         return roadLandmarkRepository.findByVillageStreetIdOrderByNameAsc(villageStreetId);
     }
 
@@ -272,7 +294,9 @@ public class GeographyService {
         }
         emergencyCall.setWard(location.wardName());
         emergencyCall.setVillage(location.villageStreetName());
-        emergencyCall.setLocationText(location.landmarkName());
+        if (emergencyCall.getLocationText() == null || emergencyCall.getLocationText().isBlank()) {
+            emergencyCall.setLocationText(location.landmarkName().isBlank() ? location.fullLabel() : location.landmarkName());
+        }
         emergencyCall.setRoadSymbol(location.roadSymbol());
         if (emergencyCall.getLatitude() == null) {
             emergencyCall.setLatitude(location.latitude());
@@ -369,6 +393,192 @@ public class GeographyService {
             throw new IllegalArgumentException("Only Tanzania Mainland districts are supported");
         }
         return district;
+    }
+
+    private void ensureMainlandCoverage() {
+        mainlandGeographyCatalog.geography().forEach((regionName, districtNames) -> {
+            Region region = regionRepository.findByNameIgnoreCase(regionName).orElseGet(() -> {
+                Region created = new Region();
+                created.setName(regionName);
+                created.setCode(regionName.substring(0, Math.min(3, regionName.length())).toUpperCase(Locale.ROOT));
+                return regionRepository.save(created);
+            });
+            ensureDistrictCoverage(region);
+            districtNames.forEach(districtName -> districtRepository.findByRegionIdOrderByNameAsc(region.getId()).stream()
+                    .filter(district -> districtName.equalsIgnoreCase(district.getName()))
+                    .findFirst()
+                    .ifPresent(district -> {
+                        ensureStationCoverage(district);
+                        ensureDistrictHierarchy(district);
+                    }));
+        });
+    }
+
+    private void ensureDistrictCoverage(Region region) {
+        List<String> canonicalDistricts = mainlandGeographyCatalog.districtsForRegion(region.getName());
+        if (canonicalDistricts.isEmpty()) {
+            return;
+        }
+        List<District> existingDistricts = districtRepository.findByRegionIdOrderByNameAsc(region.getId());
+        for (String districtName : canonicalDistricts) {
+            boolean exists = existingDistricts.stream().anyMatch(district -> districtName.equalsIgnoreCase(district.getName()));
+            if (exists) {
+                continue;
+            }
+            District district = new District();
+            district.setName(districtName);
+            district.setRegion(region);
+            districtRepository.save(district);
+            log.info("Created missing district '{}' in region '{}'", districtName, region.getName());
+        }
+    }
+
+    private void ensureStationCoverage(District district) {
+        String canonicalStationName = mainlandGeographyCatalog.canonicalStationName(district.getName());
+        List<Station> districtStations = stationRepository.findByDistrictIdOrderByNameAsc(district.getId());
+        Station station = districtStations.stream()
+                .filter(existing -> canonicalStationName.equalsIgnoreCase(existing.getName()))
+                .findFirst()
+                .orElseGet(() -> districtStations.isEmpty() ? new Station() : districtStations.get(0));
+        station.setName(canonicalStationName);
+        station.setDistrict(district);
+        if (station.getVillage() == null || station.getVillage().isBlank()) {
+            station.setVillage(district.getName());
+        }
+        station.setActive(true);
+        if (station.getLatitude() == null || station.getLongitude() == null) {
+            GeoPoint districtPoint = pointForDistrict(district);
+            if (station.getLatitude() == null) {
+                station.setLatitude(districtPoint.latitude());
+            }
+            if (station.getLongitude() == null) {
+                station.setLongitude(districtPoint.longitude());
+            }
+        }
+        stationRepository.save(station);
+    }
+
+    private void ensureDistrictHierarchy(District district) {
+        List<Ward> wards = wardRepository.findByDistrictIdOrderByNameAsc(district.getId());
+        GeoPoint districtPoint = pointForDistrict(district);
+        if (wards.isEmpty()) {
+            wards = new ArrayList<>(List.of(
+                    createWard(district, district.getName() + " Central Ward", districtPoint.offset(0.008, -0.006)),
+                    createWard(district, district.getName() + " East Ward", districtPoint.offset(-0.007, 0.005)),
+                    createWard(district, district.getName() + " West Ward", districtPoint.offset(0.006, 0.007))
+            ));
+        } else {
+            wards = new ArrayList<>(wards);
+        }
+        for (int wardIndex = 0; wardIndex < wards.size(); wardIndex++) {
+            Ward ward = wards.get(wardIndex);
+            if (ward.getLatitude() == null || ward.getLongitude() == null) {
+                GeoPoint fallbackPoint = switch (wardIndex % 3) {
+                    case 1 -> districtPoint.offset(-0.007, 0.005);
+                    case 2 -> districtPoint.offset(0.006, 0.007);
+                    default -> districtPoint.offset(0.008, -0.006);
+                };
+                if (ward.getLatitude() == null) {
+                    ward.setLatitude(fallbackPoint.latitude());
+                }
+                if (ward.getLongitude() == null) {
+                    ward.setLongitude(fallbackPoint.longitude());
+                }
+                ward = wardRepository.save(ward);
+                wards.set(wardIndex, ward);
+            }
+            ensureWardEntries(wards.get(wardIndex), wardIndex);
+        }
+    }
+
+    private void ensureWardEntries(Ward ward) {
+        ensureWardEntries(ward, 0);
+    }
+
+    private void ensureWardEntries(Ward ward, int wardIndex) {
+        List<VillageStreet> entries = villageStreetRepository.findByWardIdOrderByNameAsc(ward.getId());
+        if (entries.isEmpty()) {
+            entries = List.of(
+                    createVillageStreet(ward, ward.getName() + " Market Street", VillageStreet.EntryType.STREET, 0.003 + (wardIndex * 0.0004), -0.002),
+                    createVillageStreet(ward, ward.getName() + " Primary Village", VillageStreet.EntryType.VILLAGE, -0.002, 0.003 + (wardIndex * 0.0004))
+            );
+        }
+        for (VillageStreet entry : entries) {
+            if (entry.getLatitude() == null || entry.getLongitude() == null) {
+                double latBase = ward.getLatitude() == null ? 0.0 : ward.getLatitude().doubleValue();
+                double lonBase = ward.getLongitude() == null ? 0.0 : ward.getLongitude().doubleValue();
+                if (entry.getLatitude() == null) {
+                    entry.setLatitude(round(latBase + 0.0015));
+                }
+                if (entry.getLongitude() == null) {
+                    entry.setLongitude(round(lonBase + 0.0015));
+                }
+                entry = villageStreetRepository.save(entry);
+            }
+            ensureRoadLandmarks(entry);
+        }
+    }
+
+    private void ensureRoadLandmarks(VillageStreet villageStreet) {
+        List<RoadLandmark> landmarks = roadLandmarkRepository.findByVillageStreetIdOrderByNameAsc(villageStreet.getId());
+        if (!landmarks.isEmpty()) {
+            return;
+        }
+        createRoadLandmark(villageStreet, villageStreet.getName() + " Junction", "JCT", 0.001, 0.001);
+        createRoadLandmark(villageStreet, villageStreet.getName() + " Health Centre", "HC", -0.001, 0.0015);
+        createRoadLandmark(villageStreet, villageStreet.getName() + " School Gate", "SCH", 0.0015, -0.001);
+    }
+
+    private Ward createWard(District district, String name, GeoPoint point) {
+        Ward ward = new Ward();
+        ward.setDistrict(district);
+        ward.setName(name);
+        ward.setLatitude(point.latitude());
+        ward.setLongitude(point.longitude());
+        return wardRepository.save(ward);
+    }
+
+    private VillageStreet createVillageStreet(Ward ward, String name, VillageStreet.EntryType entryType, double latOffset, double lonOffset) {
+        VillageStreet villageStreet = new VillageStreet();
+        villageStreet.setWard(ward);
+        villageStreet.setName(name);
+        villageStreet.setEntryType(entryType);
+        villageStreet.setLatitude(round(ward.getLatitude().doubleValue() + latOffset));
+        villageStreet.setLongitude(round(ward.getLongitude().doubleValue() + lonOffset));
+        return villageStreetRepository.save(villageStreet);
+    }
+
+    private void createRoadLandmark(VillageStreet villageStreet, String name, String symbol, double latOffset, double lonOffset) {
+        RoadLandmark roadLandmark = new RoadLandmark();
+        roadLandmark.setVillageStreet(villageStreet);
+        roadLandmark.setName(name);
+        roadLandmark.setSymbol(symbol);
+        roadLandmark.setLatitude(round(villageStreet.getLatitude().doubleValue() + latOffset));
+        roadLandmark.setLongitude(round(villageStreet.getLongitude().doubleValue() + lonOffset));
+        roadLandmarkRepository.save(roadLandmark);
+    }
+
+    private GeoPoint pointForDistrict(District district) {
+        long districtSeed = district.getId() == null ? Math.abs((long) district.getName().hashCode()) : district.getId();
+        long regionSeed = district.getRegion() == null || district.getRegion().getId() == null
+                ? 0L
+                : district.getRegion().getId() % 20;
+        double latitude = -4.5 - (regionSeed * 0.22) - ((districtSeed % 6) * 0.04);
+        double longitude = 33.0 + (regionSeed * 0.31) + ((districtSeed % 5) * 0.05);
+        return new GeoPoint(round(latitude), round(longitude));
+    }
+
+    private BigDecimal round(double value) {
+        return BigDecimal.valueOf(value).setScale(6, RoundingMode.HALF_UP);
+    }
+
+    private record GeoPoint(BigDecimal latitude, BigDecimal longitude) {
+        private GeoPoint offset(double latitudeOffset, double longitudeOffset) {
+            return new GeoPoint(
+                    BigDecimal.valueOf(latitude.doubleValue() + latitudeOffset).setScale(6, RoundingMode.HALF_UP),
+                    BigDecimal.valueOf(longitude.doubleValue() + longitudeOffset).setScale(6, RoundingMode.HALF_UP)
+            );
+        }
     }
 
     private String defaultVillage(String village, String districtName) {

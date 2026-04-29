@@ -3,6 +3,7 @@ package com.daniphord.mahanga.Controller;
 import com.daniphord.mahanga.Model.User;
 import com.daniphord.mahanga.Repositories.UserRepository;
 import com.daniphord.mahanga.Service.AuditService;
+import com.daniphord.mahanga.Service.RoleAccessService;
 import com.daniphord.mahanga.Util.OperationRole;
 import com.daniphord.mahanga.Util.RequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,25 +28,40 @@ public class UserController {
     @Autowired
     private AuditService auditService;
 
+    @Autowired
+    private RoleAccessService roleAccessService;
+
     // GET all users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<?> getAllUsers(HttpSession session) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/locked")
-    public List<User> getLockedUsers() {
-        return userService.getLockedUsers();
+    public ResponseEntity<?> getLockedUsers(HttpSession session) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
+        return ResponseEntity.ok(userService.getLockedUsers());
     }
 
     @GetMapping("/security-summary")
-    public Map<String, Object> getSecuritySummary() {
-        return userService.userSecuritySummary();
+    public ResponseEntity<?> getSecuritySummary(HttpSession session) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
+        return ResponseEntity.ok(userService.userSecuritySummary());
     }
 
     // GET user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id, HttpSession session) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -61,6 +76,9 @@ public class UserController {
             HttpSession session,
             HttpServletRequest request
     ) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         if (isInvestigationRole(user.getRole()) && !isSuperAdmin(session)) {
             return ResponseEntity.badRequest().body(Map.of("error", "Only system admin can register investigators"));
         }
@@ -83,6 +101,9 @@ public class UserController {
             HttpSession session,
             HttpServletRequest request
     ) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         if (isInvestigationRole(updatedUser.getRole()) && !isSuperAdmin(session)) {
             return ResponseEntity.badRequest().body(Map.of("error", "Only system admin can update investigators"));
         }
@@ -101,6 +122,9 @@ public class UserController {
     // DELETE user
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpSession session, HttpServletRequest request) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).build();
+        }
         Object currentUserId = session.getAttribute("userId");
         if (currentUserId instanceof Long loggedInId && loggedInId.equals(id)) {
             return ResponseEntity.badRequest().build();
@@ -112,6 +136,9 @@ public class UserController {
 
     @PostMapping("/{id}/lock")
     public ResponseEntity<?> lockUser(@PathVariable Long id, HttpSession session, HttpServletRequest request) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         Object currentUserId = session.getAttribute("userId");
         if (currentUserId instanceof Long loggedInId && loggedInId.equals(id)) {
             return ResponseEntity.badRequest().body(Map.of("error", "You cannot lock your own account"));
@@ -130,6 +157,9 @@ public class UserController {
 
     @PostMapping("/{id}/unlock")
     public ResponseEntity<?> unlockUser(@PathVariable Long id, HttpSession session, HttpServletRequest request) {
+        if (!roleAccessService.canManageUsers(currentUser(session))) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         try {
             User user = userService.unlockUser(id);
             auditService.logAction(currentUser(session), "USER_UNLOCKED", "Administrator unlocked user account", "User", user.getId(), RequestUtil.getClientIpAddress(request));

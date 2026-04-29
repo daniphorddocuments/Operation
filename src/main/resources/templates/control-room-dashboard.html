@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<th:block th:replace="~{fragments/ui :: head('FROMS | Control Room', true)}"></th:block>
+<th:block th:replace="~{fragments/ui :: head('Fire and Rescue Force Operation Management System | Control Room', true)}"></th:block>
 <body class="ui-body" th:attr="data-role=${loggedInRole},data-username=${loggedInUsername},data-page='control-room',data-lang=${currentLang}">
 <th:block th:replace="~{fragments/header :: dashboardHeader(
     @{/control-room/dashboard},
-    'Control Room Dashboard',
+    'Fire and Rescue Force Operation Management System',
     @{/operations/dashboard},
     'Operations',
     ${canAccessOperationsDashboard},
     @{/dashboard},
-    'Role Dashboard',
+    'Role Workspace',
     ${true}
 )}"></th:block>
 
@@ -20,7 +20,7 @@
     <nav class="ui-breadcrumbs ui-hide-center" aria-label="Breadcrumb">
         <a th:href="@{/}">Home</a>
         <span>/</span>
-        <a th:href="@{/dashboard}">Role Dashboard</a>
+        <a th:href="@{/dashboard}">Role Workspace</a>
         <span>/</span>
         <span aria-current="page">Control Room</span>
     </nav>
@@ -41,6 +41,7 @@
                     <a href="#control-video-panel" class="btn ui-btn-primary">Live Video Panel</a>
                     <a href="#control-call-history" class="btn ui-btn-outline">Call History</a>
                     <a href="#notification-center" class="btn ui-btn-outline">Notifications</a>
+                    <button type="button" class="btn ui-btn-outline" data-call-dispatch>Call Dispatch</button>
                 </div>
             </div>
             <div class="ui-hero-side">
@@ -116,6 +117,34 @@
                 <a href="#control-reports-panel" class="ui-link-arrow" th:if="${!#lists.isEmpty(availableReports)}"><span>Open reports</span><i class="fas fa-arrow-right"></i></a>
             </div>
         </article>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="incident-mode-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1">Operational Presence</h2>
+                <div class="small ui-muted">Use incident mode while coordinating a live emergency call so the session remains uninterrupted.</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span id="presenceStatusBadge" th:text="${sessionSecurityState != null && sessionSecurityState['presenceStatus'] != null ? sessionSecurityState['presenceStatus'] : 'ACTIVE'}">ACTIVE</span></span>
+        </div>
+        <div class="ui-grid ui-grid-2">
+            <div>
+                <label class="ui-label form-label" for="incidentModeSelector">Active Call / Incident</label>
+                <select id="incidentModeSelector" class="form-select">
+                    <option value="">No emergency selected</option>
+                    <option th:each="item : ${activeEmergencyCalls}" th:value="${item.reportNumber}" th:text="${item.reportNumber + ' | ' + item.status + ' | ' + item.incidentType}">REP-1</option>
+                </select>
+            </div>
+            <div class="ui-stack">
+                <div class="ui-kpi"><span>Risk Level</span><strong id="securityRiskLevel" th:text="${sessionSecurityState != null && sessionSecurityState['riskLevel'] != null ? sessionSecurityState['riskLevel'] : 'LOW'}">LOW</strong></div>
+                <div class="ui-kpi"><span>Risk Score</span><strong id="securityRiskScore" th:text="${sessionSecurityState != null && sessionSecurityState['riskScore'] != null ? sessionSecurityState['riskScore'] : 0}">0</strong></div>
+                <div class="small ui-muted" id="incidentModeStatusText" th:text="${sessionSecurityState != null && sessionSecurityState['incidentMode'] == true ? 'Incident mode active' : 'Standard session monitoring active'}">Standard session monitoring active</div>
+            </div>
+        </div>
+        <div class="ui-action-strip mt-3">
+            <button type="button" class="btn ui-btn-primary" id="enableIncidentModeButton">Enable Incident Mode</button>
+            <button type="button" class="btn ui-btn-outline" id="disableIncidentModeButton">Return to Standard Session</button>
+        </div>
     </section>
 
     <section class="ui-card ui-hide-center" id="control-route-panel">
@@ -421,10 +450,17 @@
             endVideoUrl: [[@{/api/video/sessions/__id__/end}]],
             uploadVideoUrl: [[@{/api/video/upload}]],
             sessionsUrl: [[@{/api/video/sessions}]],
+            keepAliveUrl: [[@{/api/session/keepalive}]],
+            sessionStateUrl: [[@{/api/session/state}]],
+            sessionPresenceUrl: [[@{/api/session/presence}]],
+            incidentModeUrl: [[@{/api/session/incident-mode}]],
+            dispatchNumber: [[${sessionSecurityState != null ? sessionSecurityState['emergencyNumber'] : null}]],
             changePasswordUrl: [[@{/api/me/change-password}]],
             controlRoomCallsUrl: [[@{/api/control-room/calls}]],
             acceptCallUrlTemplate: [[@{/api/control-room/calls/__id__/accept}]],
-            rejectCallUrlTemplate: [[@{/api/control-room/calls/__id__/reject}]]
+            rejectCallUrlTemplate: [[@{/api/control-room/calls/__id__/reject}]],
+            sessionState: [[${sessionSecurityState}]],
+            activeEmergencyIncidents: [[${activeEmergencyCalls}]]
         };
         window.FROMS_CONTROL_ROOM_CHARTS = {
             callValues: [

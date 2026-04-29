@@ -1,108 +1,202 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{fragments/ui :: head('FROMS | Login', false)}"></th:block>
+<th:block th:replace="~{fragments/ui :: head('Fire and Rescue Force Operation Management System | Login', false)}"></th:block>
 <body class="ui-body login-command-body" th:attr="data-lang=${currentLang},data-page='login-dashboard'">
 <th:block th:replace="~{fragments/header :: loginHeader}"></th:block>
 
-<section class="fire-command-banner fire-command-banner-login">
-    <div class="ui-shell fire-command-banner-shell fire-command-banner-shell-login">
-        <div class="fire-command-banner-head fire-command-banner-head-centered">
-            <img class="fire-command-banner-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo">
-            <div class="ui-hero-chip-row justify-content-center">
-                <span class="ui-chip"><i class="fas fa-user-shield"></i><span>Role verified</span></span>
-                <span class="ui-chip"><i class="fas fa-bolt"></i><span>Fast operational access</span></span>
-                <span class="ui-chip"><i class="fas fa-file-shield"></i><span>Audit aware</span></span>
-            </div>
-            <div class="landing-kicker">Secure Operational Access</div>
-            <h1 class="fire-command-banner-title">Fire &amp; Rescue Force Command Portal</h1>
-            <p class="fire-command-banner-copy">Sign in for headquarters, regional, district, station, and control room operations through a cleaner emergency-friendly command interface.</p>
-        </div>
-    </div>
-</section>
-
-<div class="ui-shell login-presentation-shell">
-    <nav class="ui-breadcrumbs" aria-label="Breadcrumb">
-        <a th:href="@{/}">Home</a>
-        <span>/</span>
-        <span aria-current="page">Command Login</span>
-    </nav>
-
-    <section class="login-presentation-card">
-        <div class="login-presentation-card-head">
-            <img class="login-presentation-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo">
-            <div class="ui-eyebrow text-white-50 mb-2">Command Sign-In</div>
-            <h2 class="login-presentation-title">Operational Access Console</h2>
-            <p class="login-presentation-copy">Large controls, faster scan, and clear support paths for presentations and real emergency workflows.</p>
-        </div>
-
-        <div class="login-presentation-card-body">
-            <div th:if="${success}" class="alert alert-success ui-alert" role="alert" data-alert-kind="success" th:text="${success}"></div>
-            <div th:if="${error}" class="alert alert-danger ui-alert" role="alert" data-alert-kind="error" th:text="${error}"></div>
-
-            <form th:action="@{/login}" method="post" id="loginForm" class="ui-stack" novalidate>
-                <input type="hidden" name="_csrf" th:value="${_csrf != null ? _csrf.token : ''}">
-                <div>
-                    <label class="ui-label form-label" for="username">Username</label>
-                    <input id="username" name="username" type="text" class="form-control" autocomplete="username" required aria-describedby="loginUsernameHint">
-                    <div id="loginUsernameHint" class="small ui-muted mt-2">Use the assigned operational account or check number.</div>
+<div class="ui-shell login-presentation-shell portal-shell">
+    <section class="portal-stage portal-stage-login gov-login-stage login-page">
+        <div class="gov-login-layout login-reference-layout">
+            <section class="login-showcase login-left skeleton-login-showcase" aria-label="System information and visual showcase">
+                <div class="skeleton-login-head login-reference-showcase-head">
+                    <div class="landing-kicker">Staff Announcements</div>
+                    <h1 class="gov-login-title">Operational notices and official staff updates.</h1>
+                    <p class="gov-login-text mb-0">Administrators upload these announcement slides through their account, and they rotate automatically in this left-side panel.</p>
                 </div>
-                <div>
-                    <label class="ui-label form-label" for="password">Password</label>
-                    <input id="password" name="password" type="password" class="form-control" autocomplete="current-password" required aria-describedby="loginPasswordHint">
-                    <div id="loginPasswordHint" class="small ui-muted mt-2">Passwords are checked against account lockout and audit controls.</div>
+                <div class="login-showcase-track" data-login-slider>
+                    <article th:each="slide, slideStat : ${loginCarouselSlides}"
+                             class="login-showcase-slide login-showcase-slide-uploaded login-reference-slide"
+                             th:classappend="${slideStat.index == 0} ? ' is-active' : ''">
+                        <img class="login-showcase-image" th:src="${slide.imageUrl}" th:alt="${slide.title}">
+                        <div class="login-showcase-overlay"></div>
+                        <div class="login-showcase-copy login-reference-copy">
+                            <div class="landing-kicker">Staff Update</div>
+                            <h1 class="gov-login-title" th:text="${slide.title}">Prepared teams, faster coordination, safer public response.</h1>
+                            <p class="gov-login-text" th:text="${slide.subtitle}">Operational visibility and field support in one government-grade platform.</p>
+                        </div>
+                    </article>
+                    <article th:if="${#lists.isEmpty(loginCarouselSlides)}" class="login-showcase-slide login-showcase-slide-fire login-reference-slide is-active">
+                        <div class="login-showcase-copy login-reference-copy">
+                            <div class="landing-kicker">Staff Announcement</div>
+                            <h1 class="gov-login-title">Upload official notices here from the admin workspace.</h1>
+                            <p class="gov-login-text">This left panel is reserved for staff announcements, awareness posters, and command communication visuals.</p>
+                        </div>
+                    </article>
                 </div>
-                <button type="submit" class="btn ui-btn-primary w-100" id="loginButton">
-                    <span class="ui-button-text">Login</span>
-                    <span class="ui-button-loader">
-                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                        Signing In...
-                    </span>
-                </button>
-            </form>
+                <div class="login-showcase-dots" aria-label="Showcase controls">
+                    <button th:each="slide, slideStat : ${loginCarouselSlides}"
+                            type="button"
+                            class="login-showcase-dot"
+                            th:classappend="${slideStat.index == 0} ? ' is-active' : ''"
+                            th:attr="data-login-dot=${slideStat.index},aria-label=${'Show slide ' + (slideStat.index + 1)}"></button>
+                    <th:block th:if="${#lists.isEmpty(loginCarouselSlides)}">
+                        <button type="button" class="login-showcase-dot is-active" data-login-dot="0" aria-label="Show slide 1"></button>
+                        <button type="button" class="login-showcase-dot" data-login-dot="1" aria-label="Show slide 2"></button>
+                        <button type="button" class="login-showcase-dot" data-login-dot="2" aria-label="Show slide 3"></button>
+                    </th:block>
+                </div>
+            </section>
 
-            <div class="login-support-grid">
-                <a class="login-support-card text-decoration-none" th:href="'tel:' + ${supportPhone}">
-                    <div class="fw-semibold">Operations Line</div>
-                    <div class="small ui-muted" th:text="${supportPhone}">114</div>
-                </a>
-                <a class="login-support-card text-decoration-none" th:href="'mailto:' + ${supportEmail}">
-                    <div class="fw-semibold">Command Email</div>
-                    <div class="small ui-muted" th:text="${supportEmail}">operations@fire.go.tz</div>
-                </a>
-            </div>
+            <section class="portal-access-card portal-access-card-login gov-login-card login-right skeleton-login-card login-reference-card">
+                <div class="login-form-shell">
+                    <div class="login-reference-brand">
+                        <div class="landing-kicker">Secure Access</div>
+                        <h2 class="portal-access-title mb-2">Staff Login</h2>
+                        <p class="mb-0 ui-muted">Authorized fire and rescue personnel sign in here.</p>
+                    </div>
 
-            <div class="login-presentation-actions">
-                <a th:href="@{/}" class="btn ui-btn-outline">Platform Overview</a>
-                <a th:href="@{/public/emergency/report}" class="btn ui-btn-primary">Public Emergency Access</a>
-            </div>
+                    <div th:if="${success}" class="alert alert-success ui-alert" role="alert" data-alert-kind="success" th:text="${success}"></div>
+                    <div th:if="${error}" class="alert alert-danger ui-alert" role="alert" data-alert-kind="error" th:text="${error}"></div>
+
+                    <form th:action="@{/login}" method="post" id="loginForm" class="ui-stack login-reference-form" novalidate>
+                        <input type="hidden" name="_csrf" th:value="${_csrf != null ? _csrf.token : ''}">
+                        <input type="hidden" name="clientFingerprint" id="clientFingerprint">
+                        <input type="hidden" name="autofillDetected" id="autofillDetected" value="false">
+                        <input type="hidden" name="typedPassword" id="typedPassword" value="false">
+                        <div class="login-reference-field">
+                            <label class="ui-label form-label label" for="username">Username</label>
+                            <input id="username" name="username" type="text" class="form-control input navy-input login-reference-input" autocomplete="username" required aria-describedby="loginUsernameHint" placeholder="Enter your username">
+                            <div id="loginUsernameHint" class="small ui-muted mt-2">Use the assigned operational account or check number.</div>
+                        </div>
+                        <div class="login-reference-field">
+                            <label class="ui-label form-label label" for="password">Password</label>
+                            <div class="login-password-shell login-reference-password-shell">
+                                <input id="password" name="password" type="password" class="form-control input navy-input login-reference-input" autocomplete="current-password" required aria-describedby="loginPasswordHint" placeholder="Enter your password">
+                                <button type="button" class="login-password-toggle" id="togglePassword" aria-label="Show or hide password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div id="loginPasswordHint" class="small ui-muted mt-2">Account lockout and audit controls remain active on every sign-in attempt.</div>
+                        </div>
+                        <button type="submit" class="btn ui-btn-primary w-100 login-reference-submit" id="loginButton">
+                            <span class="ui-button-text">Login</span>
+                            <span class="ui-button-loader">
+                                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                Signing In...
+                            </span>
+                        </button>
+                    </form>
+
+                    <div class="login-presentation-actions login-reference-actions">
+                        <a th:href="@{/}" class="btn ui-btn-outline">Home</a>
+                        <a th:href="@{/public/emergency/report}" class="btn ui-btn-primary">Public Service Access</a>
+                    </div>
+                    <div class="login-security-note">
+                        <i class="fas fa-lock"></i>
+                        <span>Secure login with monitored access and audit controls.</span>
+                    </div>
+                    <div class="portal-access-footer login-reference-footer">
+                        <span>Operations Line</span>
+                        <strong th:text="${supportPhone}">114</strong>
+                    </div>
+                </div>
+            </section>
         </div>
-    </section>
-
-    <section class="login-support-ribbon" aria-label="Operational access quick facts">
-        <article class="login-support-ribbon-card">
-            <span>Coverage</span>
-            <strong>HQ to Station</strong>
-        </article>
-        <article class="login-support-ribbon-card">
-            <span>Access Mode</span>
-            <strong>Role-Based</strong>
-        </article>
-        <article class="login-support-ribbon-card">
-            <span>Workflow</span>
-            <strong>Secure &amp; Fast</strong>
-        </article>
     </section>
 </div>
 
 <script>
+    (function () {
+        const slider = document.querySelector('[data-login-slider]');
+        if (!slider) {
+            return;
+        }
+        const slides = Array.from(slider.querySelectorAll('.login-showcase-slide'));
+        const dots = Array.from(document.querySelectorAll('[data-login-dot]'));
+        let currentIndex = 0;
+        let timerId = null;
+
+        function showSlide(index) {
+            currentIndex = index;
+            slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === index));
+            dots.forEach((dot, dotIndex) => dot.classList.toggle('is-active', dotIndex === index));
+        }
+
+        function startRotation() {
+            timerId = window.setInterval(function () {
+                showSlide((currentIndex + 1) % slides.length);
+            }, 5200);
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', function () {
+                window.clearInterval(timerId);
+                showSlide(index);
+                startRotation();
+            });
+        });
+
+        showSlide(0);
+        startRotation();
+    }());
+
     const loginForm = document.getElementById('loginForm');
     const loginButton = document.getElementById('loginButton');
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const fingerprintInput = document.getElementById('clientFingerprint');
+    const autofillInput = document.getElementById('autofillDetected');
+    const typedPasswordInput = document.getElementById('typedPassword');
+    let passwordTypedByKeyboard = false;
+
+    function buildClientFingerprint() {
+        const source = [
+            navigator.userAgent || '',
+            navigator.language || '',
+            String(screen.width || ''),
+            String(screen.height || ''),
+            Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+        ].join('|');
+        let hash = 0;
+        for (let index = 0; index < source.length; index += 1) {
+            hash = ((hash << 5) - hash) + source.charCodeAt(index);
+            hash |= 0;
+        }
+        return 'fp-' + Math.abs(hash);
+    }
+
+    if (fingerprintInput) {
+        fingerprintInput.value = buildClientFingerprint();
+    }
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function () {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            togglePassword.innerHTML = isPassword
+                ? '<i class="fas fa-eye-slash"></i>'
+                : '<i class="fas fa-eye"></i>';
+        });
+        passwordInput.addEventListener('keydown', function () {
+            passwordTypedByKeyboard = true;
+            if (typedPasswordInput) {
+                typedPasswordInput.value = 'true';
+            }
+            if (autofillInput) {
+                autofillInput.value = 'false';
+            }
+        });
+    }
 
     loginForm.addEventListener('submit', function (event) {
         if (!loginForm.checkValidity()) {
             event.preventDefault();
             loginForm.classList.add('was-validated');
             return;
+        }
+        if (passwordInput && passwordInput.value && !passwordTypedByKeyboard) {
+            autofillInput.value = 'true';
+            typedPasswordInput.value = 'false';
         }
         loginButton.classList.add('btn-loading');
         loginButton.setAttribute('disabled', 'disabled');

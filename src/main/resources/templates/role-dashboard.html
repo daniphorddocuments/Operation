@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<th:block th:replace="~{fragments/ui :: head('FROMS | Role Dashboard', true)}"></th:block>
+<th:block th:replace="~{fragments/ui :: head('Fire and Rescue Force Operation Management System | Role Workspace', true)}"></th:block>
 <body class="ui-body" th:attr="data-role=${loggedInRole},data-username=${loggedInUsername},data-page='role-dashboard',data-lang=${currentLang}">
 <style>
     body[data-page='role-dashboard'] [id] { scroll-margin-top: 104px; }
@@ -16,14 +16,14 @@
     ${canAccessOperationsDashboard}
 )}"></th:block>
 
-<div class="ui-shell">
-    <div class="dashboard-workbench">
+<div class="ui-shell role-dashboard-shell">
+    <div class="dashboard-workbench dashboard-workbench-sketch">
         <aside th:replace="~{fragments/sidebar :: roleSidebar}"></aside>
-        <main class="dashboard-main ui-stack">
+        <main class="dashboard-main ui-stack dashboard-main-sketch">
     <nav class="ui-breadcrumbs ui-hide-center" aria-label="Breadcrumb">
         <a th:href="@{/}">Home</a>
         <span>/</span>
-        <span aria-current="page">Role Dashboard</span>
+        <span aria-current="page">Role Workspace</span>
     </nav>
     <div th:if="${success}" class="alert alert-success ui-alert ui-hide-center" role="alert" data-alert-kind="success" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger ui-alert ui-hide-center" role="alert" data-alert-kind="error" th:text="${error}"></div>
@@ -43,6 +43,9 @@
                     <a href="#notification-center" class="btn ui-btn-outline">Notifications</a>
                     <a href="#report-center-module" class="btn ui-btn-outline" th:if="${!#lists.isEmpty(availableReports)}">Reports</a>
                     <a href="#user-management-module" class="btn ui-btn-outline" th:if="${canManageUsers}">User Management</a>
+                    <a href="#role-permissions-module" class="btn ui-btn-outline" th:if="${canManageRolePermissions}">Role Definitions</a>
+                    <a href="#login-carousel-module" class="btn ui-btn-outline" th:if="${isAdminWorkbench}" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">Login Ads</a>
+                    <button type="button" class="btn ui-btn-outline" data-call-dispatch>Call Dispatch</button>
                 </div>
             </div>
             <div class="ui-hero-side">
@@ -161,7 +164,9 @@
             <div class="ui-briefing-kicker">Control Area</div>
             <div class="ui-briefing-actions">
                 <a href="#user-management-module" class="ui-link-arrow" th:if="${canManageUsers}"><span>Manage users</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#role-permissions-module" class="ui-link-arrow" th:if="${canManageRolePermissions}"><span>Edit role permissions</span><i class="fas fa-arrow-right"></i></a>
                 <a href="#geography-module" class="ui-link-arrow" th:if="${canManageGeography}"><span>Review geography</span><i class="fas fa-arrow-right"></i></a>
+                <a href="#login-carousel-module" class="ui-link-arrow" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')"><span>Manage login ads</span><i class="fas fa-arrow-right"></i></a>
                 <a href="#documentation-module" class="ui-link-arrow" th:if="${canAccessAdminDocuments}"><span>Open documents</span><i class="fas fa-arrow-right"></i></a>
             </div>
         </article>
@@ -172,6 +177,63 @@
                 <a href="#profile-actions" class="ui-link-arrow"><span>Update profile</span><i class="fas fa-arrow-right"></i></a>
             </div>
         </article>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="incident-mode-panel">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1">Incident Mode Override</h2>
+                <div class="small ui-muted">Presence tracking stays on, but emergency handling disables disruptive idle logout behavior.</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span id="presenceStatusBadge" th:text="${sessionSecurityState != null && sessionSecurityState['presenceStatus'] != null ? sessionSecurityState['presenceStatus'] : 'ACTIVE'}">ACTIVE</span></span>
+        </div>
+        <div class="ui-grid ui-grid-2">
+            <div>
+                <label class="ui-label form-label" for="incidentModeSelector">Active Incident</label>
+                <select id="incidentModeSelector" class="form-select">
+                    <option value="">No active incident selected</option>
+                    <option th:each="item : ${activeEmergencyIncidents}" th:value="${item.incidentNumber}" th:text="${item.incidentNumber + ' | ' + item.status + ' | ' + item.severity}">INC-1</option>
+                </select>
+                <div class="small ui-muted mt-2">Enable incident mode only while working a live emergency case.</div>
+            </div>
+            <div class="ui-stack">
+                <div class="ui-kpi"><span>Risk Level</span><strong id="securityRiskLevel" th:text="${sessionSecurityState != null && sessionSecurityState['riskLevel'] != null ? sessionSecurityState['riskLevel'] : 'LOW'}">LOW</strong></div>
+                <div class="ui-kpi"><span>Risk Score</span><strong id="securityRiskScore" th:text="${sessionSecurityState != null && sessionSecurityState['riskScore'] != null ? sessionSecurityState['riskScore'] : 0}">0</strong></div>
+                <div class="small ui-muted" id="incidentModeStatusText" th:text="${sessionSecurityState != null && sessionSecurityState['incidentMode'] == true ? 'Incident mode active' : 'Standard session monitoring active'}">Standard session monitoring active</div>
+            </div>
+        </div>
+        <div class="ui-action-strip mt-3">
+            <button type="button" class="btn ui-btn-primary" id="enableIncidentModeButton">Enable Incident Mode</button>
+            <button type="button" class="btn ui-btn-outline" id="disableIncidentModeButton">Return to Standard Session</button>
+        </div>
+    </section>
+
+    <section class="ui-card ui-hide-center" id="security-command-center" th:if="${isAdminWorkbench}">
+        <div class="ui-section-head mb-2">
+            <div>
+                <h2 class="h5 mb-1">Security Command Center</h2>
+                <div class="small ui-muted">Active users, device tracking, login history, risk scoring, and failed login clusters.</div>
+            </div>
+            <span class="ui-status-badge"><span class="ui-status-dot"></span><span>Admin View</span></span>
+        </div>
+        <div class="ui-mini-grid mb-3">
+            <div class="ui-kpi"><span>Active Users</span><strong id="securitySummaryActiveUsers" th:text="${securityAdminOverview.summary != null ? securityAdminOverview.summary.activeUsers : 0}">0</strong></div>
+            <div class="ui-kpi"><span>Elevated Risk</span><strong id="securitySummaryElevated" th:text="${securityAdminOverview.summary != null ? securityAdminOverview.summary.mediumOrHighRisk : 0}">0</strong></div>
+            <div class="ui-kpi"><span>On Mission</span><strong id="securitySummaryOnMission" th:text="${securityAdminOverview.summary != null ? securityAdminOverview.summary.onMission : 0}">0</strong></div>
+            <div class="ui-kpi"><span>Failed Clusters</span><strong id="securitySummaryFailedClusters" th:text="${securityAdminOverview.summary != null ? securityAdminOverview.summary.failedLoginClusters : 0}">0</strong></div>
+        </div>
+        <div class="ui-grid ui-grid-2">
+            <div>
+                <div class="fw-semibold mb-2">Active Users and Devices</div>
+                <div id="securityActiveUsersFeed" class="ui-list-grid"></div>
+            </div>
+            <div>
+                <div class="fw-semibold mb-2">Alerts</div>
+                <div id="securityAlertsFeed" class="ui-list-grid mb-3"></div>
+                <div class="fw-semibold mb-2">Failed Login Clusters</div>
+                <div id="securityFailedClustersFeed" class="ui-list-grid"></div>
+            </div>
+        </div>
     </section>
 
     <section class="ui-card ui-hide-center" id="user-manual-panel">
@@ -829,6 +891,36 @@
                 <div class="small ui-muted mt-3">View users opens a popup directory. Register user opens the account-creation popup.</div>
             </div>
 
+            <div class="ui-card" id="role-permissions-module" th:if="${canManageRolePermissions}">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">System Role Definitions</h2>
+                        <div class="small ui-muted">Select a role, review what it can do, then add or remove permissions. Changes apply to dashboards and permission checks immediately.</div>
+                    </div>
+                </div>
+                <div class="ui-grid ui-grid-2">
+                    <div>
+                        <label class="ui-label form-label" for="rolePermissionRoleSelect">Role</label>
+                        <select id="rolePermissionRoleSelect" class="form-select"></select>
+                        <div class="ui-soft-note mt-3">
+                            <div class="fw-semibold mb-1" id="rolePermissionSummaryTitle">Role summary</div>
+                            <div class="small ui-muted" id="rolePermissionSummaryMeta">Select a role to inspect its current permissions.</div>
+                        </div>
+                        <div class="ui-soft-note mt-3">
+                            <div class="fw-semibold mb-1">Current role can</div>
+                            <ul class="ui-manual-list mb-0" id="rolePermissionResponsibilities"></ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="fw-semibold mb-2">Permission switches</div>
+                        <div id="rolePermissionActionList" class="ui-list-grid"></div>
+                    </div>
+                </div>
+                <div class="ui-action-strip mt-3">
+                    <button type="button" class="btn ui-btn-primary" id="saveRolePermissionsButton">Save Role Permissions</button>
+                </div>
+            </div>
+
             <div class="ui-card" id="geography-module" th:if="${canManageGeography}" sec:authorize="hasRole('SUPER_ADMIN')">
                 <div class="ui-section-head mb-2">
                     <div>
@@ -842,6 +934,61 @@
                     <button type="button" class="btn ui-btn-outline" data-bs-toggle="modal" data-bs-target="#stationModal">Register Station</button>
                 </div>
                 <div class="small ui-muted">Public users now select only admin-registered region, district, and nearby fire station. Reports are delivered only to the selected station control room.</div>
+            </div>
+
+            <div class="ui-card" id="login-carousel-module" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                <div class="ui-section-head mb-2">
+                    <div>
+                        <h2 class="h5 mb-0">Landing and Login Showcase</h2>
+                        <div class="small ui-muted">Upload moving announcement images for either the landing page public display or the login page staff showcase.</div>
+                    </div>
+                </div>
+                <div class="ui-soft-note mb-3">
+                    <div class="fw-semibold mb-1">Recommended poster format</div>
+                    <div class="small ui-muted">Use a clean landscape image around 1600 x 1200 or similar, with minimal text placed away from the edges so the landing and login overlays stay readable.</div>
+                </div>
+                <form id="loginCarouselForm" class="ui-stack" enctype="multipart/form-data">
+                    <div class="ui-grid ui-grid-2">
+                        <div>
+                            <label class="ui-label form-label" for="loginCarouselTitle">Slide title</label>
+                            <input id="loginCarouselTitle" class="form-control" name="title" type="text" maxlength="160" placeholder="Example: National emergency awareness week">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="loginCarouselOrder">Display order</label>
+                            <input id="loginCarouselOrder" class="form-control" name="displayOrder" type="number" min="0" value="0">
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="loginCarouselTargetPage">Placement</label>
+                            <select id="loginCarouselTargetPage" class="form-select" name="targetPage">
+                                <option value="LOGIN">Login Page</option>
+                                <option value="LANDING">Landing Page</option>
+                            </select>
+                        </div>
+                        <div class="ui-form-span">
+                            <label class="ui-label form-label" for="loginCarouselSubtitle">Slide subtitle</label>
+                            <textarea id="loginCarouselSubtitle" class="form-control" name="subtitle" rows="3" maxlength="600" placeholder="Short message displayed over the uploaded image"></textarea>
+                        </div>
+                        <div>
+                            <label class="ui-label form-label" for="loginCarouselImage">Advertisement image</label>
+                            <input id="loginCarouselImage" class="form-control" name="image" type="file" accept="image/png,image/jpeg,image/webp" required>
+                            <div class="small ui-muted mt-2">Use PNG, JPG, or WEBP. Recommended landscape poster image.</div>
+                        </div>
+                        <div class="d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="loginCarouselActive" name="active" checked>
+                                <label class="form-check-label" for="loginCarouselActive">Show immediately on selected page</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-action-strip">
+                        <button type="submit" class="btn ui-btn-primary">Upload Showcase Slide</button>
+                    </div>
+                </form>
+                <div class="ui-soft-note mt-3">
+                    <div class="fw-semibold mb-1">Current showcase slides</div>
+                    <div class="small ui-muted">Uploaded slides rotate automatically in the selected page placement: login or landing.</div>
+                </div>
+                <div id="loginCarouselAdminList" class="ui-list-grid mt-3"></div>
             </div>
 
             <div class="ui-card" id="report-center-module" th:if="${!#lists.isEmpty(availableReports)}">
@@ -877,7 +1024,7 @@
                 </div>
             </div>
 
-            <div class="ui-card ui-hide-center" id="system-test-module" th:if="${canRunSystemTests}" sec:authorize="hasRole('SUPER_ADMIN')">
+            <div class="ui-card ui-hide-center" id="system-test-module" th:if="${canRunSystemTests}" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                 <div class="ui-section-head mb-2">
                     <div>
                         <h2 class="h5 mb-0">System Verification</h2>
@@ -977,15 +1124,24 @@
             incidentsApiUrl: [[@{/api/incidents}]],
             equipmentApiUrl: [[@{/api/equipment}]],
             hydrantApiUrl: [[@{/api/equipment/hydrants}]],
+            keepAliveUrl: [[@{/api/session/keepalive}]],
+            sessionStateUrl: [[@{/api/session/state}]],
+            sessionPresenceUrl: [[@{/api/session/presence}]],
+            incidentModeUrl: [[@{/api/session/incident-mode}]],
+            securityOverviewApiUrl: [[@{/api/admin/audit/security/overview}]],
+            dispatchNumber: [[${sessionSecurityState != null ? sessionSecurityState['emergencyNumber'] : null}]],
             changePasswordUrl: [[@{/api/me/change-password}]],
             usersApiUrl: [[@{/api/users}]],
             canManageUsers: [[${canManageUsers}]],
+            canManageRolePermissions: [[${canManageRolePermissions}]],
             canManageGeography: [[${canManageGeography}]],
             canManageEquipment: [[${canManageEquipment}]],
             canManageHydrants: [[${canManageHydrants}]],
             canRegisterOperationalIncident: [[${canRegisterOperationalIncident}]],
             canReviewOperationalApprovals: [[${canReviewOperationalApprovals}]],
             canRunSystemTests: [[${canRunSystemTests}]],
+            loginCarouselApiUrl: [[@{/api/admin/login-carousel}]],
+            rolePermissionsApiUrl: [[@{/api/admin/role-permissions}]],
             canAccessInvestigations: [[${canAccessInvestigations}]],
             roles: [[${T(com.daniphord.mahanga.Util.OperationRole).ALL_FROMS_ROLES}]],
             stations: [[${stationOptions}]],
@@ -999,7 +1155,9 @@
             currentRole: [[${loggedInRole}]],
             geographyApiUrl: [[@{/api/geography}]],
             systemTestApiUrl: [[@{/api/system-tests}]],
-            teleSupportRequestUrlTemplate: [[@{/api/incidents/__id__/tele-support-request}]]
+            teleSupportRequestUrlTemplate: [[@{/api/incidents/__id__/tele-support-request}]],
+            sessionState: [[${sessionSecurityState}]],
+            activeEmergencyIncidents: [[${activeEmergencyIncidents}]]
         };
         window.FROMS_ROLE_CHARTS = {
             incidentLabels: ['Active incidents', 'Cleared / standby'],

@@ -206,6 +206,10 @@ public class RoleAccessService {
         return hasAction(user, RoleResponsibilityService.ACTION_MANAGE_USERS);
     }
 
+    public boolean canManageRolePermissions(User user) {
+        return hasAction(user, RoleResponsibilityService.ACTION_MANAGE_ROLE_PERMISSIONS);
+    }
+
     public boolean canManageSystemSettings(User user) {
         return hasAction(user, RoleResponsibilityService.ACTION_MANAGE_SYSTEM_SETTINGS);
     }
@@ -264,7 +268,7 @@ public class RoleAccessService {
     public boolean canReviewOperationalApprovals(User user) {
         String role = normalizeRole(user == null ? null : user.getRole());
         return Set.of(
-                "SUPER_ADMIN",
+                OperationRole.SUPER_ADMIN,
                 OperationRole.STATION_FIRE_OPERATION_OFFICER,
                 OperationRole.STATION_FIRE_OFFICER,
                 OperationRole.DISTRICT_OPERATION_OFFICER,

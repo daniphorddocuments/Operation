@@ -70,6 +70,23 @@ class LoginSecurityServiceTest {
         assertTrue(loginSecurityService.isAccountLocked(refreshedProbeUser));
     }
 
+    @Test
+    void repeatedFailedPasswordsDoNotLockEmergencyOperatorAccount() {
+        String probeIp = uniqueProbeIp("203.0.114.");
+        User probeUser = createProbeUser();
+        probeUser.setRole(OperationRole.STATION_OPERATION_OFFICER);
+        userRepository.save(probeUser);
+
+        String lastMessage = "";
+        for (int attempt = 0; attempt < loginSecurityService.maxLoginAttempts(); attempt++) {
+            lastMessage = loginSecurityService.recordFailedLogin(probeUser, probeIp);
+        }
+
+        User refreshedProbeUser = userRepository.findById(probeUser.getId()).orElseThrow();
+        assertTrue(!loginSecurityService.isAccountLocked(refreshedProbeUser));
+        assertTrue(lastMessage.contains("remains available during active response"));
+    }
+
     private User createProbeUser() {
         User probeUser = new User();
         probeUser.setUsername("lstest_" + Long.toString(System.nanoTime(), 36));

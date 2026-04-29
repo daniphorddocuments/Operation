@@ -32,7 +32,7 @@ public class SystemTestController {
     public ResponseEntity<?> reports(HttpSession session) {
         User currentUser = currentUser(session);
         if (!systemTestService.canRunTests(currentUser)) {
-            return ResponseEntity.status(403).body(Map.of("error", "Only system admin can view system test reports"));
+            return ResponseEntity.status(403).body(Map.of("error", "Only authorized administrators can view system test reports"));
         }
         return ResponseEntity.ok(systemTestService.latestReports().stream().map(this::toView).toList());
     }
@@ -41,7 +41,7 @@ public class SystemTestController {
     public ResponseEntity<?> run(HttpSession session, HttpServletRequest request) {
         User currentUser = currentUser(session);
         if (!systemTestService.canRunTests(currentUser)) {
-            return ResponseEntity.status(403).body(Map.of("error", "Only system admin can run system verification"));
+            return ResponseEntity.status(403).body(Map.of("error", "Only authorized administrators can run system verification"));
         }
         return ResponseEntity.ok(toView(systemTestService.runManual(currentUser, RequestUtil.getClientIpAddress(request))));
     }
@@ -50,7 +50,7 @@ public class SystemTestController {
     public ResponseEntity<?> report(@PathVariable Long id, HttpSession session) {
         User currentUser = currentUser(session);
         if (!systemTestService.canRunTests(currentUser)) {
-            return ResponseEntity.status(403).body(Map.of("error", "Only system admin can view system test reports"));
+            return ResponseEntity.status(403).body(Map.of("error", "Only authorized administrators can view system test reports"));
         }
         SystemTestReport report = systemTestService.report(id);
         return ResponseEntity.ok(Map.of(
@@ -63,7 +63,7 @@ public class SystemTestController {
     public ResponseEntity<?> reportPdf(@PathVariable Long id, @RequestParam(name = "lang", defaultValue = "en") String lang, HttpSession session) {
         User currentUser = currentUser(session);
         if (!systemTestService.canRunTests(currentUser)) {
-            return ResponseEntity.status(403).body(Map.of("error", "Only system admin can download system test reports"));
+            return ResponseEntity.status(403).body(Map.of("error", "Only authorized administrators can download system test reports"));
         }
         byte[] pdf = systemTestService.generatePdf(id, lang);
         return ResponseEntity.ok()

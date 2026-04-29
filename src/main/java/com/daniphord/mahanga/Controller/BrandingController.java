@@ -4,6 +4,7 @@ import com.daniphord.mahanga.Model.User;
 import com.daniphord.mahanga.Repositories.UserRepository;
 import com.daniphord.mahanga.Service.AuditService;
 import com.daniphord.mahanga.Service.PdfBrandingService;
+import com.daniphord.mahanga.Service.RoleAccessService;
 import com.daniphord.mahanga.Util.RequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,20 +20,33 @@ public class BrandingController {
     private final PdfBrandingService pdfBrandingService;
     private final AuditService auditService;
     private final UserRepository userRepository;
+    private final RoleAccessService roleAccessService;
 
-    public BrandingController(PdfBrandingService pdfBrandingService, AuditService auditService, UserRepository userRepository) {
+    public BrandingController(
+            PdfBrandingService pdfBrandingService,
+            AuditService auditService,
+            UserRepository userRepository,
+            RoleAccessService roleAccessService
+    ) {
         this.pdfBrandingService = pdfBrandingService;
         this.auditService = auditService;
         this.userRepository = userRepository;
+        this.roleAccessService = roleAccessService;
     }
 
     @GetMapping
-    public Map<String, String> currentBranding() {
-        return pdfBrandingService.currentBranding();
+    public ResponseEntity<Map<String, String>> currentBranding(HttpSession session) {
+        if (!canManageBranding(session)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
+        return ResponseEntity.ok(pdfBrandingService.currentBranding());
     }
 
     @PutMapping("/signature")
     public ResponseEntity<Map<String, String>> updateSignature(@RequestBody Map<String, String> requestBody, HttpSession session, HttpServletRequest request) {
+        if (!canManageBranding(session)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         String signatureText = requestBody.getOrDefault("signatureText", "");
         if (signatureText == null || signatureText.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("error", "signatureText is required"));
@@ -44,6 +58,9 @@ public class BrandingController {
 
     @PutMapping("/signature-footer")
     public ResponseEntity<Map<String, String>> updateSignatureFooter(@RequestBody Map<String, String> requestBody, HttpSession session, HttpServletRequest request) {
+        if (!canManageBranding(session)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         String signatureFooterBase64 = requestBody.getOrDefault("signatureFooterBase64", "");
         if (signatureFooterBase64 == null || signatureFooterBase64.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("error", "signatureFooterBase64 is required"));
@@ -55,6 +72,9 @@ public class BrandingController {
 
     @PutMapping("/logos")
     public ResponseEntity<Map<String, String>> updateLogos(@RequestBody Map<String, String> requestBody, HttpSession session, HttpServletRequest request) {
+        if (!canManageBranding(session)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Action not allowed for your role"));
+        }
         String fireLogoBase64 = requestBody.get("fireLogoBase64");
         String tanzaniaLogoBase64 = requestBody.get("tanzaniaLogoBase64");
         if ((fireLogoBase64 == null || fireLogoBase64.isBlank()) && (tanzaniaLogoBase64 == null || tanzaniaLogoBase64.isBlank())) {
@@ -71,5 +91,10 @@ public class BrandingController {
             return userRepository.findById(id).orElse(null);
         }
         return null;
+    }
+
+    private boolean canManageBranding(HttpSession session) {
+        User user = currentUser(session);
+        return roleAccessService.canManageSystemSettings(user) || roleAccessService.canManageRolePermissions(user);
     }
 }

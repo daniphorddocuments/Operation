@@ -45,7 +45,20 @@ public final class OperationRole {
             ADMIN
     );
 
+    public static final List<String> EMERGENCY_OPERATOR_ROLES = List.of(
+            CONTROL_ROOM_OPERATOR,
+            CONTROL_ROOM_ATTENDANT,
+            STATION_FIRE_OPERATION_OFFICER,
+            STATION_FIRE_OFFICER,
+            STATION_OPERATION_OFFICER,
+            OPERATION_OFFICER,
+            DEPARTMENT_OFFICER,
+            HEAD_FIRE_FIGHTING_OPERATIONS,
+            HEAD_RESCUE_OPERATIONS
+    );
+
     public static final List<String> ALL_FROMS_ROLES = List.of(
+            SUPER_ADMIN,
             UNASSIGNED,
             ADMIN,
             CONTROL_ROOM_OPERATOR,
@@ -80,5 +93,9 @@ public final class OperationRole {
         }
         String normalized = role.trim().toUpperCase();
         return normalized.startsWith("ROLE_") ? normalized.substring(5) : normalized;
+    }
+
+    public static boolean isEmergencyOperatorRole(String role) {
+        return EMERGENCY_OPERATOR_ROLES.contains(normalizeRole(role));
     }
 }

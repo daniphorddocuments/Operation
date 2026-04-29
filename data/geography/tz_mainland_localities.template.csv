@@ -1,0 +1,4 @@
+region,region_code,district,ward,entry_type,locality_name,ward_latitude,ward_longitude,locality_latitude,locality_longitude,landmark_name,landmark_symbol,landmark_latitude,landmark_longitude
+Dodoma,DOD,Dodoma City Council,Kiwanja cha Ndege,STREET,Mlimwa C,-6.172500,35.739200,-6.173100,35.740000,Kiwanja cha Ndege Junction,JCT,-6.173500,35.740300
+Dodoma,DOD,Dodoma City Council,Kiwanja cha Ndege,STREET,Mlimwa B,-6.172500,35.739200,-6.172900,35.739700,,,
+Dodoma,DOD,Chamwino District Council,Buigiri,VILLAGE,Buigiri,-6.250100,35.820400,-6.249700,35.821100,Buigiri Primary School,SCH,-6.249900,35.821500

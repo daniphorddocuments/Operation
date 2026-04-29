@@ -11,6 +11,7 @@ import com.daniphord.mahanga.Service.NotificationService;
 import com.daniphord.mahanga.Service.ReportCenterService;
 import com.daniphord.mahanga.Service.RoleAccessService;
 import com.daniphord.mahanga.Service.RoleResponsibilityService;
+import com.daniphord.mahanga.Service.SecurityIntelligenceService;
 import com.daniphord.mahanga.Service.UserManualService;
 import com.daniphord.mahanga.Service.VideoSessionService;
 import com.daniphord.mahanga.Util.RateLimiter;
@@ -53,6 +54,7 @@ public class ControlRoomController {
     private final NotificationService notificationService;
     private final UserManualService userManualService;
     private final AiRouteService aiRouteService;
+    private final SecurityIntelligenceService securityIntelligenceService;
 
     public ControlRoomController(
             ControlRoomService controlRoomService,
@@ -64,7 +66,8 @@ public class ControlRoomController {
             ReportCenterService reportCenterService,
             NotificationService notificationService,
             UserManualService userManualService,
-            AiRouteService aiRouteService
+            AiRouteService aiRouteService,
+            SecurityIntelligenceService securityIntelligenceService
     ) {
         this.controlRoomService = controlRoomService;
         this.captchaService = captchaService;
@@ -76,6 +79,7 @@ public class ControlRoomController {
         this.notificationService = notificationService;
         this.userManualService = userManualService;
         this.aiRouteService = aiRouteService;
+        this.securityIntelligenceService = securityIntelligenceService;
     }
 
     @GetMapping("/public/emergency/report")
@@ -97,6 +101,7 @@ public class ControlRoomController {
             @RequestParam Long regionId,
             @RequestParam Long districtId,
             @RequestParam Long stationId,
+            @RequestParam(required = false) String manualLocationText,
             @RequestParam String captchaAnswer,
             HttpServletRequest request,
             HttpSession session,
@@ -115,6 +120,9 @@ public class ControlRoomController {
             return "redirect:/public/emergency/report";
         }
         try {
+            if (manualLocationText != null && !manualLocationText.isBlank()) {
+                call.setLocationText(manualLocationText.trim());
+            }
             EmergencyCall saved = controlRoomService.logPublicReport(call, regionId, districtId, stationId);
             log.info("Public emergency report recorded. callId={}, ip={}, incidentType={}, stationId={}", saved.getId(), ipAddress, saved.getIncidentType(), stationId);
             return "redirect:/public/emergency/report/" + saved.getReportNumber() + "?token=" + saved.getPublicAccessToken();
@@ -354,6 +362,16 @@ public class ControlRoomController {
                 ))
                 .toList());
         model.addAttribute("notificationUnreadCount", notificationService.unreadCount(userId));
+        model.addAttribute("sessionSecurityState", securityIntelligenceService.sessionState(session));
+        model.addAttribute("activeEmergencyCalls", visibleCalls.stream()
+                .filter(call -> !"CLOSED".equalsIgnoreCase(call.getStatus()) && !"REJECTED".equalsIgnoreCase(call.getStatus()))
+                .map(call -> Map.of(
+                        "reportNumber", call.getReportNumber(),
+                        "status", call.getStatus(),
+                        "incidentType", call.getIncidentType() == null ? "" : call.getIncidentType()
+                ))
+                .limit(20)
+                .toList());
         return "control-room-dashboard";
     }
 

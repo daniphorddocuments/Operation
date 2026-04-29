@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             return JSON.parse(text);
         } catch (error) {
-            throw new Error('Server returned an unexpected response. Please try again.');
+            return { rawText: text };
         }
     }
 

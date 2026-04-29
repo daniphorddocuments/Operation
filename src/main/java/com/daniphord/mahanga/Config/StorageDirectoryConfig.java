@@ -18,11 +18,13 @@ public class StorageDirectoryConfig {
     @Bean
     ApplicationRunner ensureStorageDirectories(
             @Value("${froms.storage.videos-dir:videos}") String videosDirectory,
-            @Value("${froms.storage.investigations-dir:investigations}") String investigationsDirectory
+            @Value("${froms.storage.investigations-dir:investigations}") String investigationsDirectory,
+            @Value("${froms.storage.login-carousel-dir:login-carousel}") String loginCarouselDirectory
     ) {
         return args -> {
             createDirectory(videosDirectory);
             createDirectory(investigationsDirectory);
+            createDirectory(loginCarouselDirectory);
         };
     }
 

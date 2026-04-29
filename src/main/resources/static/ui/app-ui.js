@@ -8,18 +8,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }).filter(function (item) {
             return item.startsWith(prefix);
         }).map(function (item) {
-            return decodeURIComponent(item.substring(prefix.length));
+            return decodeURIComponent(item.substring(prefix.length)).replace(/^"|"$/g, '');
         })[0] || '';
+    }
+
+    function readCsrfMeta(name) {
+        const element = document.querySelector('meta[name="' + name + '"]');
+        return element ? String(element.getAttribute('content') || '') : '';
     }
 
     window.fetch = function (resource, options) {
         const requestOptions = options ? Object.assign({}, options) : {};
         const method = String(requestOptions.method || 'GET').toUpperCase();
         const headers = new Headers(requestOptions.headers || {});
+        if (!headers.has('X-Requested-With')) {
+            headers.set('X-Requested-With', 'XMLHttpRequest');
+        }
         if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
-            const csrfToken = readCookie('XSRF-TOKEN');
-            if (csrfToken && !headers.has('X-XSRF-TOKEN')) {
-                headers.set('X-XSRF-TOKEN', csrfToken);
+            // For AJAX headers, Spring expects the plain cookie token.
+            // The meta token rendered into HTML may be XOR-masked for BREACH protection.
+            const csrfToken = readCookie('XSRF-TOKEN') || readCsrfMeta('_csrf');
+            const csrfHeader = readCsrfMeta('_csrf_header') || 'X-XSRF-TOKEN';
+            if (csrfToken && !headers.has(csrfHeader)) {
+                headers.set(csrfHeader, csrfToken);
             }
         }
         requestOptions.headers = headers;
@@ -248,6 +259,29 @@ document.addEventListener('DOMContentLoaded', function () {
         if (document.title && translations.sw[document.title]) {
             document.title = translations.sw[document.title];
         }
+    }
+
+    const fireSwal = typeof Swal !== 'undefined'
+        ? Swal.mixin({
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'ui-swal-confirm',
+                cancelButton: 'ui-swal-cancel'
+            },
+            confirmButtonColor: '#f57c00',
+            cancelButtonColor: '#ffd093'
+        })
+        : null;
+
+    if (fireSwal && typeof Swal.fire === 'function') {
+        Swal.fire = fireSwal.fire.bind(fireSwal);
+    }
+
+    function showSwal(options) {
+        if (fireSwal) {
+            return fireSwal.fire(options);
+        }
+        return Promise.resolve({ isConfirmed: window.confirm((options && options.text) || (options && options.title) || 'Continue?') });
     }
 
     function renderDashboardChart(canvasId, type, labels, values, colors, options) {
@@ -597,6 +631,195 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function syncSidebarActiveLinks() {
+        const sidebarLinks = Array.from(document.querySelectorAll('.dashboard-sidebar .landing-sidebar-link'));
+        if (sidebarLinks.length === 0) {
+            return;
+        }
+
+        const currentHash = window.location.hash || '';
+        const currentPathname = window.location.pathname || '';
+        let matchedLink = null;
+
+        sidebarLinks.forEach(function (link) {
+            link.classList.remove('is-active');
+            link.removeAttribute('aria-current');
+
+            const href = compactText(link.getAttribute('href'));
+            if (!href) {
+                return;
+            }
+
+            if (currentHash && href === currentHash) {
+                matchedLink = link;
+                return;
+            }
+
+            if (!currentHash && href.charAt(0) !== '#') {
+                try {
+                    const resolvedUrl = new URL(href, window.location.origin);
+                    if (resolvedUrl.pathname === currentPathname) {
+                        matchedLink = link;
+                    }
+                } catch (error) {
+                    // Ignore malformed href values and continue checking other links.
+                }
+            }
+        });
+
+        if (!matchedLink && sidebarLinks.length > 0) {
+            matchedLink = sidebarLinks[0];
+        }
+
+        if (matchedLink) {
+            matchedLink.classList.add('is-active');
+            matchedLink.setAttribute('aria-current', 'page');
+        }
+    }
+
+    function topLevelDashboardPanels() {
+        return Array.from(document.querySelectorAll(
+            ".dashboard-main > .ui-hero, .dashboard-main > .ui-command-grid, .dashboard-main > .ui-briefing-strip, .dashboard-main > .ui-card, .dashboard-main > .ui-dual-grid, .dashboard-main > .ui-command-center"
+        ));
+    }
+
+    function panelForHash(hashValue) {
+        if (!hashValue || hashValue.charAt(0) !== '#') {
+            return null;
+        }
+        const target = document.querySelector(hashValue);
+        if (!target) {
+            return null;
+        }
+        return target.closest('.dashboard-main > .ui-hero, .dashboard-main > .ui-command-grid, .dashboard-main > .ui-briefing-strip, .dashboard-main > .ui-card, .dashboard-main > .ui-dual-grid, .dashboard-main > .ui-command-center');
+    }
+
+    function defaultDashboardPanel() {
+        return document.querySelector('#overview-panel, #operations-overview, #control-overview');
+    }
+
+    function isCompositeDashboardPanel(panel) {
+        return !!(panel && (panel.classList.contains('ui-dual-grid') || panel.classList.contains('ui-command-center')));
+    }
+
+    function directChildren(element) {
+        return element ? Array.from(element.children || []) : [];
+    }
+
+    function directCards(container) {
+        return directChildren(container).filter(function (child) {
+            return child.classList && child.classList.contains('ui-card');
+        });
+    }
+
+    function directCompositeChild(panel, target) {
+        let current = target;
+        while (current && current.parentElement !== panel) {
+            current = current.parentElement;
+        }
+        return current && current.parentElement === panel ? current : null;
+    }
+
+    function directCardWithinContainer(container, target) {
+        let current = target;
+        while (current && current.parentElement !== container) {
+            current = current.parentElement;
+        }
+        return current && current.parentElement === container && current.classList && current.classList.contains('ui-card')
+            ? current
+            : null;
+    }
+
+    function resetCompositePanel(panel) {
+        if (!isCompositeDashboardPanel(panel)) {
+            return;
+        }
+        directChildren(panel).forEach(function (child) {
+            child.style.display = '';
+            directCards(child).forEach(function (card) {
+                card.style.display = '';
+            });
+        });
+    }
+
+    function syncDashboardPanels() {
+        if (!isProtectedPage) {
+            return;
+        }
+        const panels = topLevelDashboardPanels();
+        if (!panels.length) {
+            return;
+        }
+        panels.forEach(function (panel) {
+            panel.classList.remove('dashboard-panel-visible');
+        });
+
+        const hashPanel = panelForHash(window.location.hash || '');
+        const selectedPanel = hashPanel || defaultDashboardPanel();
+        if (selectedPanel) {
+            selectedPanel.classList.add('dashboard-panel-visible');
+            document.querySelectorAll('.dashboard-main .ui-dual-grid, .dashboard-main .ui-command-center').forEach(function (panel) {
+                resetCompositePanel(panel);
+            });
+
+            if (isCompositeDashboardPanel(selectedPanel) && window.location.hash) {
+                const target = document.querySelector(window.location.hash);
+                const compositeChild = target ? directCompositeChild(selectedPanel, target) : null;
+                if (compositeChild && target !== selectedPanel) {
+                    directChildren(selectedPanel).forEach(function (child) {
+                        child.style.display = 'none';
+                    });
+                    compositeChild.style.display = '';
+
+                    const targetCard = directCardWithinContainer(compositeChild, target);
+                    const siblingCards = directCards(compositeChild);
+                    if (targetCard && siblingCards.length > 1) {
+                        siblingCards.forEach(function (card) {
+                            card.style.display = card === targetCard ? '' : 'none';
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    function syncSidebarMenus() {
+        const cards = Array.from(document.querySelectorAll('.dashboard-sidebar .sidebar-module-card'));
+        if (!cards.length) {
+            return;
+        }
+
+        cards.forEach(function (card) {
+            const links = Array.from(card.querySelectorAll('.landing-sidebar-link'));
+            const currentHash = window.location.hash || '';
+            const matchingHash = links.some(function (link) {
+                return compactText(link.getAttribute('href')) === currentHash;
+            });
+            card.classList.toggle('is-open', matchingHash);
+        });
+    }
+
+    syncSidebarActiveLinks();
+    syncSidebarMenus();
+    syncDashboardPanels();
+    window.addEventListener('hashchange', syncSidebarActiveLinks);
+    window.addEventListener('hashchange', syncSidebarMenus);
+    window.addEventListener('hashchange', syncDashboardPanels);
+    document.querySelectorAll('.dashboard-sidebar .landing-sidebar-link').forEach(function (link) {
+        link.addEventListener('click', function () {
+            const card = link.closest('.sidebar-module-card');
+            const hasSubmenu = link.classList.contains('has-submenu');
+            if (hasSubmenu && card) {
+                card.classList.toggle('is-open');
+            }
+            window.setTimeout(function () {
+                syncSidebarActiveLinks();
+                syncSidebarMenus();
+                syncDashboardPanels();
+            }, 0);
+        });
+    });
+
     document.querySelectorAll('[data-history-back]').forEach(function (button) {
         button.addEventListener('click', function () {
             if (window.history.length > 1) {
@@ -669,18 +892,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const publicWardId = document.getElementById('ward');
         const publicVillageStreetId = document.getElementById('village');
         const publicRoadLandmarkId = document.getElementById('locationText');
+        const manualLocationInput = document.getElementById('manualLocationText');
 
         function showUiError(message) {
             if (typeof Swal !== 'undefined') {
-                Swal.fire({ icon: 'error', title: 'Request failed', text: message });
+                showSwal({ icon: 'error', title: 'Request failed', text: message });
                 return;
             }
             window.alert(message);
         }
 
+        function syncManualLocationState(optionsCount) {
+            if (!manualLocationInput) {
+                return;
+            }
+            if (typeof optionsCount === 'number' && optionsCount > 0) {
+                manualLocationInput.placeholder = 'Optional if you selected a listed landmark';
+                return;
+            }
+            manualLocationInput.placeholder = 'Type the nearest landmark, building, junction, bridge, school, or market';
+        }
+
         async function fetchPublicOptions(url, selectElement, placeholder) {
             if (!selectElement) {
-                return;
+                return 0;
             }
             resetSelectOptions(selectElement, placeholder);
             selectElement.disabled = true;
@@ -689,13 +924,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) {
                 throw new Error(payload.error || 'Unable to load options');
             }
+            if (!Array.isArray(payload)) {
+                throw new Error('Unable to load options');
+            }
             payload.forEach(function (item) {
                 const option = document.createElement('option');
                 option.value = String(item.id);
                 option.textContent = item.name;
                 selectElement.appendChild(option);
             });
-            selectElement.disabled = false;
+            selectElement.disabled = payload.length === 0;
+            return payload.length;
         }
 
         if (publicRegionId && publicDistrictId) {
@@ -716,6 +955,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     resetSelectOptions(publicRoadLandmarkId, 'Select road landmark');
                     publicRoadLandmarkId.disabled = true;
                 }
+                syncManualLocationState(0);
                 if (!publicRegionId.value) {
                     resetSelectOptions(publicDistrictId, 'Select district');
                     publicDistrictId.disabled = true;
@@ -741,6 +981,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     resetSelectOptions(publicRoadLandmarkId, 'Select road landmark');
                     publicRoadLandmarkId.disabled = true;
                 }
+                syncManualLocationState(0);
                 if (!publicDistrictId.value) {
                     resetSelectOptions(publicStationId, 'Select station');
                     publicStationId.disabled = true;
@@ -761,6 +1002,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     resetSelectOptions(publicRoadLandmarkId, 'Select road landmark');
                     publicRoadLandmarkId.disabled = true;
                 }
+                syncManualLocationState(0);
                 if (!publicWardId.value) {
                     resetSelectOptions(publicVillageStreetId, 'Select village or street');
                     publicVillageStreetId.disabled = true;
@@ -777,13 +1019,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!publicVillageStreetId.value) {
                     resetSelectOptions(publicRoadLandmarkId, 'Select road landmark');
                     publicRoadLandmarkId.disabled = true;
+                    syncManualLocationState(0);
                     return;
                 }
-                fetchPublicOptions(publicGeoContext.geographyApiUrl + '/villages-streets/' + publicVillageStreetId.value + '/road-landmarks', publicRoadLandmarkId, 'Select road landmark').catch(function (error) {
-                    showUiError(error.message);
-                });
+                fetchPublicOptions(publicGeoContext.geographyApiUrl + '/villages-streets/' + publicVillageStreetId.value + '/road-landmarks', publicRoadLandmarkId, 'Select road landmark')
+                    .then(function (count) {
+                        syncManualLocationState(count);
+                    })
+                    .catch(function (error) {
+                        syncManualLocationState(0);
+                        showUiError(error.message);
+                    });
             });
         }
+
+        syncManualLocationState(0);
     }
 
     function showInlineAlertToasts() {
@@ -890,8 +1140,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showSessionWarning() {
-        warningOpen = true;
-        Swal.fire({
+            warningOpen = true;
+        showSwal({
             title: 'Session Expired',
             text: 'Your session expired after 5 minutes of inactivity. Do you want to continue?',
             icon: 'warning',
@@ -1198,6 +1448,264 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
         });
+    }
+
+    if (appContext.loginCarouselApiUrl) {
+        const loginCarouselForm = document.getElementById('loginCarouselForm');
+        const loginCarouselAdminList = document.getElementById('loginCarouselAdminList');
+
+        function renderLoginCarouselSlides(items) {
+            if (!loginCarouselAdminList) {
+                return;
+            }
+            if (!Array.isArray(items) || items.length === 0) {
+                loginCarouselAdminList.innerHTML = '<div class="ui-soft-note"><div class="small ui-muted">No showcase images uploaded yet.</div></div>';
+                return;
+            }
+            loginCarouselAdminList.innerHTML = items.map(function (item) {
+                const subtitle = item.subtitle ? '<div class="small ui-muted">' + escapeHtml(item.subtitle) + '</div>' : '';
+                const badge = item.active ? 'Active' : 'Hidden';
+                const placement = item.targetPage ? ' | Placement: ' + escapeHtml(item.targetPage) : '';
+                return [
+                    '<div class="ui-list-row login-carousel-admin-row">',
+                    '<a class="login-carousel-admin-thumb" href="' + escapeHtml(item.imageUrl) + '" target="_blank" rel="noopener" aria-label="Preview showcase image">',
+                    '<img src="' + escapeHtml(item.imageUrl) + '" alt="' + escapeHtml(item.title || 'Showcase image') + '">',
+                    '</a>',
+                    '<div class="login-carousel-admin-copy">',
+                    '<div class="fw-semibold">' + escapeHtml(item.title || 'Showcase Slide') + '</div>',
+                    subtitle,
+                    '<div class="small ui-muted mt-2">Order: ' + escapeHtml(String(item.displayOrder || 0)) + ' | Status: ' + badge + placement + '</div>',
+                    '</div>',
+                    '<div class="ui-action-strip">',
+                    '<a class="btn ui-btn-outline" href="' + escapeHtml(item.imageUrl) + '" target="_blank" rel="noopener">Preview</a>',
+                    '<button type="button" class="btn ui-btn-outline" data-delete-login-slide="' + escapeHtml(String(item.id)) + '">Delete</button>',
+                    '</div>',
+                    '</div>'
+                ].join('');
+            }).join('');
+
+            loginCarouselAdminList.querySelectorAll('[data-delete-login-slide]').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const slideId = button.getAttribute('data-delete-login-slide');
+                    confirmActionPrompt('Delete showcase slide?', 'This image will be removed from its selected page rotation.', 'Delete slide')
+                        .then(function (confirmed) {
+                            if (!confirmed) {
+                                return null;
+                            }
+                            return window.fetch(appContext.loginCarouselApiUrl + '/' + slideId, {
+                                method: 'DELETE',
+                                credentials: 'same-origin'
+                            }).then(async function (response) {
+                                const payload = await readResponsePayload(response);
+                                if (!response.ok) {
+                                    throw new Error(payload.error || 'Unable to delete slide');
+                                }
+                                return loadLoginCarouselSlides();
+                            });
+                        })
+                        .catch(function (error) {
+                            if (error) {
+                                Swal.fire({ icon: 'error', title: 'Delete failed', text: error.message });
+                            }
+                        });
+                });
+            });
+        }
+
+        function loadLoginCarouselSlides() {
+            if (!loginCarouselAdminList) {
+                return Promise.resolve();
+            }
+            renderLoadingSkeleton(loginCarouselAdminList, 3);
+            return window.fetch(appContext.loginCarouselApiUrl, {
+                method: 'GET',
+                credentials: 'same-origin'
+            }).then(async function (response) {
+                const payload = await readResponsePayload(response);
+                if (!response.ok) {
+                    throw new Error(payload.error || 'Unable to load showcase slides');
+                }
+                renderLoginCarouselSlides(payload);
+            }).catch(function (error) {
+                loginCarouselAdminList.innerHTML = '<div class="ui-soft-note"><div class="small ui-muted">' + escapeHtml(error.message) + '</div></div>';
+            });
+        }
+
+        if (loginCarouselForm) {
+            loginCarouselForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(loginCarouselForm);
+                if (!document.getElementById('loginCarouselActive')?.checked) {
+                    formData.set('active', 'false');
+                }
+                const imageInput = document.getElementById('loginCarouselImage');
+                const placementInput = document.getElementById('loginCarouselTargetPage');
+                if (!imageInput || !imageInput.files || !imageInput.files[0]) {
+                    Swal.fire({ icon: 'error', title: 'Image required', text: 'Select an image before uploading.' });
+                    return;
+                }
+                const placement = placementInput ? placementInput.value : 'LOGIN';
+                confirmActionPrompt('Upload showcase image?', 'This image will be added to the moving showcase on the ' + placement.toLowerCase() + ' page.', 'Upload slide')
+                    .then(function (confirmed) {
+                        if (!confirmed) {
+                            return null;
+                        }
+                        return window.fetch(appContext.loginCarouselApiUrl, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            body: formData
+                        }).then(async function (response) {
+                            const payload = await readResponsePayload(response);
+                            if (!response.ok) {
+                                throw new Error(payload.error || 'Unable to upload slide');
+                            }
+                            loginCarouselForm.reset();
+                            const activeCheckbox = document.getElementById('loginCarouselActive');
+                            if (activeCheckbox) {
+                                activeCheckbox.checked = true;
+                            }
+                            return loadLoginCarouselSlides().then(function () {
+                                Swal.fire({ icon: 'success', title: 'Slide uploaded', text: 'The selected page showcase has been updated.' });
+                            });
+                        });
+                    })
+                    .catch(function (error) {
+                        if (error) {
+                            Swal.fire({ icon: 'error', title: 'Upload failed', text: error.message });
+                        }
+                    });
+            });
+        }
+
+        if (loginCarouselAdminList) {
+            loadLoginCarouselSlides();
+        }
+    }
+
+    if (appContext.rolePermissionsApiUrl && appContext.canManageRolePermissions) {
+        const rolePermissionRoleSelect = document.getElementById('rolePermissionRoleSelect');
+        const rolePermissionSummaryTitle = document.getElementById('rolePermissionSummaryTitle');
+        const rolePermissionSummaryMeta = document.getElementById('rolePermissionSummaryMeta');
+        const rolePermissionResponsibilities = document.getElementById('rolePermissionResponsibilities');
+        const rolePermissionActionList = document.getElementById('rolePermissionActionList');
+        const saveRolePermissionsButton = document.getElementById('saveRolePermissionsButton');
+        let rolePermissionProfiles = [];
+
+        function rolePermissionProfile(roleKey) {
+            return rolePermissionProfiles.find(function (item) {
+                return item.roleKey === roleKey;
+            }) || null;
+        }
+
+        function renderRolePermissionProfile(roleKey) {
+            const profile = rolePermissionProfile(roleKey);
+            if (!profile) {
+                return;
+            }
+            if (rolePermissionSummaryTitle) {
+                rolePermissionSummaryTitle.textContent = profile.roleLabel || profile.roleKey;
+            }
+            if (rolePermissionSummaryMeta) {
+                const pageSummary = Array.isArray(profile.pages) && profile.pages.length ? profile.pages.join(', ') : 'ROLE';
+                rolePermissionSummaryMeta.textContent = 'Workspaces: ' + pageSummary;
+            }
+            if (rolePermissionResponsibilities) {
+                rolePermissionResponsibilities.innerHTML = Array.isArray(profile.responsibilities) && profile.responsibilities.length
+                    ? profile.responsibilities.map(function (item) {
+                        return '<li>' + escapeHtml(item) + '</li>';
+                    }).join('')
+                    : '<li>No permissions are currently enabled for this role.</li>';
+            }
+            if (rolePermissionActionList) {
+                rolePermissionActionList.innerHTML = Array.isArray(profile.actions) ? profile.actions.map(function (action) {
+                    return [
+                        '<label class="ui-list-row" style="align-items:flex-start; gap:0.9rem;">',
+                        '<input type="checkbox" class="form-check-input mt-1" data-role-permission-action value="' + escapeHtml(action.key) + '"' + (action.enabled ? ' checked' : '') + '>',
+                        '<span style="display:block;">',
+                        '<span class="fw-semibold d-block">' + escapeHtml(action.label) + '</span>',
+                        '<span class="small ui-muted d-block">' + escapeHtml(action.description) + '</span>',
+                        '<span class="small ui-muted d-block mt-1">Default: ' + (action.defaultEnabled ? 'enabled' : 'disabled') + '</span>',
+                        '</span>',
+                        '</label>'
+                    ].join('');
+                }).join('') : '';
+            }
+        }
+
+        function loadRolePermissionProfiles(selectedRole) {
+            return window.fetch(appContext.rolePermissionsApiUrl, {
+                method: 'GET',
+                credentials: 'same-origin'
+            }).then(async function (response) {
+                const payload = await readResponsePayload(response);
+                if (!response.ok) {
+                    throw new Error(payload.error || 'Unable to load role definitions');
+                }
+                rolePermissionProfiles = Array.isArray(payload.roles) ? payload.roles : [];
+                if (rolePermissionRoleSelect) {
+                    rolePermissionRoleSelect.innerHTML = rolePermissionProfiles.map(function (profile) {
+                        return '<option value="' + escapeHtml(profile.roleKey) + '">' + escapeHtml(profile.roleLabel || profile.roleKey) + '</option>';
+                    }).join('');
+                    const requestedRole = selectedRole || rolePermissionRoleSelect.value || (rolePermissionProfiles[0] ? rolePermissionProfiles[0].roleKey : '');
+                    if (requestedRole) {
+                        rolePermissionRoleSelect.value = requestedRole;
+                        renderRolePermissionProfile(requestedRole);
+                    }
+                }
+            });
+        }
+
+        if (rolePermissionRoleSelect) {
+            rolePermissionRoleSelect.addEventListener('change', function () {
+                renderRolePermissionProfile(rolePermissionRoleSelect.value);
+            });
+        }
+
+        if (saveRolePermissionsButton) {
+            saveRolePermissionsButton.addEventListener('click', function () {
+                const roleKey = rolePermissionRoleSelect ? rolePermissionRoleSelect.value : '';
+                if (!roleKey) {
+                    Swal.fire({ icon: 'error', title: 'Role required', text: 'Select a role before saving permissions.' });
+                    return;
+                }
+                const enabledActions = Array.from(document.querySelectorAll('[data-role-permission-action]:checked')).map(function (input) {
+                    return input.value;
+                });
+                confirmActionPrompt('Update role permissions?', 'This will change what the selected role can access and do immediately.', 'Save permissions')
+                    .then(function (confirmed) {
+                        if (!confirmed) {
+                            return null;
+                        }
+                        return window.fetch(appContext.rolePermissionsApiUrl + '/' + encodeURIComponent(roleKey), {
+                            method: 'PUT',
+                            credentials: 'same-origin',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ enabledActions: enabledActions })
+                        }).then(async function (response) {
+                            const payload = await readResponsePayload(response);
+                            if (!response.ok) {
+                                throw new Error(payload.error || 'Unable to save role permissions');
+                            }
+                            return loadRolePermissionProfiles(roleKey).then(function () {
+                                Swal.fire({ icon: 'success', title: 'Permissions updated', text: 'The selected role permissions were saved.' });
+                            });
+                        });
+                    })
+                    .catch(function (error) {
+                        if (error) {
+                            Swal.fire({ icon: 'error', title: 'Save failed', text: error.message });
+                        }
+                    });
+            });
+        }
+
+        if (rolePermissionRoleSelect) {
+            loadRolePermissionProfiles().catch(function (error) {
+                if (rolePermissionActionList) {
+                    rolePermissionActionList.innerHTML = '<div class="ui-soft-note"><div class="small ui-muted">' + escapeHtml(error.message) + '</div></div>';
+                }
+            });
+        }
     }
 
     if (appContext.canAccessInvestigations && appContext.investigationApiUrl) {
@@ -3309,5 +3817,211 @@ document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({ icon: 'error', title: 'Message send failed', text: error.message });
             });
         });
+    }
+
+    const securityContext = window.FROMS_CONTEXT || {};
+    const sessionState = securityContext.sessionState || {};
+    const presenceBadge = document.getElementById('presenceStatusBadge');
+    const incidentModeSelector = document.getElementById('incidentModeSelector');
+    const enableIncidentModeButton = document.getElementById('enableIncidentModeButton');
+    const disableIncidentModeButton = document.getElementById('disableIncidentModeButton');
+    const incidentModeStatusText = document.getElementById('incidentModeStatusText');
+    const securityRiskLevel = document.getElementById('securityRiskLevel');
+    const securityRiskScore = document.getElementById('securityRiskScore');
+    const dispatchButtons = document.querySelectorAll('[data-call-dispatch]');
+    let refreshToken = sessionState.refreshToken || '';
+    let incidentModeActive = Boolean(sessionState.incidentMode);
+    let lastInteractionAt = Date.now();
+    let idleWarningShown = false;
+
+    function setPresenceStatus(status) {
+        if (presenceBadge) {
+            presenceBadge.textContent = status || 'ACTIVE';
+        }
+    }
+
+    function setIncidentModeStatus(message) {
+        if (incidentModeStatusText) {
+            incidentModeStatusText.textContent = message;
+        }
+    }
+
+    function rememberInteraction() {
+        lastInteractionAt = Date.now();
+        idleWarningShown = false;
+    }
+
+    ['mousemove', 'keydown', 'click', 'touchstart'].forEach(function (eventName) {
+        window.addEventListener(eventName, rememberInteraction, { passive: true });
+    });
+
+    async function postJson(url, payload) {
+        const response = await window.fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload || {})
+        });
+        return readResponsePayload(response);
+    }
+
+    async function pushPresence(interacting) {
+        if (!securityContext.sessionPresenceUrl || !refreshToken) {
+            return;
+        }
+        const idleSeconds = Math.max(0, Math.round((Date.now() - lastInteractionAt) / 1000));
+        if (!idleWarningShown && idleSeconds >= Number(sessionState.idleWarningSeconds || 90)) {
+            idleWarningShown = true;
+            showSwal({
+                icon: 'warning',
+                title: 'Operator idle',
+                text: incidentModeActive
+                    ? 'Presence is being logged while incident mode keeps your emergency session active.'
+                    : 'The session is still open, but the system has marked you idle. Resume activity to refresh your session window.'
+            });
+        }
+        const payload = await postJson(securityContext.sessionPresenceUrl, {
+            refreshToken: refreshToken,
+            idleSeconds: idleSeconds,
+            tabVisible: document.visibilityState === 'visible',
+            interacting: Boolean(interacting),
+            warningShown: idleWarningShown
+        });
+        if (payload && payload.presenceStatus) {
+            setPresenceStatus(payload.presenceStatus);
+        }
+    }
+
+    if (securityContext.keepAliveUrl && refreshToken) {
+        window.setInterval(function () {
+            window.fetch(securityContext.keepAliveUrl, { method: 'POST', credentials: 'same-origin' })
+                .catch(function () {
+                    return null;
+                });
+            pushPresence(false).catch(function () {
+                return null;
+            });
+        }, incidentModeActive ? 60000 : 180000);
+        window.setInterval(function () {
+            pushPresence(false).catch(function () {
+                return null;
+            });
+        }, 30000);
+        document.addEventListener('visibilitychange', function () {
+            pushPresence(false).catch(function () {
+                return null;
+            });
+        });
+    }
+
+    if (enableIncidentModeButton && securityContext.incidentModeUrl) {
+        enableIncidentModeButton.addEventListener('click', function () {
+            postJson(securityContext.incidentModeUrl, {
+                refreshToken: refreshToken,
+                enabled: true,
+                incidentNumber: incidentModeSelector ? incidentModeSelector.value : ''
+            }).then(function (payload) {
+                incidentModeActive = Boolean(payload && payload.incidentMode);
+                setPresenceStatus(payload && payload.presenceStatus ? payload.presenceStatus : 'ON_MISSION');
+                setIncidentModeStatus('Incident mode active for ' + ((payload && payload.incidentNumber) || 'current emergency'));
+            }).catch(function (error) {
+                Swal.fire({ icon: 'error', title: 'Incident mode failed', text: error.message });
+            });
+        });
+    }
+
+    if (disableIncidentModeButton && securityContext.incidentModeUrl) {
+        disableIncidentModeButton.addEventListener('click', function () {
+            postJson(securityContext.incidentModeUrl, {
+                refreshToken: refreshToken,
+                enabled: false,
+                incidentNumber: ''
+            }).then(function (payload) {
+                incidentModeActive = false;
+                setPresenceStatus(payload && payload.presenceStatus ? payload.presenceStatus : 'ACTIVE');
+                setIncidentModeStatus('Standard session monitoring active');
+            }).catch(function (error) {
+                Swal.fire({ icon: 'error', title: 'Incident mode failed', text: error.message });
+            });
+        });
+    }
+
+    dispatchButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const number = String(securityContext.dispatchNumber || '114');
+            showSwal({
+                icon: 'question',
+                title: 'Open dispatch dialer?',
+                text: 'The dialer will open with ' + number + '. The call will not start until you confirm on your device.',
+                showCancelButton: true,
+                confirmButtonText: 'Open dialer'
+            }).then(function (result) {
+                if (!result || !result.isConfirmed) {
+                    return null;
+                }
+                return new Promise(function (resolve) {
+                    window.setTimeout(function () {
+                        window.location.href = 'tel:' + number;
+                        resolve();
+                    }, 3000);
+                });
+            });
+        });
+    });
+
+    function renderSecurityFeed(targetId, rows, formatter) {
+        const target = document.getElementById(targetId);
+        if (!target) {
+            return;
+        }
+        const items = Array.isArray(rows) ? rows : [];
+        if (!items.length) {
+            target.innerHTML = '<div class="ui-soft-note"><div class="small ui-muted">No security events in this view.</div></div>';
+            return;
+        }
+        target.innerHTML = items.map(formatter).join('');
+    }
+
+    function refreshSecurityOverview() {
+        if (!securityContext.securityOverviewApiUrl) {
+            return;
+        }
+        window.fetch(securityContext.securityOverviewApiUrl, {
+            method: 'GET',
+            credentials: 'same-origin'
+        }).then(readResponsePayload).then(function (payload) {
+            if (!payload || !payload.summary) {
+                return;
+            }
+            const summary = payload.summary;
+            const summaryMap = {
+                securitySummaryActiveUsers: summary.activeUsers,
+                securitySummaryElevated: summary.mediumOrHighRisk,
+                securitySummaryOnMission: summary.onMission,
+                securitySummaryFailedClusters: summary.failedLoginClusters
+            };
+            Object.keys(summaryMap).forEach(function (id) {
+                const node = document.getElementById(id);
+                if (node) {
+                    node.textContent = String(summaryMap[id] || 0);
+                }
+            });
+            renderSecurityFeed('securityActiveUsersFeed', payload.activeUsers, function (item) {
+                return '<div class="ui-soft-note"><div class="fw-semibold">' + (item.username || 'Unknown') + ' • ' + (item.presenceStatus || 'ACTIVE') + '</div><div class="small ui-muted">' + (item.role || '') + ' | ' + (item.browser || '') + ' | ' + (item.operatingSystem || '') + ' | risk ' + (item.riskScore || 0) + ' (' + (item.riskLevel || 'LOW') + ')</div></div>';
+            });
+            renderSecurityFeed('securityAlertsFeed', payload.alerts, function (item) {
+                return '<div class="ui-soft-note"><div class="fw-semibold">' + (item.alert || 'Alert') + '</div><div class="small ui-muted">' + (item.username || '') + ' | ' + (item.riskLevel || 'LOW') + ' | score ' + (item.riskScore || 0) + '</div></div>';
+            });
+            renderSecurityFeed('securityFailedClustersFeed', payload.failedLoginClusters, function (item) {
+                return '<div class="ui-soft-note"><div class="fw-semibold">' + (item.username || 'Unknown') + '</div><div class="small ui-muted">' + (item.ipAddress || '') + ' | ' + (item.details || '') + '</div></div>';
+            });
+        }).catch(function () {
+            return null;
+        });
+    }
+
+    if (document.getElementById('security-command-center')) {
+        refreshSecurityOverview();
+        window.setInterval(refreshSecurityOverview, 45000);
     }
 });

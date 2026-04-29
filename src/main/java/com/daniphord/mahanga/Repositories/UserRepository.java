@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     List<User> findByStationId(Long stationId);
     List<User> findByAccountLockedUntilAfter(LocalDateTime timestamp);
+    List<User> findByRoleIn(List<String> roles);
 }

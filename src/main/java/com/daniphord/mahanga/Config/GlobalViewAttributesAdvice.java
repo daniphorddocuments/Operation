@@ -1,6 +1,7 @@
 package com.daniphord.mahanga.Config;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -16,6 +17,14 @@ public class GlobalViewAttributesAdvice {
     @ModelAttribute("showLangSwitch")
     public boolean showLangSwitch() {
         return true;
+    }
+
+    @ModelAttribute("_csrf")
+    public CsrfToken csrfToken(CsrfToken csrfToken) {
+        if (csrfToken != null) {
+            csrfToken.getToken();
+        }
+        return csrfToken;
     }
 
     @ModelAttribute("supportPhone")

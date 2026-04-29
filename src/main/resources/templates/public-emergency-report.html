@@ -1,60 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{fragments/ui :: head('FROMS | Public Emergency Access', false)}"></th:block>
+<th:block th:replace="~{fragments/ui :: head('Fire and Rescue Force Operation Management System | Public Emergency Access', false)}"></th:block>
 <body class="ui-body" th:attr="data-lang=${currentLang},data-page='public-emergency-report'">
 <th:block th:replace="~{fragments/header :: publicHeader}"></th:block>
 
-<div class="ui-shell">
-    <nav class="ui-breadcrumbs mb-3" aria-label="Breadcrumb">
-        <a th:href="@{/login}">Home</a>
-        <span>/</span>
-        <span aria-current="page">Public Emergency Access</span>
-    </nav>
+<div class="ui-shell public-report-shell-clean">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <section class="ui-hero mb-4">
-                <div class="ui-hero-matrix">
-                    <div>
-                        <div class="ui-hero-chip-row">
-                            <span class="ui-hero-chip"><i class="fas fa-phone-volume"></i><span>Rapid public intake</span></span>
-                            <span class="ui-hero-chip"><i class="fas fa-comments"></i><span>Live case updates</span></span>
-                            <span class="ui-hero-chip"><i class="fas fa-video"></i><span>Scene video support</span></span>
-                        </div>
-                        <div class="ui-eyebrow mb-2">Emergency Access</div>
-                        <h1 class="h2 fw-bold mb-3">Reach the control room with a clearer and faster reporting flow.</h1>
-                        <p class="mb-0 text-white-50">Citizens, witnesses, and field responders can send a verified report, receive updates, and if needed show the scene live to the assigned station.</p>
-                    </div>
-                    <div class="ui-hero-side">
-                        <div class="ui-hero-panel">
-                            <div class="ui-eyebrow mb-2 text-white-50">Safety Line</div>
-                            <div class="fw-semibold">Call 114 for immediate danger</div>
-                        </div>
-                        <div class="ui-hero-panel">
-                            <div class="ui-eyebrow mb-2 text-white-50">Guided Flow</div>
-                            <div class="fw-semibold">Report, track, chat, and video in one place</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="ui-briefing-strip mb-4" aria-label="Public reporting steps">
-                <article class="ui-briefing-card">
-                    <div class="ui-briefing-kicker">Step 1</div>
-                    <h2 class="ui-briefing-title">Identify the caller and the incident quickly.</h2>
-                    <p class="ui-briefing-copy">Start with who is reporting, what is happening, and which type of emergency best matches the scene.</p>
-                </article>
-                <article class="ui-briefing-card">
-                    <div class="ui-briefing-kicker">Step 2</div>
-                    <h2 class="ui-briefing-title">Route the location accurately.</h2>
-                    <p class="ui-briefing-copy">Select the correct region, district, station, ward, and nearest landmark so the control room can act faster.</p>
-                </article>
-                <article class="ui-briefing-card">
-                    <div class="ui-briefing-kicker">Step 3</div>
-                    <h2 class="ui-briefing-title">Keep the case room open after submission.</h2>
-                    <p class="ui-briefing-copy">Use the case page for chat updates and live scene video if the control room needs visual confirmation.</p>
-                </article>
-            </section>
-
             <section class="ui-card mb-4" th:if="${publicReport != null}">
                 <div class="ui-section-head mb-2">
                     <div>
@@ -149,16 +101,6 @@
                         <h1 class="h3 fw-bold mb-2">Report a fire, rescue need, or accident</h1>
                         <p class="ui-muted mb-0">Public reporting channel for citizens, villages, and field witnesses. Every request is validated before it reaches the control room.</p>
                     </div>
-                    <div class="ui-mini-grid" style="min-width:260px;">
-                        <div class="ui-soft-note">
-                            <div class="ui-eyebrow mb-1">Protection</div>
-                            <div class="small">CAPTCHA enabled</div>
-                        </div>
-                        <div class="ui-soft-note">
-                            <div class="ui-eyebrow mb-1">Control</div>
-                            <div class="small">Rate-limited intake</div>
-                        </div>
-                    </div>
                 </div>
 
                 <div th:if="${success}" class="alert alert-success ui-alert" role="alert" data-alert-kind="success" th:text="${success}"></div>
@@ -237,9 +179,14 @@
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label" for="locationText">Nearest landmark</label>
-                                <select class="form-select" id="locationText" name="roadLandmarkId" required disabled>
+                                <select class="form-select" id="locationText" name="roadLandmarkId" disabled>
                                     <option value="">Select road landmark</option>
                                 </select>
+                                <div class="small ui-muted mt-2">If the exact landmark is not listed, type it manually below.</div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="manualLocationText">Manual landmark / building / street note</label>
+                                <input class="form-control" id="manualLocationText" name="manualLocationText" type="text" placeholder="Example: Near market junction, school gate, mosque, bridge">
                             </div>
                         </div>
                     </div>

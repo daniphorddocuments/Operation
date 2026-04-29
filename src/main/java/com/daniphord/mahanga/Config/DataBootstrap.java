@@ -12,6 +12,7 @@ import com.daniphord.mahanga.Util.PasswordStrengthUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -30,6 +31,24 @@ public class DataBootstrap {
             "tele.support"
     );
 
+    private final boolean seedDefaultAdmins;
+    private final BootstrapAccountConfig primaryAdmin;
+    private final BootstrapAccountConfig secondaryAdmin;
+
+    public DataBootstrap(
+            @Value("${froms.bootstrap.seed-default-admins:false}") boolean seedDefaultAdmins,
+            @Value("${froms.bootstrap.admin.username:}") String primaryUsername,
+            @Value("${froms.bootstrap.admin.password:}") String primaryPassword,
+            @Value("${froms.bootstrap.admin.full-name:}") String primaryFullName,
+            @Value("${froms.bootstrap.secondary-admin.username:}") String secondaryUsername,
+            @Value("${froms.bootstrap.secondary-admin.password:}") String secondaryPassword,
+            @Value("${froms.bootstrap.secondary-admin.full-name:}") String secondaryFullName
+    ) {
+        this.seedDefaultAdmins = seedDefaultAdmins;
+        this.primaryAdmin = new BootstrapAccountConfig(primaryUsername, primaryPassword, primaryFullName);
+        this.secondaryAdmin = new BootstrapAccountConfig(secondaryUsername, secondaryPassword, secondaryFullName);
+    }
+
     @Bean
     @Order(3)
     CommandLineRunner bootstrapUsers(
@@ -38,7 +57,7 @@ public class DataBootstrap {
             UserService userService
     ) {
         return args -> {
-            seedCommandAccount(userRepository, passwordEncoder, "Mahanga", "Nsunga@2018", "SUPER_ADMIN", "Mahanga");
+            seedConfiguredAccounts(userRepository, passwordEncoder);
             int deletedUsers = userService.deleteLegacyBootstrapUsers(LEGACY_BOOTSTRAP_USERNAMES);
             if (deletedUsers > 0) {
                 log.warn("Removed {} legacy bootstrap user account(s) during startup cleanup", deletedUsers);
@@ -60,6 +79,15 @@ public class DataBootstrap {
                 ensureDistrict(districtRepository, existingDistricts, region, districtName);
             }
         });
+    }
+
+    private void seedConfiguredAccounts(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        if (!seedDefaultAdmins) {
+            log.info("Default admin bootstrap is disabled. No presentation accounts were seeded.");
+            return;
+        }
+        seedCommandAccount(userRepository, passwordEncoder, primaryAdmin);
+        seedCommandAccount(userRepository, passwordEncoder, secondaryAdmin);
     }
 
     private Region ensureRegion(RegionRepository regionRepository, String regionName) {
@@ -90,14 +118,15 @@ public class DataBootstrap {
         return regionName.substring(0, Math.min(3, regionName.length())).toUpperCase(Locale.ROOT);
     }
 
-    private void seedCommandAccount(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            String username,
-            String rawPassword,
-            String role,
-            String fullName
-    ) {
+    private void seedCommandAccount(UserRepository userRepository, PasswordEncoder passwordEncoder, BootstrapAccountConfig accountConfig) {
+        if (!accountConfig.isComplete()) {
+            log.warn("Skipping bootstrap admin seed because username/password/full name were not fully configured.");
+            return;
+        }
+        String username = accountConfig.username().trim();
+        String rawPassword = accountConfig.password();
+        String fullName = accountConfig.fullName().trim();
+        String role = OperationRole.SUPER_ADMIN;
         java.util.Optional<User> existingAccount = userRepository.findByUsername(username);
         if (existingAccount.isPresent()) {
             User account = existingAccount.get();
@@ -149,6 +178,14 @@ public class DataBootstrap {
         account.setDesignation(role);
         account.setStation(null);
         userRepository.save(account);
-        log.warn("Seeded default FROMS command account: username={}, role={}. Change the password immediately.", username, role);
+        log.warn("Seeded configured FROMS command account: username={}, role={}. Rotate the password after first use.", username, role);
+    }
+
+    private record BootstrapAccountConfig(String username, String password, String fullName) {
+        private boolean isComplete() {
+            return username != null && !username.isBlank()
+                    && password != null && !password.isBlank()
+                    && fullName != null && !fullName.isBlank();
+        }
     }
 }

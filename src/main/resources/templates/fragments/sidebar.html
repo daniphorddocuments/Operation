@@ -42,7 +42,6 @@
 
 <th:block th:fragment="workspaceSidebar">
     <div class="dashboard-sidebar-brand">
-        <img class="dashboard-sidebar-brand-logo" th:src="@{/images/fire-rescue-force-logo.png}" alt="Fire and Rescue Force Logo">
         <div class="dashboard-sidebar-brand-copy">
             <div class="dashboard-sidebar-brand-kicker" th:text="${workspaceSidebar.brandKicker}">FROMS Workspace</div>
             <div class="dashboard-sidebar-brand-name" th:text="${workspaceSidebar.brandName}">Fire and Rescue Operations Management System</div>
@@ -50,13 +49,25 @@
         </div>
     </div>
     <th:block th:each="section, sectionStat : ${workspaceSidebar.sections}">
-        <div class="landing-sidebar-title" th:classappend="${sectionStat.index > 0} ? ' mt-4' : ''" th:text="${section.title}">Workspace</div>
-        <div class="landing-sidebar-links flex-column">
-            <a th:each="item : ${section.items}" th:href="${item.href}" class="landing-sidebar-link" th:text="${item.label}">Overview</a>
-        </div>
+        <section class="sidebar-module-card" th:classappend="${sectionStat.index > 0} ? ' mt-3' : ''">
+            <div class="landing-sidebar-title sidebar-module-title" th:text="${section.title}">Workspace</div>
+            <div class="landing-sidebar-links flex-column sidebar-module-links" th:if="${!#lists.isEmpty(section.items)}">
+                <a th:href="${section.items[0].href}"
+                   class="landing-sidebar-link sidebar-primary-link"
+                   th:classappend="${#lists.size(section.items) > 1} ? ' has-submenu' : ''"
+                   th:text="${section.items[0].label}">Overview</a>
+                <div class="sidebar-submenu" th:if="${#lists.size(section.items) > 1}">
+                    <a th:each="item, itemStat : ${section.items}"
+                       th:if="${itemStat.index > 0}"
+                       th:href="${item.href}"
+                       class="landing-sidebar-link sidebar-submenu-link"
+                       th:text="${item.label}">Submenu</a>
+                </div>
+            </div>
+        </section>
     </th:block>
     <div class="landing-sidebar-title mt-4" th:text="${workspaceSidebar.accessTitle}">Role Access</div>
-    <div class="ui-soft-note">
+    <div class="ui-soft-note sidebar-access-note">
         <div class="fw-semibold mb-1" th:text="${isAdminWorkbench} ? 'Administrative workspace' : workspaceSidebar.brandName">Role workspace</div>
         <div class="small ui-muted" th:text="${workspaceSidebar.accessNote}">Only modules assigned to your role are available in this dashboard.</div>
     </div>

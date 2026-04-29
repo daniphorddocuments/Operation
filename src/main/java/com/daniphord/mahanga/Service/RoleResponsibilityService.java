@@ -1,9 +1,12 @@
 package com.daniphord.mahanga.Service;
 
 import com.daniphord.mahanga.Util.OperationRole;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +15,7 @@ import java.util.Set;
 public class RoleResponsibilityService {
 
     public static final String ACTION_MANAGE_USERS = "MANAGE_USERS";
+    public static final String ACTION_MANAGE_ROLE_PERMISSIONS = "MANAGE_ROLE_PERMISSIONS";
     public static final String ACTION_MANAGE_SYSTEM_SETTINGS = "MANAGE_SYSTEM_SETTINGS";
     public static final String ACTION_VIEW_REPORTS = "VIEW_REPORTS";
     public static final String ACTION_VIEW_DOCUMENTATION = "VIEW_DOCUMENTATION";
@@ -73,588 +77,297 @@ public class RoleResponsibilityService {
             true
     );
 
-    private final Map<String, RoleWorkspaceDefinition> definitions = Map.ofEntries(
-            Map.entry(OperationRole.SUPER_ADMIN, definition(
-                    OperationRole.SUPER_ADMIN,
-                    "System Administration",
-                    List.of(
-                            "Manage user accounts and role assignments.",
-                            "Configure regions, districts, stations, and system settings.",
-                            "Review reports, documentation, and system verification outputs."
-                    ),
-                    actions(
-                            ACTION_MANAGE_USERS,
-                            ACTION_MANAGE_SYSTEM_SETTINGS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_DOCUMENTATION,
-                            ACTION_RUN_SYSTEM_TESTS
-                    ),
-                    modules(
-                            MODULE_USER_MANAGEMENT,
-                            MODULE_SYSTEM_SETTINGS,
-                            MODULE_REPORTS,
-                            MODULE_DOCUMENTATION,
-                            MODULE_SYSTEM_TESTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.ADMIN, definition(
-                    OperationRole.ADMIN,
-                    "System Administration",
-                    List.of(
-                            "Manage user accounts and role assignments.",
-                            "Review administrative reports and official system documentation."
-                    ),
-                    actions(
-                            ACTION_MANAGE_USERS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_DOCUMENTATION
-                    ),
-                    modules(
-                            MODULE_USER_MANAGEMENT,
-                            MODULE_REPORTS,
-                            MODULE_DOCUMENTATION,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.CONTROL_ROOM_ATTENDANT, definition(
-                    OperationRole.CONTROL_ROOM_ATTENDANT,
-                    "Control Room Operations",
-                    List.of(
-                            "Receive 114 calls and validate emergency details.",
-                            "Register initial incidents and complete incident reporting.",
-                            "Dispatch the nearest station with route guidance and live control-room support."
-                    ),
-                    actions(
-                            ACTION_HANDLE_CALLS,
-                            ACTION_REGISTER_INITIAL_INCIDENT,
-                            ACTION_COMPLETE_INCIDENT_REPORT,
-                            ACTION_DISPATCH_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_PUBLISH_LIVE_VIDEO,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_CONTROL_ROOM_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_CALLS,
-                            MODULE_DISPATCH,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.CONTROL_ROOM),
-                    false
-            )),
-            Map.entry(OperationRole.CONTROL_ROOM_OPERATOR, definition(
-                    OperationRole.CONTROL_ROOM_OPERATOR,
-                    "Control Room Operations",
-                    List.of(
-                            "Receive 114 calls and validate emergency details.",
-                            "Register initial incidents and complete incident reporting.",
-                            "Dispatch the nearest station with route guidance."
-                    ),
-                    actions(
-                            ACTION_HANDLE_CALLS,
-                            ACTION_REGISTER_INITIAL_INCIDENT,
-                            ACTION_COMPLETE_INCIDENT_REPORT,
-                            ACTION_DISPATCH_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_CONTROL_ROOM_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_CALLS,
-                            MODULE_DISPATCH,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.CONTROL_ROOM),
-                    false
-            )),
-            Map.entry(OperationRole.STATION_OPERATION_OFFICER, definition(
-                    OperationRole.STATION_OPERATION_OFFICER,
-                    "Station Operations",
-                    List.of(
-                            "Execute assigned operations and update incident status.",
-                            "Register hydrants, equipment, and monthly station readiness updates.",
-                            "Publish live field video and request tele-support when needed."
-                    ),
-                    actions(
-                            ACTION_REGISTER_INITIAL_INCIDENT,
-                            ACTION_COMPLETE_INCIDENT_REPORT,
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_UPDATE_INCIDENT_STATUS,
-                            ACTION_MANAGE_HYDRANTS,
-                            ACTION_MANAGE_EQUIPMENT,
-                            ACTION_MANAGE_MONTHLY_UPDATES,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_PUBLISH_LIVE_VIDEO,
-                            ACTION_TELE_SUPPORT,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_STATION_OPERATIONS,
-                            MODULE_EQUIPMENT,
-                            MODULE_HYDRANTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_TELE_SUPPORT,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.STATION_FIRE_OPERATION_OFFICER, definition(
-                    OperationRole.STATION_FIRE_OPERATION_OFFICER,
-                    "Station Fire Operations",
-                    List.of(
-                            "Coordinate assigned station incidents and register station reports.",
-                            "Maintain equipment, hydrant readiness, and local operational reporting.",
-                            "Use AI guidance, live monitoring, and tele-support as required."
-                    ),
-                    actions(
-                            ACTION_REGISTER_INITIAL_INCIDENT,
-                            ACTION_COMPLETE_INCIDENT_REPORT,
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_UPDATE_INCIDENT_STATUS,
-                            ACTION_MANAGE_HYDRANTS,
-                            ACTION_MANAGE_EQUIPMENT,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_AI_RECOMMENDATIONS,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_TELE_SUPPORT,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_STATION_OPERATIONS,
-                            MODULE_EQUIPMENT,
-                            MODULE_HYDRANTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_AI_RECOMMENDATIONS,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_TELE_SUPPORT,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.STATION_FIRE_OFFICER, definition(
-                    OperationRole.STATION_FIRE_OFFICER,
-                    "Station Fire Oversight",
-                    List.of(
-                            "Review assigned station incidents and readiness.",
-                            "Monitor local equipment status and station reporting."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_MANAGE_EQUIPMENT,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_STATION_OPERATIONS,
-                            MODULE_EQUIPMENT,
-                            MODULE_HYDRANTS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.DISTRICT_INVESTIGATION_OFFICER, definition(
-                    OperationRole.DISTRICT_INVESTIGATION_OFFICER,
-                    "District Investigation",
-                    List.of(
-                            "Conduct investigations for assigned incidents.",
-                            "Compile findings, evidence, and submit reports into the approval workflow."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_SUBMIT_INVESTIGATION,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_INVESTIGATIONS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.FIRE_INVESTIGATION_OFFICER, definition(
-                    OperationRole.FIRE_INVESTIGATION_OFFICER,
-                    "Investigation Intake",
-                    List.of(
-                            "Prepare investigation inputs and field evidence for the district workflow."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_SUBMIT_INVESTIGATION
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_INVESTIGATIONS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.DISTRICT_FIRE_OFFICER, definition(
-                    OperationRole.DISTRICT_FIRE_OFFICER,
-                    "District Command",
-                    List.of(
-                            "Review district incident activity, routing visibility, and live operational status.",
-                            "Approve or deny district investigation reports."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_REVIEW_DISTRICT_INVESTIGATION,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_INVESTIGATION_APPROVALS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS, WorkspacePage.ROLE),
-                    true
-            )),
-            Map.entry(OperationRole.REGIONAL_INVESTIGATION_OFFICER, definition(
-                    OperationRole.REGIONAL_INVESTIGATION_OFFICER,
-                    "Regional Investigation Approval",
-                    List.of(
-                            "Review and approve or deny regional investigation reports."
-                    ),
-                    actions(
-                            ACTION_REVIEW_REGIONAL_INVESTIGATION,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INVESTIGATION_APPROVALS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    true
-            )),
-            Map.entry(OperationRole.REGIONAL_FIRE_OFFICER, definition(
-                    OperationRole.REGIONAL_FIRE_OFFICER,
-                    "Regional Command",
-                    List.of(
-                            "Provide regional operational oversight.",
-                            "Review investigation reports at the regional approval stage."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_REVIEW_REGIONAL_INVESTIGATION,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_INVESTIGATION_APPROVALS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS, WorkspacePage.ROLE),
-                    true
-            )),
-            Map.entry(OperationRole.REGIONAL_OPERATION_OFFICER, definition(
-                    OperationRole.REGIONAL_OPERATION_OFFICER,
-                    "Regional Operations",
-                    List.of(
-                            "Coordinate regional response visibility and remote support readiness."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_TELE_SUPPORT,
-                            ACTION_VIEW_AI_RECOMMENDATIONS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_EQUIPMENT,
-                            MODULE_HYDRANTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_TELE_SUPPORT,
-                            MODULE_AI_RECOMMENDATIONS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS),
-                    false
-            )),
-            Map.entry(OperationRole.DISTRICT_OPERATION_OFFICER, definition(
-                    OperationRole.DISTRICT_OPERATION_OFFICER,
-                    "District Operations",
-                    List.of(
-                            "Monitor district incident posture and coordinate remote support."
-                    ),
-                    actions(
-                            ACTION_REGISTER_INITIAL_INCIDENT,
-                            ACTION_COMPLETE_INCIDENT_REPORT,
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_TELE_SUPPORT,
-                            ACTION_VIEW_AI_RECOMMENDATIONS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_EQUIPMENT,
-                            MODULE_HYDRANTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_TELE_SUPPORT,
-                            MODULE_AI_RECOMMENDATIONS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS, WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.COMMISSIONER_OPERATIONS, definition(
-                    OperationRole.COMMISSIONER_OPERATIONS,
-                    "National Operations Command",
-                    List.of(
-                            "Provide national operations oversight.",
-                            "Review investigation approvals before final CGF authorization.",
-                            "Review national reports and strategic route intelligence."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_VIEW_AI_RECOMMENDATIONS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_REVIEW_NATIONAL_INVESTIGATION,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_EQUIPMENT,
-                            MODULE_HYDRANTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_AI_RECOMMENDATIONS,
-                            MODULE_INVESTIGATION_APPROVALS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS),
-                    true
-            )),
-            Map.entry(OperationRole.CGF, definition(
-                    OperationRole.CGF,
-                    "Strategic Final Approval",
-                    List.of(
-                            "Provide strategic decisions using national reports and summary dashboards.",
-                            "Issue final investigation approval at the last workflow stage."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_FINAL_INVESTIGATION_APPROVAL,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_INVESTIGATION_APPROVALS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS),
-                    true
-            )),
-            Map.entry(OperationRole.FIRE_INVESTIGATION_HOD, definition(
-                    OperationRole.FIRE_INVESTIGATION_HOD,
-                    "National Investigation Command",
-                    List.of(
-                            "Review investigation quality and approve reports at the HOD stage."
-                    ),
-                    actions(
-                            ACTION_REVIEW_NATIONAL_INVESTIGATION,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INVESTIGATION_APPROVALS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    true
-            )),
-            Map.entry(OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS, definition(
-                    OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS,
-                    "National Fire Operations",
-                    List.of(
-                            "Review national fire operations posture and readiness."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_VIEW_AI_RECOMMENDATIONS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_AI_RECOMMENDATIONS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS),
-                    true
-            )),
-            Map.entry(OperationRole.HEAD_RESCUE_OPERATIONS, definition(
-                    OperationRole.HEAD_RESCUE_OPERATIONS,
-                    "National Rescue Operations",
-                    List.of(
-                            "Review national rescue operations posture and readiness."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_LIVE_VIDEO,
-                            ACTION_VIEW_AI_RECOMMENDATIONS,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_AI_RECOMMENDATIONS,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS),
-                    true
-            )),
-            Map.entry(OperationRole.CHIEF_FIRE_OFFICER, definition(
-                    OperationRole.CHIEF_FIRE_OFFICER,
-                    "Chief Fire Oversight",
-                    List.of(
-                            "Review national fire posture and command reports."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_REPORTS,
-                            ACTION_VIEW_OPERATIONS_DASHBOARD
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.OPERATIONS),
-                    true
-            )),
-            Map.entry(OperationRole.OPERATION_OFFICER, definition(
-                    OperationRole.OPERATION_OFFICER,
-                    "Operational Field Support",
-                    List.of(
-                            "Handle assigned incidents and submit field progress updates.",
-                            "Use map guidance and request tele-support when required."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_UPDATE_INCIDENT_STATUS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_TELE_SUPPORT,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_TELE_SUPPORT,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.DEPARTMENT_OFFICER, definition(
-                    OperationRole.DEPARTMENT_OFFICER,
-                    "Department Operations",
-                    List.of(
-                            "Track assigned incidents and departmental operational posture."
-                    ),
-                    actions(
-                            ACTION_VIEW_ASSIGNED_INCIDENTS,
-                            ACTION_VIEW_MAP_ROUTING,
-                            ACTION_VIEW_REPORTS
-                    ),
-                    modules(
-                            MODULE_INCIDENTS,
-                            MODULE_MAP_ROUTING,
-                            MODULE_REPORTS,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    false
-            )),
-            Map.entry(OperationRole.TELE_SUPPORT_PERSONNEL, definition(
-                    OperationRole.TELE_SUPPORT_PERSONNEL,
-                    "Tele-Support",
-                    List.of(
-                            "Respond to support requests and guide field teams remotely."
-                    ),
-                    actions(
-                            ACTION_TELE_SUPPORT,
-                            ACTION_VIEW_LIVE_VIDEO
-                    ),
-                    modules(
-                            MODULE_TELE_SUPPORT,
-                            MODULE_LIVE_VIDEO,
-                            MODULE_NOTIFICATIONS
-                    ),
-                    pages(WorkspacePage.ROLE),
-                    true
-            )),
-            Map.entry(OperationRole.UNASSIGNED, DEFAULT_DEFINITION)
-    );
+    private final Map<String, RoleWorkspaceDefinition> definitions;
+    private final List<ActionDefinition> actionDefinitions;
+    private final RolePermissionOverrideService rolePermissionOverrideService;
+
+    public RoleResponsibilityService() {
+        this(null);
+    }
+
+    @Autowired
+    public RoleResponsibilityService(RolePermissionOverrideService rolePermissionOverrideService) {
+        this.rolePermissionOverrideService = rolePermissionOverrideService;
+        this.actionDefinitions = buildActionDefinitions();
+
+        Map<String, RoleWorkspaceDefinition> map = new LinkedHashMap<>();
+        map.put(OperationRole.SUPER_ADMIN, definition(
+                OperationRole.SUPER_ADMIN,
+                "System Administration",
+                List.of("Manage users, permissions, settings, reports, and verification."),
+                supportedActions(),
+                Set.of(
+                        MODULE_USER_MANAGEMENT,
+                        MODULE_SYSTEM_SETTINGS,
+                        MODULE_REPORTS,
+                        MODULE_DOCUMENTATION,
+                        MODULE_SYSTEM_TESTS,
+                        MODULE_AI_RECOMMENDATIONS,
+                        MODULE_EQUIPMENT,
+                        MODULE_HYDRANTS,
+                        MODULE_INCIDENTS,
+                        MODULE_INVESTIGATIONS,
+                        MODULE_INVESTIGATION_APPROVALS,
+                        MODULE_CALLS,
+                        MODULE_DISPATCH,
+                        MODULE_MAP_ROUTING,
+                        MODULE_LIVE_VIDEO,
+                        MODULE_TELE_SUPPORT,
+                        MODULE_STATION_OPERATIONS,
+                        MODULE_NOTIFICATIONS
+                ),
+                Set.of(WorkspacePage.ROLE, WorkspacePage.OPERATIONS, WorkspacePage.CONTROL_ROOM),
+                false
+        ));
+        map.put(OperationRole.ADMIN, definition(
+                OperationRole.ADMIN,
+                "Administration",
+                List.of("Manage users, permissions, reports, and documentation."),
+                Set.of(
+                        ACTION_MANAGE_USERS,
+                        ACTION_MANAGE_ROLE_PERMISSIONS,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_DOCUMENTATION
+                ),
+                Set.of(MODULE_USER_MANAGEMENT, MODULE_REPORTS, MODULE_DOCUMENTATION, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.ROLE),
+                false
+        ));
+        map.put(OperationRole.CONTROL_ROOM_ATTENDANT, definition(
+                OperationRole.CONTROL_ROOM_ATTENDANT,
+                "Control Room Operations",
+                List.of("Handle calls, register incidents, dispatch teams, and support live routing."),
+                Set.of(
+                        ACTION_HANDLE_CALLS,
+                        ACTION_REGISTER_INITIAL_INCIDENT,
+                        ACTION_COMPLETE_INCIDENT_REPORT,
+                        ACTION_DISPATCH_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_PUBLISH_LIVE_VIDEO,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_CONTROL_ROOM_DASHBOARD
+                ),
+                Set.of(MODULE_CALLS, MODULE_DISPATCH, MODULE_MAP_ROUTING, MODULE_LIVE_VIDEO, MODULE_REPORTS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.CONTROL_ROOM),
+                false
+        ));
+        map.put(OperationRole.CONTROL_ROOM_OPERATOR, definition(
+                OperationRole.CONTROL_ROOM_OPERATOR,
+                "Control Room Operations",
+                List.of("Handle calls, incidents, dispatch, and route guidance."),
+                Set.of(
+                        ACTION_HANDLE_CALLS,
+                        ACTION_REGISTER_INITIAL_INCIDENT,
+                        ACTION_COMPLETE_INCIDENT_REPORT,
+                        ACTION_DISPATCH_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_VIEW_CONTROL_ROOM_DASHBOARD
+                ),
+                Set.of(MODULE_CALLS, MODULE_DISPATCH, MODULE_MAP_ROUTING, MODULE_LIVE_VIDEO, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.CONTROL_ROOM),
+                false
+        ));
+        map.put(OperationRole.STATION_OPERATION_OFFICER, fieldRole(
+                OperationRole.STATION_OPERATION_OFFICER,
+                "Station Operations",
+                Set.of(
+                        ACTION_REGISTER_INITIAL_INCIDENT,
+                        ACTION_COMPLETE_INCIDENT_REPORT,
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_UPDATE_INCIDENT_STATUS,
+                        ACTION_MANAGE_HYDRANTS,
+                        ACTION_MANAGE_EQUIPMENT,
+                        ACTION_MANAGE_MONTHLY_UPDATES,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_PUBLISH_LIVE_VIDEO,
+                        ACTION_TELE_SUPPORT,
+                        ACTION_VIEW_REPORTS
+                ),
+                Set.of(
+                        MODULE_INCIDENTS,
+                        MODULE_STATION_OPERATIONS,
+                        MODULE_EQUIPMENT,
+                        MODULE_HYDRANTS,
+                        MODULE_MAP_ROUTING,
+                        MODULE_LIVE_VIDEO,
+                        MODULE_TELE_SUPPORT,
+                        MODULE_REPORTS,
+                        MODULE_NOTIFICATIONS
+                )
+        ));
+        map.put(OperationRole.STATION_FIRE_OPERATION_OFFICER, fieldRole(
+                OperationRole.STATION_FIRE_OPERATION_OFFICER,
+                "Station Fire Operations",
+                Set.of(
+                        ACTION_REGISTER_INITIAL_INCIDENT,
+                        ACTION_COMPLETE_INCIDENT_REPORT,
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_UPDATE_INCIDENT_STATUS,
+                        ACTION_MANAGE_HYDRANTS,
+                        ACTION_MANAGE_EQUIPMENT,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_AI_RECOMMENDATIONS,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_TELE_SUPPORT,
+                        ACTION_VIEW_REPORTS
+                ),
+                Set.of(
+                        MODULE_INCIDENTS,
+                        MODULE_STATION_OPERATIONS,
+                        MODULE_EQUIPMENT,
+                        MODULE_HYDRANTS,
+                        MODULE_MAP_ROUTING,
+                        MODULE_AI_RECOMMENDATIONS,
+                        MODULE_LIVE_VIDEO,
+                        MODULE_TELE_SUPPORT,
+                        MODULE_REPORTS,
+                        MODULE_NOTIFICATIONS
+                )
+        ));
+        map.put(OperationRole.STATION_FIRE_OFFICER, fieldRole(
+                OperationRole.STATION_FIRE_OFFICER,
+                "Station Fire Oversight",
+                Set.of(ACTION_VIEW_ASSIGNED_INCIDENTS, ACTION_MANAGE_EQUIPMENT, ACTION_VIEW_REPORTS),
+                Set.of(MODULE_INCIDENTS, MODULE_EQUIPMENT, MODULE_HYDRANTS, MODULE_REPORTS, MODULE_NOTIFICATIONS)
+        ));
+        map.put(OperationRole.DISTRICT_INVESTIGATION_OFFICER, definition(
+                OperationRole.DISTRICT_INVESTIGATION_OFFICER,
+                "District Investigation",
+                List.of("Conduct and submit investigations for assigned incidents."),
+                Set.of(ACTION_VIEW_ASSIGNED_INCIDENTS, ACTION_SUBMIT_INVESTIGATION, ACTION_VIEW_REPORTS),
+                Set.of(MODULE_INCIDENTS, MODULE_INVESTIGATIONS, MODULE_REPORTS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.ROLE),
+                false
+        ));
+        map.put(OperationRole.FIRE_INVESTIGATION_OFFICER, definition(
+                OperationRole.FIRE_INVESTIGATION_OFFICER,
+                "Investigation Intake",
+                List.of("Prepare evidence and investigation submissions."),
+                Set.of(ACTION_VIEW_ASSIGNED_INCIDENTS, ACTION_SUBMIT_INVESTIGATION),
+                Set.of(MODULE_INCIDENTS, MODULE_INVESTIGATIONS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.ROLE),
+                false
+        ));
+        map.put(OperationRole.DISTRICT_FIRE_OFFICER, operationsRole(
+                OperationRole.DISTRICT_FIRE_OFFICER,
+                "District Command",
+                Set.of(
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_REVIEW_DISTRICT_INVESTIGATION,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_OPERATIONS_DASHBOARD
+                )
+        ));
+        map.put(OperationRole.DISTRICT_OPERATION_OFFICER, operationsRole(
+                OperationRole.DISTRICT_OPERATION_OFFICER,
+                "District Operations",
+                Set.of(
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_TELE_SUPPORT,
+                        ACTION_VIEW_AI_RECOMMENDATIONS,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_OPERATIONS_DASHBOARD
+                )
+        ));
+        map.put(OperationRole.REGIONAL_INVESTIGATION_OFFICER, definition(
+                OperationRole.REGIONAL_INVESTIGATION_OFFICER,
+                "Regional Investigation Approval",
+                List.of("Review regional investigation reports."),
+                Set.of(ACTION_REVIEW_REGIONAL_INVESTIGATION, ACTION_VIEW_REPORTS),
+                Set.of(MODULE_INVESTIGATION_APPROVALS, MODULE_REPORTS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.ROLE),
+                true
+        ));
+        map.put(OperationRole.REGIONAL_FIRE_OFFICER, operationsRole(
+                OperationRole.REGIONAL_FIRE_OFFICER,
+                "Regional Command",
+                Set.of(
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_REVIEW_REGIONAL_INVESTIGATION,
+                        ACTION_VIEW_OPERATIONS_DASHBOARD
+                )
+        ));
+        map.put(OperationRole.REGIONAL_OPERATION_OFFICER, operationsRole(
+                OperationRole.REGIONAL_OPERATION_OFFICER,
+                "Regional Operations",
+                Set.of(
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_TELE_SUPPORT,
+                        ACTION_VIEW_AI_RECOMMENDATIONS,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_OPERATIONS_DASHBOARD
+                )
+        ));
+        map.put(OperationRole.CGF, nationalRole(OperationRole.CGF, "CGF"));
+        map.put(OperationRole.COMMISSIONER_OPERATIONS, nationalRole(OperationRole.COMMISSIONER_OPERATIONS, "Commissioner Operations"));
+        map.put(OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS, nationalRole(OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS, "National Fire Operations"));
+        map.put(OperationRole.HEAD_RESCUE_OPERATIONS, nationalRole(OperationRole.HEAD_RESCUE_OPERATIONS, "National Rescue Operations"));
+        map.put(OperationRole.CHIEF_FIRE_OFFICER, nationalRole(OperationRole.CHIEF_FIRE_OFFICER, "Chief Fire Oversight"));
+        map.put(OperationRole.FIRE_INVESTIGATION_HOD, definition(
+                OperationRole.FIRE_INVESTIGATION_HOD,
+                "National Investigation Command",
+                List.of("Approve national investigation outputs."),
+                Set.of(ACTION_REVIEW_NATIONAL_INVESTIGATION, ACTION_VIEW_REPORTS),
+                Set.of(MODULE_INVESTIGATION_APPROVALS, MODULE_REPORTS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.ROLE),
+                true
+        ));
+        map.put(OperationRole.OPERATION_OFFICER, fieldRole(
+                OperationRole.OPERATION_OFFICER,
+                "Operational Field Support",
+                Set.of(ACTION_VIEW_ASSIGNED_INCIDENTS, ACTION_UPDATE_INCIDENT_STATUS, ACTION_VIEW_MAP_ROUTING, ACTION_TELE_SUPPORT, ACTION_VIEW_REPORTS),
+                Set.of(MODULE_INCIDENTS, MODULE_MAP_ROUTING, MODULE_TELE_SUPPORT, MODULE_REPORTS, MODULE_NOTIFICATIONS)
+        ));
+        map.put(OperationRole.DEPARTMENT_OFFICER, fieldRole(
+                OperationRole.DEPARTMENT_OFFICER,
+                "Department Operations",
+                Set.of(ACTION_VIEW_ASSIGNED_INCIDENTS, ACTION_VIEW_MAP_ROUTING, ACTION_VIEW_REPORTS),
+                Set.of(MODULE_INCIDENTS, MODULE_MAP_ROUTING, MODULE_REPORTS, MODULE_NOTIFICATIONS)
+        ));
+        map.put(OperationRole.TELE_SUPPORT_PERSONNEL, definition(
+                OperationRole.TELE_SUPPORT_PERSONNEL,
+                "Tele-Support",
+                List.of("Guide field teams remotely."),
+                Set.of(ACTION_TELE_SUPPORT, ACTION_VIEW_LIVE_VIDEO),
+                Set.of(MODULE_TELE_SUPPORT, MODULE_LIVE_VIDEO, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.ROLE),
+                true
+        ));
+        map.put(OperationRole.UNASSIGNED, DEFAULT_DEFINITION);
+
+        this.definitions = Map.copyOf(map);
+    }
 
     public RoleWorkspaceDefinition definitionFor(String role) {
-        return definitions.getOrDefault(normalizeRole(role), DEFAULT_DEFINITION);
+        RoleWorkspaceDefinition baseDefinition = definitions.getOrDefault(normalizeRole(role), DEFAULT_DEFINITION);
+        if (rolePermissionOverrideService == null || OperationRole.SUPER_ADMIN.equals(baseDefinition.roleKey())) {
+            return baseDefinition;
+        }
+        Set<String> effectiveActions = rolePermissionOverrideService.applyOverrides(baseDefinition.roleKey(), baseDefinition.actions());
+        if (effectiveActions.equals(baseDefinition.actions())) {
+            return baseDefinition;
+        }
+        return new RoleWorkspaceDefinition(
+                baseDefinition.roleKey(),
+                baseDefinition.roleLabel(),
+                baseDefinition.responsibilities(),
+                effectiveActions,
+                baseDefinition.modules(),
+                baseDefinition.pages(),
+                baseDefinition.readOnlyMostly()
+        );
     }
 
     public boolean hasAction(String role, String action) {
@@ -666,53 +379,27 @@ public class RoleResponsibilityService {
     }
 
     public boolean canAccessWorkspace(String role, WorkspacePage page) {
+        if (page == WorkspacePage.OPERATIONS) {
+            return hasAction(role, ACTION_VIEW_OPERATIONS_DASHBOARD);
+        }
+        if (page == WorkspacePage.CONTROL_ROOM) {
+            return hasAction(role, ACTION_VIEW_CONTROL_ROOM_DASHBOARD);
+        }
         return definitionFor(role).pages().contains(page);
     }
 
     public WorkspaceSidebar sidebarFor(String role, WorkspacePage page, boolean hasReports) {
         RoleWorkspaceDefinition definition = definitionFor(role);
-        List<SidebarSection> sections = switch (page) {
-            case CONTROL_ROOM -> controlRoomSidebar(definition, hasReports);
-            case OPERATIONS -> operationsSidebar(definition, hasReports);
-            case ROLE -> roleSidebar(definition, hasReports);
-        };
-        return switch (page) {
-            case CONTROL_ROOM -> new WorkspaceSidebar(
-                    "FROMS Workspace",
-                    "Control Room Command Center",
-                    "Call intake, incident registration, dispatch, routing, and live communication support",
-                    "Control room scope",
-                    "Only control-room responsibilities defined for your role are visible here.",
-                    sections
-            );
-            case OPERATIONS -> new WorkspaceSidebar(
-                    "FROMS Workspace",
-                    "Operations Command Center",
-                    operationsBrandMeta(definition),
-                    "Operations scope",
-                    operationsAccessNote(definition),
-                    sections
-            );
-            case ROLE -> new WorkspaceSidebar(
-                    "FROMS Workspace",
-                    "Fire and Rescue Operations Management System",
-                    definition.roleLabel(),
-                    "Role scope",
-                    "No responsibility means no access and no visibility in this dashboard.",
-                    sections
-            );
-        };
-    }
-
-    private List<SidebarSection> roleSidebar(RoleWorkspaceDefinition definition, boolean hasReports) {
         List<SidebarLink> workspace = new ArrayList<>();
         workspace.add(link("Overview", "#overview-panel"));
-        workspace.add(link("Analytics", "#analytics-panel"));
-        if (definition.modules().contains(MODULE_TELE_SUPPORT)) {
-            workspace.add(link("Tele-Support", "#tele-support-module"));
+        if (page == WorkspacePage.CONTROL_ROOM) {
+            workspace.add(link("Call History", "#control-call-history"));
         }
         if (definition.modules().contains(MODULE_MAP_ROUTING)) {
             workspace.add(link("Map & Routing", "#map-panel"));
+        }
+        if (definition.modules().contains(MODULE_LIVE_VIDEO)) {
+            workspace.add(link("Live Video", "#control-video-panel"));
         }
         if (definition.modules().contains(MODULE_AI_RECOMMENDATIONS)) {
             workspace.add(link("AI Recommendations", "#ai-recommendations-panel"));
@@ -723,124 +410,107 @@ public class RoleResponsibilityService {
         if (hasReports && definition.modules().contains(MODULE_REPORTS)) {
             workspace.add(link("Reports", "#report-center-module"));
         }
-        workspace.add(link("User Manual", "#user-manual-panel"));
         workspace.add(link("Notifications", "#notification-center"));
 
-        List<SidebarLink> administration = new ArrayList<>();
-        if (definition.modules().contains(MODULE_USER_MANAGEMENT)) {
-            administration.add(link("Users", "#user-management-module"));
-        }
-        if (definition.modules().contains(MODULE_SYSTEM_SETTINGS)) {
-            administration.add(link("System Settings", "#geography-module"));
-        }
-        if (definition.modules().contains(MODULE_DOCUMENTATION)) {
-            administration.add(link("Documentation", "#documentation-module"));
-        }
-        if (definition.modules().contains(MODULE_SYSTEM_TESTS)) {
-            administration.add(link("System Test", "#system-test-module"));
-        }
-
-        List<SidebarLink> incidentDesk = new ArrayList<>();
-        if (definition.modules().contains(MODULE_INCIDENTS)) {
-            incidentDesk.add(link("View Registered Incidents", "#incident-feed-panel"));
-            if (definition.actions().contains(ACTION_REGISTER_INITIAL_INCIDENT) || definition.actions().contains(ACTION_COMPLETE_INCIDENT_REPORT)) {
-                incidentDesk.add(link("Register Incident", "#incident-registration-module"));
-            }
-        }
-
-        List<SidebarLink> equipmentDesk = new ArrayList<>();
-        if (definition.modules().contains(MODULE_EQUIPMENT) || definition.modules().contains(MODULE_HYDRANTS)) {
-            equipmentDesk.add(link(
-                    OperationRole.STATION_FIRE_OPERATION_OFFICER.equals(definition.roleKey())
-                            ? "Equipment Management"
-                            : "Equipments",
-                    "#equipment-summary-module"
-            ));
-            if (definition.modules().contains(MODULE_HYDRANTS)) {
-                equipmentDesk.add(link("Hydrants", "#hydrants-module"));
-            }
-            if (definition.modules().contains(MODULE_EQUIPMENT)) {
-                equipmentDesk.add(link("Fire Tender", "#equipment-fire-tender"));
-                equipmentDesk.add(link("Command Car", "#equipment-command-car"));
-                equipmentDesk.add(link("Management Car", "#equipment-management-car"));
-                equipmentDesk.add(link("Hazmat Car", "#equipment-hazmat-car"));
-                equipmentDesk.add(link("Ambulance", "#equipment-ambulance"));
-                equipmentDesk.add(link("Rescue Equipment", "#equipment-rescue-equipment"));
-                equipmentDesk.add(link("Fire Fighting Equipment", "#equipment-fire-fighting-equipment"));
-                equipmentDesk.add(link("BA", "#equipment-ba"));
-                equipmentDesk.add(link("Fire Fighting Chemicals", "#equipment-fire-fighting-chemicals"));
-            }
-        }
-
-        List<SidebarSection> sections = new ArrayList<>();
-        sections.add(new SidebarSection("Workspace", workspace));
-        if (!incidentDesk.isEmpty()) {
-            sections.add(new SidebarSection("Incident Desk", incidentDesk));
-        }
-        if (!equipmentDesk.isEmpty()) {
-            sections.add(new SidebarSection(
-                    OperationRole.STATION_FIRE_OPERATION_OFFICER.equals(definition.roleKey())
-                            ? "Equipment Management"
-                            : "Equipments",
-                    equipmentDesk
-            ));
-        }
-        if (!administration.isEmpty()) {
-            sections.add(new SidebarSection("Administration", administration));
-        }
-        sections.add(new SidebarSection("Account", List.of(link("Profile", "#profile-actions"))));
-        return sections;
-    }
-
-    private List<SidebarSection> operationsSidebar(RoleWorkspaceDefinition definition, boolean hasReports) {
-        List<SidebarLink> workspace = new ArrayList<>();
-        workspace.add(link("Overview", "#operations-overview"));
-        if (definition.modules().contains(MODULE_MAP_ROUTING)) {
-            workspace.add(link("AI Route", "#operations-route-panel"));
-        }
-        if (definition.modules().contains(MODULE_INCIDENTS)) {
-            workspace.add(link("Incident Feed", "#operations-incident-feed"));
-            workspace.add(link("Detailed Incident Desk", "/dashboard#incident-feed-panel"));
-        }
-        if (definition.modules().contains(MODULE_EQUIPMENT) || definition.modules().contains(MODULE_HYDRANTS)) {
-            workspace.add(link("Equipment Desk", "/dashboard#equipment-summary-module"));
-        }
-        if (definition.modules().contains(MODULE_AI_RECOMMENDATIONS)) {
-            workspace.add(link("AI Recommendations", "#operations-ai-panel"));
-        }
-        if (hasReports && definition.modules().contains(MODULE_REPORTS)) {
-            workspace.add(link("Reports", "#operations-report-panel"));
-        }
-        workspace.add(link("User Manual", "#operations-manual-panel"));
-        workspace.add(link("Notifications", "#notification-center"));
-
-        return List.of(
+        List<SidebarSection> sections = List.of(
                 new SidebarSection("Workspace", workspace),
                 new SidebarSection("Account", List.of(link("Profile", "#profile-actions")))
         );
+
+        String brandName = switch (page) {
+            case CONTROL_ROOM -> "Control Room Command Center";
+            case OPERATIONS -> "Operations Command Center";
+            case ROLE -> "Fire and Rescue Operations Management System";
+        };
+
+        return new WorkspaceSidebar(
+                "FROMS Workspace",
+                brandName,
+                definition.roleLabel(),
+                "Role scope",
+                "Only modules tied to the current role are visible.",
+                sections
+        );
     }
 
-    private List<SidebarSection> controlRoomSidebar(RoleWorkspaceDefinition definition, boolean hasReports) {
-        List<SidebarLink> workspace = new ArrayList<>();
-        workspace.add(link("Overview", "#control-overview"));
-        if (definition.modules().contains(MODULE_MAP_ROUTING)) {
-            workspace.add(link("Dispatch Route", "#control-route-panel"));
-        }
-        if (definition.modules().contains(MODULE_LIVE_VIDEO)) {
-            workspace.add(link("Live Video", "#control-video-panel"));
-        }
-        if (definition.modules().contains(MODULE_CALLS)) {
-            workspace.add(link("Call History", "#control-call-history"));
-        }
-        workspace.add(link("User Manual", "#control-manual-panel"));
-        workspace.add(link("Notifications", "#notification-center"));
-        if (hasReports && definition.modules().contains(MODULE_REPORTS)) {
-            workspace.add(link("Reports", "#control-reports-panel"));
-        }
+    public Map<String, Object> rolePermissionDefinition(String role) {
+        RoleWorkspaceDefinition definition = definitionFor(role);
+        return Map.of(
+                "roleKey", definition.roleKey(),
+                "roleLabel", definition.roleLabel(),
+                "actions", actionDefinitions().stream()
+                        .map(action -> Map.of(
+                                "key", action.key(),
+                                "label", action.label(),
+                                "description", action.description(),
+                                "enabled", definition.actions().contains(action.key())
+                        ))
+                        .toList(),
+                "modules", definition.modules(),
+                "pages", definition.pages(),
+                "responsibilities", definition.responsibilities(),
+                "readOnly", definition.readOnlyMostly()
+        );
+    }
 
-        return List.of(
-                new SidebarSection("Workspace", workspace),
-                new SidebarSection("Account", List.of(link("Profile", "#profile-actions")))
+    public List<Map<String, Object>> rolePermissionDefinitions() {
+        return definitions.values().stream()
+                .map(definition -> rolePermissionDefinition(definition.roleKey()))
+                .toList();
+    }
+
+    public List<ActionDefinition> actionDefinitions() {
+        return actionDefinitions;
+    }
+
+    public Set<String> supportedActions() {
+        return actionDefinitions.stream().map(ActionDefinition::key).collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public boolean isSupportedAction(String action) {
+        return supportedActions().contains(action);
+    }
+
+    private RoleWorkspaceDefinition fieldRole(String roleKey, String roleLabel, Set<String> actions, Set<String> modules) {
+        return definition(
+                roleKey,
+                roleLabel,
+                List.of("Perform field-level operational duties assigned to this role."),
+                actions,
+                modules,
+                Set.of(WorkspacePage.ROLE),
+                false
+        );
+    }
+
+    private RoleWorkspaceDefinition operationsRole(String roleKey, String roleLabel, Set<String> actions) {
+        return definition(
+                roleKey,
+                roleLabel,
+                List.of("Monitor command-level operations, routing visibility, and approvals."),
+                actions,
+                Set.of(MODULE_INCIDENTS, MODULE_MAP_ROUTING, MODULE_LIVE_VIDEO, MODULE_INVESTIGATION_APPROVALS, MODULE_REPORTS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.OPERATIONS, WorkspacePage.ROLE),
+                true
+        );
+    }
+
+    private RoleWorkspaceDefinition nationalRole(String roleKey, String roleLabel) {
+        return definition(
+                roleKey,
+                roleLabel,
+                List.of("Monitor national incident posture and command reports."),
+                Set.of(
+                        ACTION_VIEW_ASSIGNED_INCIDENTS,
+                        ACTION_VIEW_MAP_ROUTING,
+                        ACTION_VIEW_LIVE_VIDEO,
+                        ACTION_VIEW_AI_RECOMMENDATIONS,
+                        ACTION_VIEW_REPORTS,
+                        ACTION_VIEW_OPERATIONS_DASHBOARD
+                ),
+                Set.of(MODULE_INCIDENTS, MODULE_MAP_ROUTING, MODULE_LIVE_VIDEO, MODULE_AI_RECOMMENDATIONS, MODULE_REPORTS, MODULE_NOTIFICATIONS),
+                Set.of(WorkspacePage.OPERATIONS),
+                true
         );
     }
 
@@ -856,16 +526,40 @@ public class RoleResponsibilityService {
         return new RoleWorkspaceDefinition(roleKey, roleLabel, responsibilities, actions, modules, pages, readOnlyMostly);
     }
 
-    private Set<String> actions(String... values) {
-        return Set.of(values);
+    private List<ActionDefinition> buildActionDefinitions() {
+        return List.of(
+                action(ACTION_MANAGE_USERS, "Manage users", "Create, update, and deactivate users."),
+                action(ACTION_MANAGE_ROLE_PERMISSIONS, "Manage role permissions", "Change enabled actions for a role."),
+                action(ACTION_MANAGE_SYSTEM_SETTINGS, "Manage system settings", "Configure geography and system settings."),
+                action(ACTION_VIEW_REPORTS, "View reports", "Access operational and administrative reports."),
+                action(ACTION_VIEW_DOCUMENTATION, "View documentation", "Open system documentation and manuals."),
+                action(ACTION_RUN_SYSTEM_TESTS, "Run system tests", "Run startup and system verification tests."),
+                action(ACTION_HANDLE_CALLS, "Handle calls", "Receive and manage emergency calls."),
+                action(ACTION_REGISTER_INITIAL_INCIDENT, "Register incident", "Create an initial incident record."),
+                action(ACTION_COMPLETE_INCIDENT_REPORT, "Complete incident report", "Finalize detailed incident reporting."),
+                action(ACTION_DISPATCH_INCIDENTS, "Dispatch incidents", "Dispatch teams and route responses."),
+                action(ACTION_VIEW_MAP_ROUTING, "View map routing", "Use routing and map guidance."),
+                action(ACTION_VIEW_AI_RECOMMENDATIONS, "View AI recommendations", "Read AI-generated response guidance."),
+                action(ACTION_VIEW_ASSIGNED_INCIDENTS, "View assigned incidents", "See incidents within the role scope."),
+                action(ACTION_UPDATE_INCIDENT_STATUS, "Update incident status", "Update field progress and status."),
+                action(ACTION_MANAGE_HYDRANTS, "Manage hydrants", "Create and maintain hydrant records."),
+                action(ACTION_MANAGE_EQUIPMENT, "Manage equipment", "Create and maintain equipment records."),
+                action(ACTION_MANAGE_MONTHLY_UPDATES, "Manage monthly updates", "Submit monthly station readiness updates."),
+                action(ACTION_VIEW_LIVE_VIDEO, "View live video", "Watch live field video streams."),
+                action(ACTION_PUBLISH_LIVE_VIDEO, "Publish live video", "Start live field video streams."),
+                action(ACTION_TELE_SUPPORT, "Tele-support", "Provide or request remote support."),
+                action(ACTION_SUBMIT_INVESTIGATION, "Submit investigation", "Submit investigation findings."),
+                action(ACTION_REVIEW_DISTRICT_INVESTIGATION, "Review district investigation", "Approve or reject district investigations."),
+                action(ACTION_REVIEW_REGIONAL_INVESTIGATION, "Review regional investigation", "Approve or reject regional investigations."),
+                action(ACTION_REVIEW_NATIONAL_INVESTIGATION, "Review national investigation", "Approve or reject national investigations."),
+                action(ACTION_FINAL_INVESTIGATION_APPROVAL, "Final investigation approval", "Issue final approval for investigations."),
+                action(ACTION_VIEW_CONTROL_ROOM_DASHBOARD, "View control room dashboard", "Access control room workspace."),
+                action(ACTION_VIEW_OPERATIONS_DASHBOARD, "View operations dashboard", "Access operations workspace.")
+        );
     }
 
-    private Set<String> modules(String... values) {
-        return Set.of(values);
-    }
-
-    private Set<WorkspacePage> pages(WorkspacePage... values) {
-        return Set.of(values);
+    private ActionDefinition action(String key, String label, String description) {
+        return new ActionDefinition(key, label, description);
     }
 
     private SidebarLink link(String label, String href) {
@@ -874,38 +568,6 @@ public class RoleResponsibilityService {
 
     private String normalizeRole(String role) {
         return OperationRole.normalizeRole(role);
-    }
-
-    private String operationsBrandMeta(RoleWorkspaceDefinition definition) {
-        if (isNationalOperationsRole(definition.roleKey())) {
-            return "National oversight from Fire and Rescue Force Headquarters, Dodoma";
-        }
-        if (OperationRole.DISTRICT_FIRE_OFFICER.equals(definition.roleKey())
-                || OperationRole.DISTRICT_OPERATION_OFFICER.equals(definition.roleKey())) {
-            return "District oversight for incidents, routes, approvals, and reports";
-        }
-        return "Regional and national oversight for incidents, routes, approvals, and reports";
-    }
-
-    private String operationsAccessNote(RoleWorkspaceDefinition definition) {
-        if (isNationalOperationsRole(definition.roleKey())) {
-            return "Headquarters roles monitor the full country from Fire and Rescue Force Headquarters, Dodoma.";
-        }
-        if (OperationRole.DISTRICT_FIRE_OFFICER.equals(definition.roleKey())
-                || OperationRole.DISTRICT_OPERATION_OFFICER.equals(definition.roleKey())) {
-            return "This workspace is filtered to your district only, even when the command menu matches regional oversight roles.";
-        }
-        return "This workspace exposes only the command modules tied to your responsibilities.";
-    }
-
-    private boolean isNationalOperationsRole(String role) {
-        return Set.of(
-                OperationRole.CGF,
-                OperationRole.COMMISSIONER_OPERATIONS,
-                OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS,
-                OperationRole.HEAD_RESCUE_OPERATIONS,
-                OperationRole.CHIEF_FIRE_OFFICER
-        ).contains(normalizeRole(role));
     }
 
     public record RoleWorkspaceDefinition(
@@ -933,5 +595,8 @@ public class RoleResponsibilityService {
             String accessNote,
             List<SidebarSection> sections
     ) {
+    }
+
+    public record ActionDefinition(String key, String label, String description) {
     }
 }

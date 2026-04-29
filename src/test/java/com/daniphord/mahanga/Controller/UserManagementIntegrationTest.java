@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,9 +57,52 @@ class UserManagementIntegrationTest {
     }
 
     @Test
+    void bootstrappedDaniphordSystemAdminCanLoginAndReachDashboard() throws Exception {
+        User daniphord = userRepository.findByUsername("Daniphord").orElseThrow();
+
+        mockMvc.perform(post("/login")
+                        .param("username", "Daniphord")
+                        .param("password", "Nsunga@2018"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/dashboard"));
+
+        mockMvc.perform(get("/dashboard")
+                        .session(sessionFor(daniphord.getId(), daniphord.getUsername(), daniphord.getRole())))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("id=\"userListModal\"")))
+                .andExpect(content().string(containsString("id=\"system-test-module\"")))
+                .andExpect(content().string(containsString("id=\"documentation-module\"")));
+
+        mockMvc.perform(get("/api/users")
+                        .session(sessionFor(daniphord.getId(), daniphord.getUsername(), daniphord.getRole())))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/system-tests")
+                        .session(sessionFor(daniphord.getId(), daniphord.getUsername(), daniphord.getRole())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void controlRoomOperatorCannotAccessUserManagementApi() throws Exception {
         mockMvc.perform(get("/api/users")
                         .session(sessionFor(99L, "control.operator", OperationRole.CONTROL_ROOM_OPERATOR)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void adminCannotAccessOperationalApisOutsideAdminWorkspace() throws Exception {
+        User adminUser = createAdminUser();
+
+        mockMvc.perform(get("/operations/dashboard")
+                        .session(sessionFor(adminUser.getId(), adminUser.getUsername(), adminUser.getRole())))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/control-room/dashboard")
+                        .session(sessionFor(adminUser.getId(), adminUser.getUsername(), adminUser.getRole())))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/api/incidents")
+                        .session(sessionFor(adminUser.getId(), adminUser.getUsername(), adminUser.getRole())))
                 .andExpect(status().isForbidden());
     }
 
@@ -135,12 +179,12 @@ class UserManagementIntegrationTest {
                         .session(sessionFor(adminUser.getId(), adminUser.getUsername(), OperationRole.ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("id=\"documentation-module\"")))
+                .andExpect(content().string(containsString("id=\"system-test-module\"")))
                 .andExpect(content().string(containsString("FROMS System Architecture Document")))
                 .andExpect(content().string(containsString("FROMS System Design Document")))
                 .andExpect(content().string(containsString("FROMS System Requirements Specification")))
                 .andExpect(content().string(containsString("FROMS Disaster Recovery Plan")))
-                .andExpect(content().string(containsString("FROMS Disaster Recovery Runbook")))
-                .andExpect(content().string(not(containsString("id=\"system-test-module\""))));
+                .andExpect(content().string(containsString("FROMS Disaster Recovery Runbook")));
     }
 
     @Test

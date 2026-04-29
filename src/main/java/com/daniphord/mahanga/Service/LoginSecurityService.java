@@ -2,6 +2,7 @@ package com.daniphord.mahanga.Service;
 
 import com.daniphord.mahanga.Model.User;
 import com.daniphord.mahanga.Repositories.UserRepository;
+import com.daniphord.mahanga.Util.OperationRole;
 import com.daniphord.mahanga.Util.RateLimiter;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,8 @@ public class LoginSecurityService {
 
         int failedAttempts = (user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts()) + 1;
         user.setFailedLoginAttempts(failedAttempts);
-        if (failedAttempts >= MAX_LOGIN_ATTEMPTS) {
+        boolean lockExempt = OperationRole.isEmergencyOperatorRole(user.getRole());
+        if (failedAttempts >= MAX_LOGIN_ATTEMPTS && !lockExempt) {
             user.setAccountLockedUntil(LocalDateTime.now().plusMinutes(ACCOUNT_LOCK_MINUTES));
             userRepository.save(user);
             auditService.logFailure(
@@ -78,6 +80,9 @@ public class LoginSecurityService {
 
         userRepository.save(user);
         auditService.logFailure(user, "LOGIN_ATTEMPT", "Failed login attempt", ipAddress, null);
+        if (failedAttempts >= MAX_LOGIN_ATTEMPTS && lockExempt) {
+            return "Incorrect username or password. This operational account remains available during active response, but the failed attempts have been flagged for review.";
+        }
         int remainingAttempts = MAX_LOGIN_ATTEMPTS - failedAttempts;
         return "Incorrect username or password. You have " + remainingAttempts + " attempt(s) remaining before your account is locked.";
     }

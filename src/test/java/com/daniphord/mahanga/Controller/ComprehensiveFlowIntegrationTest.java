@@ -53,6 +53,20 @@ class ComprehensiveFlowIntegrationTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
+    void bootstrapAdminAccountMahangaCanLoginWithSeededPassword() throws Exception {
+        User adminUser = userRepository.findByUsername("Mahanga").orElseThrow();
+        org.junit.jupiter.api.Assertions.assertEquals(OperationRole.SUPER_ADMIN, adminUser.getRole());
+        org.junit.jupiter.api.Assertions.assertTrue(passwordEncoder.matches("Nsunga@2018", adminUser.getPassword()));
+
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("username", "Mahanga")
+                        .param("password", "Nsunga@2018"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/dashboard"));
+    }
+
+    @Test
     void adminDocumentationApiIncludesDisasterRecoveryDocuments() throws Exception {
         User superAdmin = createUser("docs-super-admin", OperationRole.SUPER_ADMIN, null);
 

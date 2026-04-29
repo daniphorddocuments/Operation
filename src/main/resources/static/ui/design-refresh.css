@@ -1,0 +1,1153 @@
+/* =============================================
+   DESIGN REFRESH SYSTEM (THEME ONLY - SAFE FINAL)
+   ============================================= */
+
+:root {
+    --primary: #f97316;
+    --primary-dark: #ea580c;
+
+    --bg-main: #f8fafc;
+    --bg-surface: #ffffff;
+
+    --text-main: #0f172a;
+    --text-secondary: #64748b;
+
+    --border: #e2e8f0;
+
+    --brand-navy: #0f172a;
+    --brand-navy-soft: #1e293b;
+}
+
+/* =============================================
+   SAFE BACKGROUND CONTROL
+   ============================================= */
+
+body[data-page] {
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+/* LOGIN */
+body[data-page='login-dashboard'] {
+    background: #ffffff;
+}
+
+/* LANDING */
+body[data-page='landing-dashboard'] {
+    background: #ffffff;
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+
+h1, h2, h3, h4 {
+    color: var(--text-main);
+}
+
+p {
+    color: var(--text-secondary);
+}
+
+/* =============================================
+   TOPBAR THEMES
+   ============================================= */
+
+body[data-page='landing-dashboard'] .ui-site-topbar {
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+body[data-page='login-dashboard'] .ui-site-topbar {
+    background: linear-gradient(90deg, #fff7ed, #ffffff);
+    color: #9a3412;
+    border-bottom: 1px solid rgba(249, 115, 22, 0.18);
+}
+
+body[data-page='public-emergency-report'] .ui-site-topbar {
+    background: linear-gradient(90deg, #ea580c, #f97316 58%, #fb923c 100%);
+    color: white;
+    border-bottom: 1px solid rgba(194, 65, 12, 0.28);
+}
+
+body[data-page='public-emergency-report'] .ui-topbar-brand,
+body[data-page='public-emergency-report'] .ui-topbar-links a {
+    color: white;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar,
+body[data-page='operations-dashboard'] .ui-role-topbar,
+body[data-page='control-room'] .ui-role-topbar {
+    background: linear-gradient(90deg, #ea580c, #f97316 58%, #fb923c 100%);
+    color: white;
+}
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+
+.btn-primary {
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    border: 1px solid var(--border);
+}
+
+/* =============================================
+   CARDS THEME
+   ============================================= */
+
+.ui-card,
+.ui-panel,
+.ui-form-shell {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--primary);
+}
+
+/* =============================================
+   FORMS
+   ============================================= */
+
+.form-control {
+    border: 1px solid var(--border);
+    background: white;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.2);
+}
+
+/* =============================================
+   SIDEBAR THEME
+   ============================================= */
+
+.dashboard-sidebar {
+    background: linear-gradient(180deg, #7c2d12, #9a3412 42%, #c2410c 100%);
+    color: white;
+}
+
+/* =============================================
+   LANDING HERO
+   ============================================= */
+
+.landing-hero-modern {
+    background: linear-gradient(135deg, #ffffff, var(--bg-main));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+}
+
+/* =============================================
+   TABLE HOVER
+   ============================================= */
+
+.ui-table tbody tr:hover td {
+    background: #fff7ed;
+}
+
+/* =============================================
+   WIREFRAME ALIGNMENT
+   ============================================= */
+
+body[data-page='landing-dashboard'],
+body[data-page='login-dashboard'] {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.10), transparent 24rem),
+        linear-gradient(180deg, #fffdf8 0%, #f5f7fb 100%);
+}
+
+body[data-page='login-dashboard'] {
+    background:
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.16), transparent 22rem),
+        linear-gradient(180deg, #fffaf5 0%, #fff1e6 100%);
+}
+
+.ui-site-topbar,
+.ui-role-topbar {
+    min-height: 74px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.10);
+}
+
+.ui-site-topbar-inner,
+.ui-role-topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(1240px, calc(100% - 24px));
+    margin: 0 auto;
+}
+
+.ui-topbar-brand,
+.ui-role-topbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ui-topbar-brand > span,
+.ui-role-topbar-brand-copy {
+    display: block;
+    min-width: 0;
+}
+
+.ui-topbar-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+.ui-topbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.ui-topbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.ui-topbar-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ui-language-form {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.ui-language-select,
+.ui-language-select.form-select,
+.ui-language-select-pill,
+.ui-language-select-pill.form-select {
+    width: auto;
+    min-width: 120px;
+    max-width: 160px;
+    padding-right: 2.25rem;
+}
+
+.landing-login-corner {
+    flex: 0 0 auto;
+    text-decoration: none;
+}
+
+.ui-topbar-brand strong,
+.ui-role-topbar-brand-copy strong {
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.landing-main-clean,
+.portal-stage-login,
+.role-dashboard-shell {
+    width: min(1240px, calc(100% - 24px));
+    margin: 0 auto;
+}
+
+.skeleton-landing-board {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2rem 0 1rem;
+}
+
+.skeleton-board-title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 247, 237, 0.98), rgba(255, 255, 255, 0.95));
+    border: 1px solid rgba(249, 115, 22, 0.22);
+    border-radius: 22px;
+    box-shadow: 0 18px 44px rgba(249, 115, 22, 0.10);
+}
+
+.skeleton-title-action {
+    white-space: nowrap;
+    align-self: center;
+}
+
+.skeleton-landing-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.85fr);
+    gap: 1.25rem;
+}
+
+.skeleton-landing-grid-only {
+    align-items: stretch;
+    min-height: calc(100vh - 150px);
+}
+
+.skeleton-announcement-panel,
+.skeleton-action-panel,
+.skeleton-login-showcase,
+.skeleton-login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #d8dee8;
+    border-radius: 24px;
+    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+.skeleton-announcement-panel {
+    padding: 1.5rem;
+    display: grid;
+    gap: 1rem;
+    border-color: rgba(249, 115, 22, 0.18);
+}
+
+.skeleton-announcement-media-only {
+    min-height: 100%;
+    height: 100%;
+}
+
+.skeleton-panel-head {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.skeleton-panel-copy {
+    max-width: 62ch;
+    margin: 0;
+}
+
+.skeleton-announcement-media {
+    min-height: 320px;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    border: 1px solid rgba(249, 115, 22, 0.18);
+}
+
+.skeleton-announcement-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.skeleton-point-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.skeleton-point-row .landing-hero-point {
+    margin: 0;
+    min-width: 0;
+    background: #fff7ed;
+    border: 1px solid rgba(249, 115, 22, 0.16);
+}
+
+.skeleton-action-panel {
+    padding: 1.5rem;
+    display: grid;
+    align-content: center;
+    gap: 1rem;
+    background: linear-gradient(180deg, rgba(255, 247, 237, 0.98), rgba(255, 255, 255, 0.98));
+    border-color: rgba(249, 115, 22, 0.24);
+}
+
+.skeleton-action-title {
+    margin: 0;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    line-height: 1.08;
+}
+
+.skeleton-action-stack {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.skeleton-action-stack .landing-btn {
+    justify-content: center;
+    min-height: 56px;
+}
+
+.skeleton-action-note {
+    padding: 1rem 1.1rem;
+    color: var(--text-secondary);
+    background: #fff7ed;
+    border-radius: 16px;
+    border: 1px dashed rgba(249, 115, 22, 0.30);
+}
+
+.skeleton-login-showcase {
+    position: relative;
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.skeleton-login-head {
+    position: relative;
+    z-index: 2;
+    max-width: 34rem;
+    margin-bottom: 1rem;
+}
+
+.skeleton-login-showcase .login-showcase-track {
+    min-height: 430px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #dbe4ef;
+}
+
+.skeleton-login-showcase .login-showcase-copy {
+    max-width: 30rem;
+}
+
+.skeleton-login-card {
+    border-top: 4px solid var(--primary);
+}
+
+.skeleton-login-card .login-form-shell {
+    padding: 1.75rem;
+}
+
+body[data-page='login-dashboard'] .gov-login-layout {
+    align-items: stretch;
+    gap: 1.25rem;
+}
+
+body[data-page='login-dashboard'] .login-reference-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.72fr);
+    gap: 0;
+    overflow: hidden;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.86), rgba(248,250,252,0.84));
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    box-shadow: 0 28px 60px rgba(15, 23, 42, 0.14);
+}
+
+body[data-page='login-dashboard'] .skeleton-login-showcase,
+body[data-page='login-dashboard'] .login-reference-card {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 76vh;
+}
+
+body[data-page='login-dashboard'] .skeleton-login-showcase {
+    padding: 1.2rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(249, 115, 22, 0.10)),
+        linear-gradient(135deg, rgba(249, 115, 22, 0.95), rgba(234, 88, 12, 0.86));
+    color: #fff7ed;
+}
+
+.login-reference-showcase-head {
+    max-width: 34rem;
+    margin-bottom: 1rem;
+}
+
+body[data-page='login-dashboard'] .login-reference-showcase-head .landing-kicker,
+body[data-page='login-dashboard'] .login-reference-showcase-head .gov-login-title,
+body[data-page='login-dashboard'] .login-reference-showcase-head .gov-login-text,
+body[data-page='login-dashboard'] .login-reference-copy .landing-kicker,
+body[data-page='login-dashboard'] .login-reference-copy .gov-login-title,
+body[data-page='login-dashboard'] .login-reference-copy .gov-login-text {
+    color: #fff;
+}
+
+body[data-page='login-dashboard'] .skeleton-login-showcase .login-showcase-track {
+    min-height: 560px;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.login-reference-slide {
+    min-height: 560px;
+}
+
+.login-reference-slide .login-showcase-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.login-reference-slide .login-showcase-overlay {
+    background: linear-gradient(180deg, rgba(249, 115, 22, 0.05) 0%, rgba(124, 45, 18, 0.74) 100%);
+}
+
+.login-reference-copy {
+    inset: auto 1.35rem 1.35rem 1.35rem;
+    max-width: 36rem;
+    padding: 1.2rem 1.25rem;
+    border-radius: 18px;
+    background: rgba(124, 45, 18, 0.54);
+    backdrop-filter: blur(8px);
+}
+
+body[data-page='login-dashboard'] .login-showcase-dots {
+    justify-content: center;
+    padding-top: 1rem;
+}
+
+body[data-page='login-dashboard'] .login-showcase-dot {
+    background: rgba(255, 255, 255, 0.46);
+}
+
+body[data-page='login-dashboard'] .login-showcase-dot.is-active {
+    background: var(--primary);
+}
+
+body[data-page='login-dashboard'] .login-reference-card {
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 247, 237, 0.99));
+    color: #fff;
+}
+
+body[data-page='login-dashboard'] .login-reference-card .login-form-shell {
+    width: min(100%, 470px);
+    margin: 0 auto;
+    padding: 2.3rem 2rem;
+}
+
+.login-reference-brand {
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 1.25rem;
+}
+
+body[data-page='login-dashboard'] .login-reference-card .landing-kicker,
+body[data-page='login-dashboard'] .login-reference-card .portal-access-title,
+body[data-page='login-dashboard'] .login-reference-card .ui-muted,
+body[data-page='login-dashboard'] .login-reference-card .login-security-note span,
+body[data-page='login-dashboard'] .login-reference-card .portal-access-footer {
+    color: #7c2d12 !important;
+}
+
+body[data-page='login-dashboard'] .login-reference-card .ui-alert {
+    border-radius: 14px;
+}
+
+.login-reference-form {
+    gap: 1rem;
+}
+
+.login-reference-field {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.login-reference-input {
+    min-height: 58px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(249, 115, 22, 0.24);
+    color: #7c2d12;
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.08);
+}
+
+.login-reference-input::placeholder {
+    color: #94a3b8;
+}
+
+.login-reference-input:focus {
+    background: #ffffff;
+    color: #7c2d12;
+}
+
+.login-reference-password-shell {
+    border-radius: 16px;
+}
+
+body[data-page='login-dashboard'] .login-password-toggle {
+    color: var(--primary);
+}
+
+.login-reference-submit {
+    min-height: 60px;
+    border-radius: 18px;
+    font-size: 1.1rem;
+}
+
+.login-reference-actions {
+    margin-top: 1.2rem;
+}
+
+.login-reference-actions .ui-btn-outline {
+    border-color: rgba(249, 115, 22, 0.28);
+    color: #9a3412;
+}
+
+.login-reference-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(249, 115, 22, 0.16);
+}
+
+body[data-page='public-emergency-report'] {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.12), transparent 22rem),
+        linear-gradient(180deg, #fffaf5 0%, #fff7ed 100%);
+}
+
+body[data-page='public-emergency-report'] .ui-hero {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border: 1px solid rgba(249, 115, 22, 0.24);
+    box-shadow: 0 20px 48px rgba(249, 115, 22, 0.20);
+}
+
+body[data-page='public-emergency-report'] .ui-card,
+body[data-page='public-emergency-report'] .ui-briefing-card,
+body[data-page='public-emergency-report'] .ui-soft-note,
+body[data-page='public-emergency-report'] .ui-card-soft,
+body[data-page='public-emergency-report'] .ui-form-section {
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(249, 115, 22, 0.14);
+}
+
+body[data-page='public-emergency-report'] .ui-eyebrow,
+body[data-page='public-emergency-report'] .ui-briefing-kicker {
+    color: #c2410c;
+}
+
+body[data-page='public-emergency-report'] .form-control,
+body[data-page='public-emergency-report'] .form-select,
+body[data-page='public-emergency-report'] textarea.form-control {
+    border-color: rgba(249, 115, 22, 0.22);
+    background: #fffdf9;
+}
+
+body[data-page='public-emergency-report'] .form-control:focus,
+body[data-page='public-emergency-report'] .form-select:focus,
+body[data-page='public-emergency-report'] textarea.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.15);
+}
+
+body[data-page='role-dashboard'] .dashboard-main > .ui-command-grid,
+body[data-page='role-dashboard'] .dashboard-main > .ui-briefing-strip,
+body[data-page='role-dashboard'] .dashboard-main > .ui-card,
+body[data-page='role-dashboard'] .dashboard-main > .ui-dual-grid,
+body[data-page='role-dashboard'] .dashboard-main > .ui-command-center,
+body[data-page='role-dashboard'] .dashboard-main > .ui-hero,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-command-grid,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-briefing-strip,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-card,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-dual-grid,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-command-center,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-hero,
+body[data-page='control-room'] .dashboard-main > .ui-command-grid,
+body[data-page='control-room'] .dashboard-main > .ui-briefing-strip,
+body[data-page='control-room'] .dashboard-main > .ui-card,
+body[data-page='control-room'] .dashboard-main > .ui-dual-grid,
+body[data-page='control-room'] .dashboard-main > .ui-command-center,
+body[data-page='control-room'] .dashboard-main > .ui-hero {
+    display: none;
+}
+
+body[data-page='role-dashboard'] .dashboard-main > .dashboard-panel-visible,
+body[data-page='operations-dashboard'] .dashboard-main > .dashboard-panel-visible,
+body[data-page='control-room'] .dashboard-main > .dashboard-panel-visible {
+    display: block;
+}
+
+body[data-page='role-dashboard'] .dashboard-main > .ui-command-grid.dashboard-panel-visible,
+body[data-page='role-dashboard'] .dashboard-main > .ui-briefing-strip.dashboard-panel-visible,
+body[data-page='role-dashboard'] .dashboard-main > .ui-dual-grid.dashboard-panel-visible,
+body[data-page='role-dashboard'] .dashboard-main > .ui-command-center.dashboard-panel-visible,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-command-grid.dashboard-panel-visible,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-briefing-strip.dashboard-panel-visible,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-dual-grid.dashboard-panel-visible,
+body[data-page='operations-dashboard'] .dashboard-main > .ui-command-center.dashboard-panel-visible,
+body[data-page='control-room'] .dashboard-main > .ui-command-grid.dashboard-panel-visible,
+body[data-page='control-room'] .dashboard-main > .ui-briefing-strip.dashboard-panel-visible,
+body[data-page='control-room'] .dashboard-main > .ui-dual-grid.dashboard-panel-visible,
+body[data-page='control-room'] .dashboard-main > .ui-command-center.dashboard-panel-visible {
+    display: grid;
+}
+
+.sidebar-submenu {
+    display: none;
+}
+
+.sidebar-module-card.is-open .sidebar-submenu {
+    display: grid;
+}
+
+.sidebar-primary-link.has-submenu::after {
+    content: '+';
+    float: right;
+    font-weight: 700;
+}
+
+.sidebar-module-card.is-open .sidebar-primary-link.has-submenu::after {
+    content: '-';
+}
+
+.role-dashboard-shell {
+    padding: 1rem 0 1.5rem;
+}
+
+body[data-page='role-dashboard'] .dashboard-workbench,
+body[data-page='operations-dashboard'] .dashboard-workbench,
+body[data-page='control-room'] .dashboard-workbench,
+.dashboard-workbench-sketch {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 1.35rem;
+    align-items: start;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar,
+body[data-page='operations-dashboard'] .dashboard-sidebar,
+body[data-page='control-room'] .dashboard-sidebar,
+.dashboard-workbench-sketch .dashboard-sidebar {
+    position: sticky;
+    top: 98px;
+    border-radius: 24px;
+    min-height: calc(100vh - 122px);
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 24px 54px rgba(234, 88, 12, 0.24);
+    padding: 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+body[data-page='role-dashboard'] .dashboard-main,
+body[data-page='operations-dashboard'] .dashboard-main,
+body[data-page='control-room'] .dashboard-main,
+.dashboard-main-sketch {
+    padding: 0;
+    gap: 1.15rem;
+}
+
+body[data-page='role-dashboard'] .ui-hero,
+body[data-page='role-dashboard'] .ui-command-card,
+body[data-page='role-dashboard'] .ui-briefing-card,
+body[data-page='role-dashboard'] .ui-card,
+body[data-page='role-dashboard'] .ui-highlight-card,
+body[data-page='operations-dashboard'] .ui-hero,
+body[data-page='operations-dashboard'] .ui-command-card,
+body[data-page='operations-dashboard'] .ui-briefing-card,
+body[data-page='operations-dashboard'] .ui-card,
+body[data-page='operations-dashboard'] .ui-highlight-card,
+body[data-page='control-room'] .ui-hero,
+body[data-page='control-room'] .ui-command-card,
+body[data-page='control-room'] .ui-briefing-card,
+body[data-page='control-room'] .ui-card,
+body[data-page='control-room'] .ui-highlight-card {
+    border-radius: 22px;
+    box-shadow: 0 16px 42px rgba(249, 115, 22, 0.10);
+}
+
+body[data-page='role-dashboard'] .ui-hero,
+body[data-page='operations-dashboard'] .ui-hero,
+body[data-page='control-room'] .ui-hero {
+    background: linear-gradient(135deg, #fff7ed, #ffffff 50%, #fff1e6 100%);
+    border: 1px solid rgba(249, 115, 22, 0.22);
+    padding: 1.6rem;
+}
+
+body[data-page='role-dashboard'] .ui-hero p,
+body[data-page='role-dashboard'] .ui-hero .text-white-50,
+body[data-page='role-dashboard'] .ui-hero .ui-eyebrow,
+body[data-page='operations-dashboard'] .ui-hero p,
+body[data-page='operations-dashboard'] .ui-hero .text-white-50,
+body[data-page='operations-dashboard'] .ui-hero .ui-eyebrow,
+body[data-page='control-room'] .ui-hero p,
+body[data-page='control-room'] .ui-hero .text-white-50,
+body[data-page='control-room'] .ui-hero .ui-eyebrow {
+    color: #7c2d12 !important;
+}
+
+body[data-page='role-dashboard'] .ui-command-card,
+body[data-page='role-dashboard'] .ui-briefing-card,
+body[data-page='role-dashboard'] .ui-card,
+body[data-page='role-dashboard'] .ui-highlight-card,
+body[data-page='operations-dashboard'] .ui-command-card,
+body[data-page='operations-dashboard'] .ui-briefing-card,
+body[data-page='operations-dashboard'] .ui-card,
+body[data-page='operations-dashboard'] .ui-highlight-card,
+body[data-page='control-room'] .ui-command-card,
+body[data-page='control-room'] .ui-briefing-card,
+body[data-page='control-room'] .ui-card,
+body[data-page='control-room'] .ui-highlight-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(249, 115, 22, 0.14);
+}
+
+body[data-page='role-dashboard'] .ui-command-icon,
+body[data-page='role-dashboard'] .ui-chip i,
+body[data-page='operations-dashboard'] .ui-command-icon,
+body[data-page='operations-dashboard'] .ui-chip i,
+body[data-page='control-room'] .ui-command-icon,
+body[data-page='control-room'] .ui-chip i {
+    color: var(--primary);
+}
+
+body[data-page='role-dashboard'] .ui-command-grid,
+body[data-page='operations-dashboard'] .ui-command-grid,
+body[data-page='control-room'] .ui-command-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+body[data-page='role-dashboard'] .ui-command-card,
+body[data-page='operations-dashboard'] .ui-command-card,
+body[data-page='control-room'] .ui-command-card {
+    padding: 1.15rem 1.2rem;
+    background: linear-gradient(180deg, #ffffff, #fff7ed);
+}
+
+body[data-page='role-dashboard'] .ui-command-value,
+body[data-page='operations-dashboard'] .ui-command-value,
+body[data-page='control-room'] .ui-command-value {
+    color: #9a3412;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+}
+
+body[data-page='role-dashboard'] .ui-section-head h2,
+body[data-page='operations-dashboard'] .ui-section-head h2,
+body[data-page='control-room'] .ui-section-head h2,
+body[data-page='role-dashboard'] .h3,
+body[data-page='operations-dashboard'] .h3,
+body[data-page='control-room'] .h3 {
+    color: #7c2d12;
+}
+
+body[data-page='role-dashboard'] .ui-kpi,
+body[data-page='operations-dashboard'] .ui-kpi,
+body[data-page='control-room'] .ui-kpi {
+    background: #fff7ed;
+    border: 1px solid rgba(249, 115, 22, 0.18);
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+}
+
+body[data-page='role-dashboard'] .ui-kpi strong,
+body[data-page='operations-dashboard'] .ui-kpi strong,
+body[data-page='control-room'] .ui-kpi strong {
+    color: #9a3412;
+}
+
+body[data-page='role-dashboard'] .ui-briefing-card,
+body[data-page='operations-dashboard'] .ui-briefing-card,
+body[data-page='control-room'] .ui-briefing-card {
+    background: linear-gradient(180deg, #fffaf5, #ffffff);
+    padding: 1.15rem 1.2rem;
+}
+
+body[data-page='role-dashboard'] .ui-briefing-kicker,
+body[data-page='operations-dashboard'] .ui-briefing-kicker,
+body[data-page='control-room'] .ui-briefing-kicker {
+    color: #ea580c;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+body[data-page='role-dashboard'] .ui-btn-primary,
+body[data-page='operations-dashboard'] .ui-btn-primary,
+body[data-page='control-room'] .ui-btn-primary {
+    background: linear-gradient(90deg, #ea580c, #f97316);
+    border: none;
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(249, 115, 22, 0.22);
+}
+
+body[data-page='role-dashboard'] .ui-btn-outline,
+body[data-page='operations-dashboard'] .ui-btn-outline,
+body[data-page='control-room'] .ui-btn-outline {
+    background: #fff7ed;
+    border: 1px solid rgba(249, 115, 22, 0.22);
+    color: #9a3412;
+}
+
+body[data-page='role-dashboard'] .ui-breadcrumbs,
+body[data-page='operations-dashboard'] .ui-breadcrumbs,
+body[data-page='control-room'] .ui-breadcrumbs {
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(249,115,22,0.12);
+    border-radius: 16px;
+}
+
+body[data-page='role-dashboard'] .dashboard-sidebar-brand,
+body[data-page='operations-dashboard'] .dashboard-sidebar-brand,
+body[data-page='control-room'] .dashboard-sidebar-brand {
+    padding: 0.4rem 0.1rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+    margin-bottom: 1rem;
+}
+
+body[data-page='role-dashboard'] .sidebar-module-card,
+body[data-page='operations-dashboard'] .sidebar-module-card,
+body[data-page='control-room'] .sidebar-module-card {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+body[data-page='role-dashboard'] .sidebar-primary-link,
+body[data-page='operations-dashboard'] .sidebar-primary-link,
+body[data-page='control-room'] .sidebar-primary-link {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+body[data-page='role-dashboard'] .sidebar-module-card.is-open .sidebar-primary-link,
+body[data-page='operations-dashboard'] .sidebar-module-card.is-open .sidebar-primary-link,
+body[data-page='control-room'] .sidebar-module-card.is-open .sidebar-primary-link {
+    background: rgba(255,255,255,0.24);
+}
+
+body[data-page='role-dashboard'] .sidebar-submenu,
+body[data-page='operations-dashboard'] .sidebar-submenu,
+body[data-page='control-room'] .sidebar-submenu {
+    background: rgba(0, 0, 0, 0.10);
+    border: 1px dashed rgba(255,255,255,0.18);
+}
+
+body[data-page='role-dashboard'] .ui-topbar-icon,
+body[data-page='operations-dashboard'] .ui-topbar-icon,
+body[data-page='control-room'] .ui-topbar-icon,
+body[data-page='role-dashboard'] .ui-profile-toggle,
+body[data-page='operations-dashboard'] .ui-profile-toggle,
+body[data-page='control-room'] .ui-profile-toggle {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #fff;
+}
+
+body[data-page='role-dashboard'] .dashboard-main-sketch::before {
+    content: "";
+    display: block;
+    min-height: 8px;
+}
+
+body[data-page='role-dashboard'] .ui-role-topbar,
+body[data-page='operations-dashboard'] .ui-role-topbar,
+body[data-page='control-room'] .ui-role-topbar {
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+}
+
+body[data-page='role-dashboard'] .ui-dashboard-topbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+body[data-page='role-dashboard'] .ui-dashboard-topbar-left,
+body[data-page='role-dashboard'] .ui-dashboard-topbar-right > .ui-dashboard-topbar-right,
+body[data-page='operations-dashboard'] .ui-dashboard-topbar-right,
+body[data-page='operations-dashboard'] .ui-dashboard-topbar-left,
+body[data-page='operations-dashboard'] .ui-dashboard-topbar-right > .ui-dashboard-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+body[data-page='role-dashboard'] .ui-dashboard-links a,
+body[data-page='operations-dashboard'] .ui-dashboard-links a {
+    color: rgba(255, 255, 255, 0.86);
+}
+
+.sidebar-module-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    padding: 0.85rem;
+}
+
+.sidebar-module-title {
+    margin: 0 0 0.65rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.76);
+}
+
+.sidebar-module-links {
+    gap: 0.6rem;
+}
+
+.sidebar-primary-link {
+    display: block;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-weight: 600;
+}
+
+.sidebar-submenu {
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.22);
+    border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+
+.sidebar-submenu-link {
+    display: block;
+    padding: 0.5rem 0.6rem;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.93rem;
+}
+
+.sidebar-submenu-link:hover,
+.sidebar-primary-link:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+.sidebar-access-note {
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.ui-topbar-notification,
+.ui-profile-toggle {
+    min-height: 44px;
+    border-radius: 999px;
+}
+
+.ui-topbar-pill-label {
+    margin-left: 0.45rem;
+    font-size: 0.92rem;
+}
+
+body[data-page='role-dashboard'] .ui-topbar-icon,
+body[data-page='operations-dashboard'] .ui-topbar-icon,
+body[data-page='role-dashboard'] .ui-profile-toggle,
+body[data-page='operations-dashboard'] .ui-profile-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+body[data-page='role-dashboard'] .ui-profile-avatar,
+body[data-page='operations-dashboard'] .ui-profile-avatar {
+    background: rgba(249, 115, 22, 0.18);
+    color: #fff;
+}
+
+@media (max-width: 991px) {
+    .skeleton-landing-grid,
+    .dashboard-workbench-sketch,
+    body[data-page='login-dashboard'] .gov-login-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-workbench-sketch .dashboard-sidebar {
+        position: static;
+        min-height: auto;
+    }
+
+    body[data-page='role-dashboard'] .ui-dashboard-topbar-right,
+    body[data-page='operations-dashboard'] .ui-dashboard-topbar-right {
+        flex-wrap: wrap;
+    }
+
+    .skeleton-landing-grid-only {
+        min-height: auto;
+    }
+
+    body[data-page='login-dashboard'] .login-reference-layout {
+        grid-template-columns: 1fr;
+    }
+
+    body[data-page='login-dashboard'] .skeleton-login-showcase,
+    body[data-page='login-dashboard'] .login-reference-card {
+        min-height: auto;
+    }
+
+    body[data-page='login-dashboard'] .skeleton-login-showcase .login-showcase-track,
+    body[data-page='login-dashboard'] .login-reference-slide {
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 767px) {
+    .ui-site-topbar-inner,
+    .ui-role-topbar-inner,
+    .landing-main-clean,
+    .portal-stage-login,
+    .role-dashboard-shell {
+        width: min(100%, calc(100% - 16px));
+    }
+
+    .skeleton-board-title {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+    }
+
+    .skeleton-point-row {
+        grid-template-columns: 1fr;
+    }
+
+    .skeleton-announcement-panel,
+    .skeleton-action-panel,
+    .skeleton-login-showcase .login-form-shell,
+    .skeleton-login-card .login-form-shell {
+        padding: 1rem;
+    }
+
+    .skeleton-announcement-media,
+    .skeleton-login-showcase .login-showcase-track {
+        min-height: 220px;
+    }
+
+    body[data-page='login-dashboard'] .login-reference-card .login-form-shell {
+        padding: 1.35rem 1rem;
+    }
+
+    .login-reference-copy {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    .ui-site-topbar-inner,
+    .ui-role-topbar-inner,
+    .ui-topbar-right {
+        align-items: flex-start;
+    }
+
+    .ui-topbar-brand,
+    .ui-role-topbar-brand {
+        width: 100%;
+    }
+
+    .ui-topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    body[data-page='role-dashboard'] .ui-dashboard-topbar-left,
+    body[data-page='role-dashboard'] .ui-dashboard-topbar-right > .ui-dashboard-topbar-right,
+    body[data-page='operations-dashboard'] .ui-dashboard-topbar-left,
+    body[data-page='operations-dashboard'] .ui-dashboard-topbar-right > .ui-dashboard-topbar-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}

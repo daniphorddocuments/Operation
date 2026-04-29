@@ -21,7 +21,10 @@ public class DatabaseStartupCheck {
     @Bean
     @Order(0)
     ApplicationRunner repairLegacySchema(DataSource dataSource) {
-        return args -> repairLegacyVideoSessionSchema(dataSource);
+        return args -> {
+            repairLegacyVideoSessionSchema(dataSource);
+            repairLegacyLoginCarouselSchema(dataSource);
+        };
     }
 
     @Bean
@@ -40,9 +43,9 @@ public class DatabaseStartupCheck {
                         connection.getMetaData().getURL(),
                         connection.getMetaData().getUserName());
             } catch (Exception exception) {
-                log.error("Database connection failed. Check PostgreSQL host, port, database name, username, and password.", exception);
+                log.error("Database connection failed. Check datasource URL, driver, username, password, and database availability.", exception);
                 throw new IllegalStateException(
-                        "Unable to connect to PostgreSQL database. Verify spring.datasource.url, username, password, and that PostgreSQL is running.",
+                        "Unable to connect to the configured database. Verify spring.datasource.url, username, password, driver, and that the database is reachable.",
                         exception
                 );
             }
@@ -65,6 +68,23 @@ public class DatabaseStartupCheck {
             }
         } catch (Exception exception) {
             throw new IllegalStateException("Unable to repair legacy video session schema.", exception);
+        }
+    }
+
+    void repairLegacyLoginCarouselSchema(DataSource dataSource) {
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            if (!tableExists(connection, "LOGIN_CAROUSEL_SLIDES")) {
+                return;
+            }
+            if (!columnExists(connection, "LOGIN_CAROUSEL_SLIDES", "TARGET_PAGE")) {
+                statement.executeUpdate("ALTER TABLE login_carousel_slides ADD COLUMN target_page VARCHAR(32)");
+                statement.executeUpdate("UPDATE login_carousel_slides SET target_page = 'LOGIN' WHERE target_page IS NULL");
+                statement.executeUpdate("ALTER TABLE login_carousel_slides ALTER COLUMN target_page SET NOT NULL");
+                log.warn("Repaired legacy schema: added missing login_carousel_slides.target_page column");
+            }
+        } catch (Exception exception) {
+            throw new IllegalStateException("Unable to repair legacy login carousel schema.", exception);
         }
     }
 

@@ -5,6 +5,8 @@ import com.daniphord.mahanga.Repositories.UserRepository;
 import com.daniphord.mahanga.Service.AuditService;
 import com.daniphord.mahanga.Service.DashboardDefinitionService;
 import com.daniphord.mahanga.Service.LoginSecurityService;
+import com.daniphord.mahanga.Service.LoginCarouselSlideService;
+import com.daniphord.mahanga.Service.SecurityIntelligenceService;
 import com.daniphord.mahanga.Service.UserManualService;
 import com.daniphord.mahanga.Service.UserService;
 import com.daniphord.mahanga.Util.InputValidator;
@@ -37,6 +39,8 @@ public class WebController {
     private final UserManualService userManualService;
     private final UserService userService;
     private final LoginSecurityService loginSecurityService;
+    private final LoginCarouselSlideService loginCarouselSlideService;
+    private final SecurityIntelligenceService securityIntelligenceService;
     private final int sessionTimeoutSeconds;
 
     public WebController(
@@ -47,6 +51,8 @@ public class WebController {
             UserManualService userManualService,
             UserService userService,
             LoginSecurityService loginSecurityService,
+            LoginCarouselSlideService loginCarouselSlideService,
+            SecurityIntelligenceService securityIntelligenceService,
             @Value("${froms.security.session-timeout-seconds:900}") int sessionTimeoutSeconds
     ) {
         this.userRepository = userRepository;
@@ -56,6 +62,8 @@ public class WebController {
         this.userManualService = userManualService;
         this.userService = userService;
         this.loginSecurityService = loginSecurityService;
+        this.loginCarouselSlideService = loginCarouselSlideService;
+        this.securityIntelligenceService = securityIntelligenceService;
         this.sessionTimeoutSeconds = sessionTimeoutSeconds;
     }
 
@@ -66,6 +74,7 @@ public class WebController {
         }
         model.addAttribute("publicUserManual", userManualService.publicLandingManual());
         model.addAttribute("landingFaqs", userManualService.publicLandingFaqs());
+        model.addAttribute("landingCarouselSlides", loginCarouselSlideService.landingSlides());
         return "landing";
     }
 
@@ -81,6 +90,7 @@ public class WebController {
         if ("expired".equalsIgnoreCase(sessionState)) {
             model.addAttribute("error", "Your session expired because of inactivity. Sign in again.");
         }
+        model.addAttribute("loginCarouselSlides", loginCarouselSlideService.loginSlides());
         return "login";
     }
 
@@ -88,6 +98,9 @@ public class WebController {
     public String login(
             @RequestParam String username,
             @RequestParam String password,
+            @RequestParam(value = "clientFingerprint", required = false) String clientFingerprint,
+            @RequestParam(value = "autofillDetected", defaultValue = "false") boolean autofillDetected,
+            @RequestParam(value = "typedPassword", defaultValue = "true") boolean typedPassword,
             HttpSession session,
             HttpServletRequest request,
             RedirectAttributes redirectAttributes
@@ -125,10 +138,21 @@ public class WebController {
         }
 
         if (user.getPassword() == null || !passwordEncoder.matches(password, user.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", loginSecurityService.recordFailedLogin(user, ipAddress));
+            String errorMessage = loginSecurityService.recordFailedLogin(user, ipAddress);
+            securityIntelligenceService.registerFailedLogin(
+                    user,
+                    request,
+                    clientFingerprint,
+                    autofillDetected,
+                    user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts(),
+                    user.getAccountLockedUntil() != null && user.getAccountLockedUntil().isAfter(LocalDateTime.now()),
+                    com.daniphord.mahanga.Util.OperationRole.isEmergencyOperatorRole(user.getRole())
+            );
+            redirectAttributes.addFlashAttribute("error", errorMessage);
             return "redirect:/login";
         }
 
+        int recentFailedAttempts = user.getFailedLoginAttempts() == null ? 0 : user.getFailedLoginAttempts();
         user = loginSecurityService.registerSuccessfulLogin(user, ipAddress);
 
         session.setMaxInactiveInterval(sessionTimeoutSeconds);
@@ -136,6 +160,18 @@ public class WebController {
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", normalizeRole(user.getRole()));
         session.setAttribute("stationId", user.getStation() != null ? user.getStation().getId() : null);
+        var registration = securityIntelligenceService.registerLogin(
+                user,
+                request,
+                session,
+                clientFingerprint,
+                autofillDetected,
+                typedPassword,
+                recentFailedAttempts
+        );
+        if (registration.secondaryVerificationRequired()) {
+            redirectAttributes.addFlashAttribute("success", "High-risk sign-in recorded. Secondary verification has been requested while access remains available.");
+        }
 
         auditService.logAction(user, "LOGIN", "User signed in to FROMS", "User", user.getId(), ipAddress);
         return "redirect:" + dashboardForRole(user.getRole());
@@ -143,6 +179,7 @@ public class WebController {
 
     @GetMapping("/logout")
     public String logout(@RequestParam(value = "reason", required = false) String reason, HttpSession session) {
+        securityIntelligenceService.markLoggedOut(session, reason == null ? "USER_LOGOUT" : reason);
         session.invalidate();
         if ("expired".equalsIgnoreCase(reason)) {
             return "redirect:/login?session=expired";
@@ -174,9 +211,41 @@ public class WebController {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body(Map.of("error", "No active session"));
         }
-        session.setMaxInactiveInterval(sessionTimeoutSeconds);
+        String refreshToken = String.valueOf(session.getAttribute(SecurityIntelligenceService.SESSION_REFRESH_TOKEN));
         session.setAttribute("lastKeepAliveAt", LocalDateTime.now().toString());
-        return ResponseEntity.ok(Map.of("status", "ok"));
+        return ResponseEntity.ok(securityIntelligenceService.keepAlive(session, refreshToken));
+    }
+
+    @GetMapping("/api/session/state")
+    public ResponseEntity<?> sessionState(HttpSession session) {
+        if (session.getAttribute("userId") == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "No active session"));
+        }
+        return ResponseEntity.ok(securityIntelligenceService.sessionState(session));
+    }
+
+    @PostMapping("/api/session/presence")
+    public ResponseEntity<?> updatePresence(@RequestBody Map<String, Object> payload, HttpSession session) {
+        if (session.getAttribute("userId") == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "No active session"));
+        }
+        String refreshToken = payload.get("refreshToken") == null ? "" : String.valueOf(payload.get("refreshToken"));
+        Long idleSeconds = payload.get("idleSeconds") instanceof Number number ? number.longValue() : 0L;
+        boolean tabVisible = payload.get("tabVisible") == null || Boolean.parseBoolean(String.valueOf(payload.get("tabVisible")));
+        boolean interacting = payload.get("interacting") != null && Boolean.parseBoolean(String.valueOf(payload.get("interacting")));
+        boolean warningShown = payload.get("warningShown") != null && Boolean.parseBoolean(String.valueOf(payload.get("warningShown")));
+        return ResponseEntity.ok(securityIntelligenceService.updatePresence(session, refreshToken, idleSeconds, tabVisible, interacting, warningShown));
+    }
+
+    @PostMapping("/api/session/incident-mode")
+    public ResponseEntity<?> incidentMode(@RequestBody Map<String, Object> payload, HttpSession session) {
+        if (session.getAttribute("userId") == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "No active session"));
+        }
+        String refreshToken = payload.get("refreshToken") == null ? "" : String.valueOf(payload.get("refreshToken"));
+        boolean enabled = payload.get("enabled") != null && Boolean.parseBoolean(String.valueOf(payload.get("enabled")));
+        String incidentNumber = payload.get("incidentNumber") == null ? null : String.valueOf(payload.get("incidentNumber"));
+        return ResponseEntity.ok(securityIntelligenceService.setIncidentMode(session, refreshToken, enabled, incidentNumber));
     }
 
     @PostMapping("/api/me/change-password")

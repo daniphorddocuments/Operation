@@ -59,6 +59,7 @@ public class SystemTestService {
     private final PdfBrandingService pdfBrandingService;
     private final PythonAiService pythonAiService;
     private final LoginSecurityService loginSecurityService;
+    private final RoleAccessService roleAccessService;
     private final PasswordEncoder passwordEncoder;
     private final int serverPort;
 
@@ -77,6 +78,7 @@ public class SystemTestService {
             PdfBrandingService pdfBrandingService,
             PythonAiService pythonAiService,
             LoginSecurityService loginSecurityService,
+            RoleAccessService roleAccessService,
             PasswordEncoder passwordEncoder,
             @Value("${server.port:1111}") int serverPort
     ) {
@@ -94,12 +96,13 @@ public class SystemTestService {
         this.pdfBrandingService = pdfBrandingService;
         this.pythonAiService = pythonAiService;
         this.loginSecurityService = loginSecurityService;
+        this.roleAccessService = roleAccessService;
         this.passwordEncoder = passwordEncoder;
         this.serverPort = serverPort;
     }
 
     public boolean canRunTests(User user) {
-        return user != null && "SUPER_ADMIN".equalsIgnoreCase(user.getRole());
+        return user != null && roleAccessService.canRunSystemTests(user);
     }
 
     public List<SystemTestReport> latestReports() {

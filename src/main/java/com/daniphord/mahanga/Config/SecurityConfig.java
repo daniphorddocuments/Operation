@@ -1,5 +1,6 @@
 package com.daniphord.mahanga.Config;
 
+import com.daniphord.mahanga.Service.SecurityIntelligenceService;
 import com.daniphord.mahanga.Util.OperationRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +14,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfException;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,7 +37,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -60,11 +69,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityIntelligenceService securityIntelligenceService) throws Exception {
         http
                 // Enable CSRF protection with secure cookie storage
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
                         .ignoringRequestMatchers("/change-language")
                 );
 
@@ -89,90 +99,20 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/signal").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/public/reports/*", "/api/public/reports/*/messages").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/public/reports/*/messages", "/api/video/public/reports/*/sessions/start", "/api/video/public/reports/*/sessions/*/end").permitAll()
-                        .requestMatchers("/control-room/**", "/api/control-room/**").hasAnyRole(
-                                "SUPER_ADMIN",
-                                OperationRole.ADMIN,
-                                OperationRole.CONTROL_ROOM_OPERATOR,
-                                OperationRole.CONTROL_ROOM_ATTENDANT,
-                                OperationRole.STATION_OPERATION_OFFICER,
-                                OperationRole.STATION_FIRE_OPERATION_OFFICER,
-                                OperationRole.STATION_FIRE_OFFICER,
-                                OperationRole.DISTRICT_OPERATION_OFFICER,
-                                OperationRole.DISTRICT_FIRE_OFFICER,
-                                OperationRole.REGIONAL_OPERATION_OFFICER,
-                                OperationRole.REGIONAL_FIRE_OFFICER,
-                                OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS,
-                                OperationRole.HEAD_RESCUE_OPERATIONS,
-                                OperationRole.COMMISSIONER_OPERATIONS,
-                                OperationRole.CGF,
-                                OperationRole.CHIEF_FIRE_OFFICER
-                        )
-                        .requestMatchers("/operations/**", "/api/incidents/**", "/api/equipment/**").hasAnyRole(
-                                "SUPER_ADMIN",
-                                OperationRole.ADMIN,
-                                OperationRole.CGF,
-                                OperationRole.COMMISSIONER_OPERATIONS,
-                                OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS,
-                                OperationRole.HEAD_RESCUE_OPERATIONS,
-                                OperationRole.FIRE_INVESTIGATION_HOD,
-                                OperationRole.REGIONAL_FIRE_OFFICER,
-                                OperationRole.REGIONAL_OPERATION_OFFICER,
-                                OperationRole.REGIONAL_INVESTIGATION_OFFICER,
-                                OperationRole.DISTRICT_FIRE_OFFICER,
-                                OperationRole.DISTRICT_OPERATION_OFFICER,
-                                OperationRole.DISTRICT_INVESTIGATION_OFFICER,
-                                OperationRole.STATION_FIRE_OFFICER,
-                                OperationRole.STATION_FIRE_OPERATION_OFFICER,
-                                OperationRole.STATION_OPERATION_OFFICER,
-                                OperationRole.OPERATION_OFFICER,
-                                OperationRole.DEPARTMENT_OFFICER,
-                                OperationRole.CONTROL_ROOM_ATTENDANT
-                        )
-                        .requestMatchers("/api/investigations/**").hasAnyRole(
-                                "SUPER_ADMIN",
-                                OperationRole.ADMIN,
-                                OperationRole.CGF,
-                                OperationRole.COMMISSIONER_OPERATIONS,
-                                OperationRole.FIRE_INVESTIGATION_HOD,
-                                OperationRole.REGIONAL_FIRE_OFFICER,
-                                OperationRole.REGIONAL_INVESTIGATION_OFFICER,
-                                OperationRole.DISTRICT_FIRE_OFFICER,
-                                OperationRole.DISTRICT_INVESTIGATION_OFFICER
-                        )
-                        .requestMatchers("/dashboard", "/api/video/**", "/signal").hasAnyRole(
-                                "SUPER_ADMIN",
-                                OperationRole.ADMIN,
-                                OperationRole.CGF,
-                                OperationRole.COMMISSIONER_OPERATIONS,
-                                OperationRole.HEAD_FIRE_FIGHTING_OPERATIONS,
-                                OperationRole.HEAD_RESCUE_OPERATIONS,
-                                OperationRole.FIRE_INVESTIGATION_HOD,
-                                OperationRole.REGIONAL_FIRE_OFFICER,
-                                OperationRole.REGIONAL_OPERATION_OFFICER,
-                                OperationRole.REGIONAL_INVESTIGATION_OFFICER,
-                                OperationRole.DISTRICT_FIRE_OFFICER,
-                                OperationRole.DISTRICT_OPERATION_OFFICER,
-                                OperationRole.DISTRICT_INVESTIGATION_OFFICER,
-                                OperationRole.STATION_FIRE_OPERATION_OFFICER,
-                                OperationRole.STATION_FIRE_OFFICER,
-                                OperationRole.STATION_OPERATION_OFFICER,
-                                OperationRole.CHIEF_FIRE_OFFICER,
-                                OperationRole.FIRE_INVESTIGATION_OFFICER,
-                                OperationRole.OPERATION_OFFICER,
-                                OperationRole.DEPARTMENT_OFFICER,
-                                OperationRole.CONTROL_ROOM_OPERATOR,
-                                OperationRole.CONTROL_ROOM_ATTENDANT,
-                                OperationRole.TELE_SUPPORT_PERSONNEL
-                        )
-                        .requestMatchers("/api/users/**").hasAnyRole(
-                                OperationRole.SUPER_ADMIN,
-                                OperationRole.ADMIN
-                        )
-                        .requestMatchers("/api/system-tests/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/control-room/**", "/api/control-room/**").authenticated()
+                        .requestMatchers("/operations/**", "/api/incidents/**", "/api/equipment/**").authenticated()
+                        .requestMatchers("/api/investigations/**").authenticated()
+                        .requestMatchers("/dashboard", "/api/video/**", "/signal").authenticated()
+                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/system-tests/**").authenticated()
                         .requestMatchers("/actuator/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers("/api/admin/documents/**").hasAnyRole("SUPER_ADMIN", OperationRole.ADMIN)
-                        .requestMatchers("/api/admin/branding/**").hasAnyRole("SUPER_ADMIN", OperationRole.ADMIN)
-                        .requestMatchers("/api/admin/audit/**").hasAnyRole("SUPER_ADMIN", OperationRole.ADMIN)
+                        .requestMatchers("/api/admin/documents/**").authenticated()
+                        .requestMatchers("/api/admin/branding/**").authenticated()
+                        .requestMatchers("/api/admin/login-carousel/**").authenticated()
+                        .requestMatchers("/api/admin/role-permissions/**").authenticated()
+                        .requestMatchers("/api/admin/audit/**").authenticated()
+                        .requestMatchers("/api/admin/security/**").authenticated()
+                        .requestMatchers("/media/login-carousel/**").permitAll()
                         .requestMatchers("/api/reports/**").authenticated()
                         .anyRequest().authenticated()
                 )
@@ -181,10 +121,6 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .invalidSessionUrl("/login?session=expired")
                         .sessionFixation(Customizer.withDefaults())
-                        .sessionConcurrency(concurrency -> concurrency
-                                .maximumSessions(1)
-                                .expiredUrl("/login?session=expired")
-                        )
                 )
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((request, response, authException) -> {
@@ -219,20 +155,21 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 // CORS configuration
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .addFilterBefore(sessionAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(sessionAuthenticationFilter(securityIntelligenceService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
-    OncePerRequestFilter sessionAuthenticationFilter() {
+    OncePerRequestFilter sessionAuthenticationFilter(SecurityIntelligenceService securityIntelligenceService) {
         return new OncePerRequestFilter() {
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                     throws ServletException, IOException {
-                Object userId = request.getSession(false) != null ? request.getSession(false).getAttribute("userId") : null;
-                Object username = request.getSession(false) != null ? request.getSession(false).getAttribute("username") : null;
-                Object role = request.getSession(false) != null ? request.getSession(false).getAttribute("role") : null;
+                var httpSession = request.getSession(false);
+                Object userId = httpSession != null ? httpSession.getAttribute("userId") : null;
+                Object username = httpSession != null ? httpSession.getAttribute("username") : null;
+                Object role = httpSession != null ? httpSession.getAttribute("role") : null;
 
                 if (userId != null && username != null && role != null
                         && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -244,6 +181,13 @@ public class SecurityConfig {
                                     List.of(new SimpleGrantedAuthority("ROLE_" + normalizedRole))
                             );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
+                if (httpSession != null && securityIntelligenceService != null && userId != null) {
+                    Object refreshToken = httpSession.getAttribute(SecurityIntelligenceService.SESSION_REFRESH_TOKEN);
+                    if (refreshToken != null) {
+                        securityIntelligenceService.keepAlive(httpSession, String.valueOf(refreshToken));
+                    }
                 }
 
                 filterChain.doFilter(request, response);
@@ -266,6 +210,12 @@ public class SecurityConfig {
             String nextStep
     ) throws IOException, ServletException {
         response.setStatus(status);
+        if (wantsJsonResponse(request)) {
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonError(status, error, message, path, reasonCode, nextStep));
+            return;
+        }
         request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, status);
         request.setAttribute(RequestDispatcher.ERROR_MESSAGE, message);
         request.setAttribute(RequestDispatcher.ERROR_REQUEST_URI, path);
@@ -336,7 +286,79 @@ public class SecurityConfig {
         );
     }
 
+    private boolean wantsJsonResponse(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String requestedWith = request.getHeader("X-Requested-With");
+        String accept = request.getHeader("Accept");
+        return (uri != null && uri.startsWith("/api/"))
+                || "XMLHttpRequest".equalsIgnoreCase(requestedWith)
+                || (accept != null && accept.toLowerCase().contains(MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    private String jsonError(int status, String error, String message, String path, String reasonCode, String nextStep) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("status", status);
+        payload.put("error", error);
+        payload.put("message", message);
+        payload.put("path", path);
+        payload.put("reasonCode", reasonCode);
+        payload.put("nextStep", nextStep);
+
+        StringBuilder json = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, Object> entry : payload.entrySet()) {
+            if (!first) {
+                json.append(',');
+            }
+            first = false;
+            json.append('"').append(escapeJson(entry.getKey())).append('"').append(':');
+            Object value = entry.getValue();
+            if (value == null) {
+                json.append("null");
+            } else if (value instanceof Number || value instanceof Boolean) {
+                json.append(value);
+            } else {
+                json.append('"').append(escapeJson(String.valueOf(value))).append('"');
+            }
+        }
+        json.append('}');
+        return json.toString();
+    }
+
+    private String escapeJson(String value) {
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n");
+    }
+
     private record ErrorDescriptor(String error, String message, String reasonCode, String nextStep) {
+    }
+
+    /**
+     * Supports CSRF tokens rendered into server-side HTML and sent back by JS clients via header.
+     * The XOR handler keeps BREACH protection for views, while header-based requests use the plain token.
+     */
+    private static final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
+
+        private final CsrfTokenRequestHandler plain = new CsrfTokenRequestAttributeHandler();
+        private final CsrfTokenRequestHandler xor = new XorCsrfTokenRequestAttributeHandler();
+
+        @Override
+        public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
+            this.xor.handle(request, response, csrfToken);
+            csrfToken.get();
+        }
+
+        @Override
+        public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
+            String headerValue = request.getHeader(csrfToken.getHeaderName());
+            if (headerValue != null && !headerValue.isBlank()) {
+                return this.plain.resolveCsrfTokenValue(request, csrfToken);
+            }
+            return this.xor.resolveCsrfTokenValue(request, csrfToken);
+        }
     }
 
     @Bean

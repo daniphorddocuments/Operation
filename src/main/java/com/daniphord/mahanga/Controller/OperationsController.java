@@ -19,6 +19,7 @@ import com.daniphord.mahanga.Service.OperationsService;
 import com.daniphord.mahanga.Service.RoleAccessService;
 import com.daniphord.mahanga.Service.RoleResponsibilityService;
 import com.daniphord.mahanga.Service.ReportCenterService;
+import com.daniphord.mahanga.Service.SecurityIntelligenceService;
 import com.daniphord.mahanga.Service.SystemTestService;
 import com.daniphord.mahanga.Service.SystemDocumentationService;
 import com.daniphord.mahanga.Service.UserService;
@@ -61,6 +62,7 @@ public class OperationsController {
     private final ReportCenterService reportCenterService;
     private final UserManualService userManualService;
     private final AiRouteService aiRouteService;
+    private final SecurityIntelligenceService securityIntelligenceService;
 
     public OperationsController(
             OperationsService operationsService,
@@ -79,7 +81,8 @@ public class OperationsController {
             SystemDocumentationService systemDocumentationService,
             ReportCenterService reportCenterService,
             UserManualService userManualService,
-            AiRouteService aiRouteService
+            AiRouteService aiRouteService,
+            SecurityIntelligenceService securityIntelligenceService
     ) {
         this.operationsService = operationsService;
         this.controlRoomService = controlRoomService;
@@ -98,6 +101,7 @@ public class OperationsController {
         this.reportCenterService = reportCenterService;
         this.userManualService = userManualService;
         this.aiRouteService = aiRouteService;
+        this.securityIntelligenceService = securityIntelligenceService;
     }
 
     @GetMapping("/dashboard")
@@ -116,6 +120,10 @@ public class OperationsController {
 
     private String populateDashboard(HttpSession session, Model model, String viewName) {
         User currentUser = currentUser(session);
+        if (currentUser == null || session.getAttribute("role") == null) {
+            session.invalidate();
+            return "redirect:/login?session=expired";
+        }
         var visibleIncidents = roleAccessService.visibleIncidents(currentUser, operationsService.getAllIncidents());
         var visibleCalls = roleAccessService.visibleCalls(currentUser, controlRoomService.latestCalls());
         var visibleEquipment = equipmentManagementService.visibleEquipment(currentUser);
@@ -123,6 +131,7 @@ public class OperationsController {
         var visibleRecommendations = roleAccessService.visibleRecommendations(currentUser, operationsService.latestRecommendations());
         var dashboardDefinition = dashboardDefinitionService.definitionFor((String) session.getAttribute("role"));
         boolean canManageUsers = roleAccessService.canManageUsers(currentUser);
+        boolean canManageRolePermissions = roleAccessService.canManageRolePermissions(currentUser);
         boolean canManageSystemSettings = roleAccessService.canManageSystemSettings(currentUser);
         boolean canRunSystemTests = roleAccessService.canRunSystemTests(currentUser);
         boolean canAccessAdminDocuments = roleAccessService.canAccessAdminDocuments(currentUser);
@@ -132,7 +141,7 @@ public class OperationsController {
         boolean canReviewOperationalApprovals = roleAccessService.canReviewOperationalApprovals(currentUser);
         boolean canRegisterOperationalIncident = roleAccessService.canRegisterInitialIncident(currentUser) || roleAccessService.canCompleteIncidentReport(currentUser);
         var availableReports = reportCenterService.availableReports(currentUser);
-        boolean isAdminWorkbench = canManageUsers || canManageSystemSettings;
+        boolean isAdminWorkbench = canManageUsers || canManageRolePermissions || canManageSystemSettings;
         Map<Long, String> recommendationByIncidentId = latestRecommendationSummaryByIncident(visibleRecommendations);
         var incidentRecordViews = incidentRecords(visibleIncidents, recommendationByIncidentId);
         var equipmentRecordViews = equipmentRecords(visibleEquipment);
@@ -201,6 +210,7 @@ public class OperationsController {
         model.addAttribute("canManageMonthlyUpdates", canManageMonthlyUpdates);
         model.addAttribute("canAccessStationOperationsModule", roleAccessService.canAccessStationOperationsModule(currentUser));
         model.addAttribute("canManageUsers", canManageUsers);
+        model.addAttribute("canManageRolePermissions", canManageRolePermissions);
         model.addAttribute("canViewMap", roleAccessService.canViewMap(currentUser));
         model.addAttribute("canViewTeleSupport", roleAccessService.canViewTeleSupport(currentUser));
         model.addAttribute("canViewLiveVideo", roleAccessService.canViewLiveVideo(currentUser));
@@ -308,6 +318,17 @@ public class OperationsController {
                 ))
                 .toList());
         model.addAttribute("notificationUnreadCount", notificationService.unreadCount(userId));
+        model.addAttribute("sessionSecurityState", securityIntelligenceService.sessionState(session));
+        model.addAttribute("securityAdminOverview", isAdminWorkbench ? securityIntelligenceService.adminOverview() : Map.of());
+        model.addAttribute("activeEmergencyIncidents", visibleIncidents.stream()
+                .filter(incident -> !"RESOLVED".equalsIgnoreCase(incident.getStatus()))
+                .map(incident -> Map.of(
+                        "incidentNumber", incident.getIncidentNumber(),
+                        "status", incident.getStatus(),
+                        "severity", incident.getSeverity()
+                ))
+                .limit(20)
+                .toList());
         return viewName;
     }
 
@@ -429,8 +450,8 @@ public class OperationsController {
 
     private User currentUser(HttpSession session) {
         Object userId = session.getAttribute("userId");
-        if (userId instanceof Long id) {
-            return userRepository.findById(id).orElse(null);
+        if (userId instanceof Number number) {
+            return userRepository.findById(number.longValue()).orElse(null);
         }
         return null;
     }
